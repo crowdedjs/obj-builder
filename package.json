@@ -1,0 +1,35 @@
+{
+  "name": "obj-builder",
+  "version": "1.1.0",
+  "description": "",
+  "main": "index.js",
+  "browser": "./index.js",
+  "scripts": {
+    "test": "npx mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/crowdedjs/obj-builder.git"
+  },
+  "keywords": [
+    "Wavefront OBJ",
+    "OBJ",
+    "Building Generation",
+    "Procedural Generation",
+    "Crowd Simulation"
+  ],
+  "author": "B. Ricks, PhD",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/crowdedjs/obj-builder/issues"
+  },
+  "homepage": "https://github.com/crowdedjs/obj-builder#readme",
+  "type": "module",
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-string": "^1.5.0",
+    "is_js": "^0.9.0",
+    "mocha": "^8.2.1"
+  },
+  "dependencies": {}
+}
