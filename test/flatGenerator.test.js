@@ -10,15 +10,19 @@ describe("Flat Generator", function () {
   it("Creates a flat obj", function () {
     let width = 10;
     let height = 20;
-    let result = flatGenerator(width, height);
+    let result = flatGenerator(width, height, {});
     expect(result).to.equalIgnoreSpaces(
       `
-      v ${width / 2} 0 -${height / 2}
-      v ${width / 2} 0 ${height / 2}
       v -${width / 2} 0 -${height / 2}
       v -${width / 2} 0 ${height / 2}
+      v ${width / 2} 0 ${height / 2}
+      v ${width / 2} 0 -${height / 2}
+      vt 0 0
+      vt 0 1
+      vt 1 1 
+      vt 1 0
       vn 0 1 0
-      f 1//1 3//1 4//1 2//1
+      f 1/1/1 2/2/1 3/3/1 4/4/1
       `.trim());
   });
 
@@ -26,12 +30,13 @@ describe("Flat Generator", function () {
     let width = 10;
     let height = 20;
     expect(()=>flatGenerator(width)).to.throw();
+    expect(()=>flatGenerator(width, height)).to.throw();
   });
 
   it("Doesn't accept too many arguments", function () {
     let width = 10;
     let height = 20;
-    expect(()=>flatGenerator(width, height, width)).to.throw();
+    expect(()=>flatGenerator(width, height, width, width)).to.throw();
   });
 
   it("Doesn't accept bad width arguments", function () {

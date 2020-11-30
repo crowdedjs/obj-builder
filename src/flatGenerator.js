@@ -1,6 +1,9 @@
 import is from "is_js";
-import PNG from 'pngjs';
+import Canvas from 'canvas';
 import fs from 'fs';
+import textureDefaults from './textureDefaults.js'
+
+
 /**
  * Remove leading and trailing white space on every line of the obj file. 
  * @param {string-like} objString The obj string to be cleaned.
@@ -14,8 +17,8 @@ function clean(objString) {
  * @param {number-like} width The width of the obj
  * @param {number-like} height The height of the obj
  */
-function flatGenerator(width, height, generateTexture) {
-  if (!is.all.finite([width, height]) || arguments.length != 2) throw new "Invalid arguments."
+function flatGenerator(width, height, textureOptions) {
+  if (!is.all.finite([width, height]) || arguments.length != 3) throw new "Invalid arguments."
   let toReturn =
     `  
  v -${width / 2} 0 -${height / 2}
@@ -30,33 +33,56 @@ function flatGenerator(width, height, generateTexture) {
  f 1/1/1 2/2/1 3/3/1 4/4/1
  `;
 
+  let dpu = textureDefaults.dotsPerUnit
+  let texWidth = width * dpu;
+  let texHeight = height * dpu;
 
-// https://stackoverflow.com/a/32260288/10047920
-  var png = new PNG.PNG({
-    width: 100,
-    height: 100,
-    filterType: -1
-  });
+  const canvas = Canvas.createCanvas(texWidth, texHeight);
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = 'white';
+  ctx.fillRect(0, 0, texWidth, texHeight);
 
-  for (var y = 0; y < png.height; y++) {
-    for (var x = 0; x < png.width; x++) {
-      var idx = (png.width * y + x) << 2;
-      png.data[idx] = 255;
-      png.data[idx + 1] = 218;
-      png.data[idx + 2] = 185;
-      png.data[idx + 3] = 128;
-    }
+  ctx.save();
+  ctx.scale(dpu, dpu);
+  ctx.translate(width / 2, height / 2);
+
+  for (let i = Math.ceil(width / 2); i > -Math.ceil(width / 2); i--) {
+    ctx.strokeStyle = "black";
+    if (i == 0)
+      ctx.strokeStyle = "green"
+
+    ctx.lineWidth = textureDefaults.minorWidth / dpu;
+    if (i % textureDefaults.major == 0)
+      ctx.lineWidth = textureDefaults.majorWidth / dpu;
+    ctx.beginPath();
+    ctx.moveTo(i, height / 2);
+    ctx.lineTo(i, -height / 2);
+    ctx.stroke();
+  }
+  for (let i = Math.ceil(height / 2); i > -Math.ceil(height / 2); i--) {
+    ctx.strokeStyle = "black";
+    if (i == 0)
+      ctx.strokeStyle = "red"
+    ctx.lineWidth = textureDefaults.minorWidth / dpu;
+    if (i % textureDefaults.major == 0)
+      ctx.lineWidth = textureDefaults.majorWidth / dpu;
+
+    ctx.beginPath();
+    ctx.moveTo(width / 2, i);
+    ctx.lineTo(-width / 2, i);
+    ctx.stroke();
   }
 
-  png.pack().pipe(fs.createWriteStream('newOut.png'));
+  ctx.restore();
 
 
+  const pngBuf = canvas.toBuffer('image/png');
 
-  if (generateTexture) {
+  fs.writeFileSync('./test.png', pngBuf);
 
-  }
+
   return clean(toReturn);
-  //return toReturn;
+
 }
 
 export default flatGenerator;

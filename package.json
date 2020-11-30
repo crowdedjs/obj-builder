@@ -33,6 +33,7 @@
     "mocha": "^8.2.1"
   },
   "dependencies": {
+    "canvas": "^2.6.1",
     "pngjs": "^6.0.0"
   }
 }
