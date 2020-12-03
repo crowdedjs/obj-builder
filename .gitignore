@@ -1,3 +1,6 @@
+## Custom ignores for this project
+runs
+
 # Logs
 logs
 *.log

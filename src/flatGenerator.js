@@ -2,6 +2,7 @@ import is from "is_js";
 import Canvas from 'canvas';
 import fs from 'fs';
 import textureDefaults from './textureDefaults.js'
+import getFileBase from './getFileBase.js'
 
 
 /**
@@ -12,15 +13,23 @@ function clean(objString) {
   return objString.trim().split("/\r?\n/").map(s => s.trim()).join("\n");
 }
 
+
+
 /**
  * Create a flat surface with the given width and height. The upper-right point will be at (width/2, height/2)
  * @param {number-like} width The width of the obj
  * @param {number-like} height The height of the obj
  */
-function flatGenerator(width, height, textureOptions) {
-  if (!is.all.finite([width, height]) || arguments.length != 3) throw new "Invalid arguments."
-  let toReturn =
+function flatGenerator(width, height, baseName, textureOptions) {
+  if (!is.all.finite([width, height]) || !is.all.positive([width,height]) || !is.string(baseName) || arguments.length != 4) throw new "Invalid arguments."
+
+  let fileBase = getFileBase(baseName);
+  //let folderBase = getFolderBase(baseName);
+
+  //First generate the wavefront obj file
+  let obj =
     `  
+ mtllib ${fileBase}.mtl
  v -${width / 2} 0 -${height / 2}
  v -${width / 2} 0 ${height / 2}
  v ${width / 2} 0 ${height / 2}
@@ -30,8 +39,33 @@ function flatGenerator(width, height, textureOptions) {
  vt 1 1 
  vt 1 0
  vn 0 1 0
+ usemtl texture
  f 1/1/1 2/2/1 3/3/1 4/4/1
  `;
+
+  fs.writeFileSync(`${baseName}.obj`, obj);
+
+  //Second generate the mtl file
+
+  let mtl = `
+  newmtl texture
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka ${fileBase}.jpg
+  map_Kd ${fileBase}.jpg
+  `;
+
+  fs.writeFileSync(`${baseName}.mtl`, mtl);
+
+
+
+
+
+  //Now generate the texture
+  //We do this by creating a html canvas-like object
+  //Drawing to the canvas
+  //Then saving the result as a png file
+
 
   let dpu = textureDefaults.dotsPerUnit
   let texWidth = width * dpu;
@@ -76,12 +110,12 @@ function flatGenerator(width, height, textureOptions) {
   ctx.restore();
 
 
-  const pngBuf = canvas.toBuffer('image/png');
+  const jpgBuffer = canvas.toBuffer('image/jpeg');
 
-  fs.writeFileSync('./test.png', pngBuf);
+  fs.writeFileSync(`./${baseName}.jpg`, jpgBuffer);
 
 
-  return clean(toReturn);
+  // return clean(toReturn);
 
 }
 
