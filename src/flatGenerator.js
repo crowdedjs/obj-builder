@@ -3,6 +3,7 @@ import Canvas from 'canvas';
 import fs from 'fs';
 import textureDefaults from './textureDefaults.js'
 import getFileBase from './getFileBase.js'
+import { homedir } from "os";
 
 
 /**
@@ -16,12 +17,12 @@ function clean(objString) {
 
 
 /**
- * Create a flat surface with the given width and height. The upper-right point will be at (width/2, height/2)
+ * Create a flat surface with the given width and length. The upper-right point will be at (width/2, length/2)
  * @param {number-like} width The width of the obj
- * @param {number-like} height The height of the obj
+ * @param {number-like} length The length of the obj
  */
-function flatGenerator(width, height, baseName, textureOptions, wOffset = 0, hOffset = 0, vOffset = 0) {
-  if (!is.all.finite([width, height]) || !is.all.positive([width,height]) || !is.string(baseName) || arguments.length < 4 || arguments.length > 7) throw new "Invalid arguments."
+function flatGenerator(width, length, baseName, textureOptions, wOffset = 0, lOffset = 0, hOffset = 0, vOffset = 0) {
+  if (!is.all.finite([width, length]) || !is.all.positive([width,length]) || !is.string(baseName) || arguments.length < 4 || arguments.length > 8) throw new "Invalid arguments."
 
   let fileBase = getFileBase(baseName);
   //let folderBase = getFolderBase(baseName);
@@ -29,10 +30,10 @@ function flatGenerator(width, height, baseName, textureOptions, wOffset = 0, hOf
   //First generate the wavefront obj file
   let obj =
     `  
- v ${-(width / 2) + wOffset} 0 ${-(height / 2) + hOffset}
- v ${-(width / 2) + wOffset} 0 ${height / 2}
- v ${width / 2} 0 ${height / 2}
- v ${width / 2} 0 ${-(height / 2) + hOffset}
+ v ${-(width / 2) + wOffset} ${hOffset} ${-(length / 2) + lOffset}
+ v ${-(width / 2) + wOffset} ${hOffset} ${length / 2 + lOffset}
+ v ${width / 2 + wOffset} ${hOffset} ${length / 2 + lOffset}
+ v ${width / 2 + wOffset} ${hOffset} ${-(length / 2) + lOffset}
  vt 0 0
  vt 0 1
  vt 1 1 
@@ -68,16 +69,16 @@ function flatGenerator(width, height, baseName, textureOptions, wOffset = 0, hOf
 
   let dpu = textureDefaults.dotsPerUnit
   let texWidth = width * dpu;
-  let texHeight = height * dpu;
+  let texLength = length * dpu;
 
-  const canvas = Canvas.createCanvas(texWidth, texHeight);
+  const canvas = Canvas.createCanvas(texWidth, texLength);
   const ctx = canvas.getContext('2d');
   ctx.fillStyle = 'white';
-  ctx.fillRect(0, 0, texWidth, texHeight);
+  ctx.fillRect(0, 0, texWidth, texLength);
 
   ctx.save();
   ctx.scale(dpu, dpu);
-  ctx.translate(width / 2, height / 2);
+  ctx.translate(width / 2, length / 2);
 
   for (let i = Math.ceil(width / 2); i > -Math.ceil(width / 2); i--) {
     ctx.strokeStyle = "black";
@@ -88,11 +89,11 @@ function flatGenerator(width, height, baseName, textureOptions, wOffset = 0, hOf
     if (i % textureDefaults.major == 0)
       ctx.lineWidth = textureDefaults.majorWidth / dpu;
     ctx.beginPath();
-    ctx.moveTo(i, height / 2);
-    ctx.lineTo(i, -height / 2);
+    ctx.moveTo(i, length / 2);
+    ctx.lineTo(i, -length / 2);
     ctx.stroke();
   }
-  for (let i = Math.ceil(height / 2); i > -Math.ceil(height / 2); i--) {
+  for (let i = Math.ceil(length / 2); i > -Math.ceil(length / 2); i--) {
     ctx.strokeStyle = "black";
     if (i == 0)
       ctx.strokeStyle = "red"
