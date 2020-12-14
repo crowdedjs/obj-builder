@@ -29,14 +29,14 @@ function wallGenerator(width, length, height, baseName, textureOptions, wOffset 
   //First generate the wavefront obj file
   let obj =
     `  
- v ${-(width / 2) + wOffset} ${-(length / 2) + lOffset} ${-(height / 2) + hOffset}
- v ${-(width / 2) + wOffset} ${-(length / 2) + lOffset} ${(height / 2) + hOffset}
- v ${-(width / 2) + wOffset} ${(length / 2) + lOffset} ${-(height / 2) + hOffset}
- v ${-(width / 2) + wOffset} ${(length / 2) + lOffset} ${(height / 2) + hOffset}
- v ${(width / 2) + wOffset} ${-(length / 2) + lOffset} ${-(height / 2) + hOffset}
- v ${(width / 2) + wOffset} ${-(length / 2) + lOffset} ${(height / 2) + hOffset}
- v ${(width / 2) + wOffset} ${(length / 2) + lOffset} ${-(height / 2) + hOffset}
- v ${(width / 2) + wOffset} ${(length / 2) + lOffset} ${(height / 2) + hOffset}
+ v ${-(width / 2) + wOffset} ${-(height / 2) + hOffset} ${-(length / 2) + lOffset}
+ v ${-(width / 2) + wOffset} ${-(height / 2) + hOffset} ${(length / 2) + lOffset}
+ v ${-(width / 2) + wOffset} ${(height / 2) + hOffset} ${-(length / 2) + lOffset}
+ v ${-(width / 2) + wOffset} ${(height / 2) + hOffset} ${(length / 2) + lOffset}
+ v ${(width / 2) + wOffset} ${-(height / 2) + hOffset} ${-(length / 2) + lOffset}
+ v ${(width / 2) + wOffset} ${-(height / 2) + hOffset} ${(length / 2) + lOffset}
+ v ${(width / 2) + wOffset} ${(height / 2) + hOffset} ${-(length / 2) + lOffset}
+ v ${(width / 2) + wOffset} ${(height / 2) + hOffset} ${(length / 2) + lOffset}
  vt 0 0
  vt 1 1
  vt 1 0
