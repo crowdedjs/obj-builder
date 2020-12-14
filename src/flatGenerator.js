@@ -20,8 +20,8 @@ function clean(objString) {
  * @param {number-like} width The width of the obj
  * @param {number-like} height The height of the obj
  */
-function flatGenerator(width, height, baseName, textureOptions) {
-  if (!is.all.finite([width, height]) || !is.all.positive([width,height]) || !is.string(baseName) || arguments.length != 4) throw new "Invalid arguments."
+function flatGenerator(width, height, baseName, textureOptions, wOffset = 0, hOffset = 0, vOffset = 0) {
+  if (!is.all.finite([width, height]) || !is.all.positive([width,height]) || !is.string(baseName) || arguments.length < 4 || arguments.length > 7) throw new "Invalid arguments."
 
   let fileBase = getFileBase(baseName);
   //let folderBase = getFolderBase(baseName);
@@ -30,32 +30,32 @@ function flatGenerator(width, height, baseName, textureOptions) {
   let obj =
     `  
  mtllib ${fileBase}.mtl
- v -${width / 2} 0 -${height / 2}
- v -${width / 2} 0 ${height / 2}
+ v ${-(width / 2) + wOffset} 0 ${-(height / 2) + hOffset}
+ v ${-(width / 2) + wOffset} 0 ${height / 2}
  v ${width / 2} 0 ${height / 2}
- v ${width / 2} 0 -${height / 2}
+ v ${width / 2} 0 ${-(height / 2) + hOffset}
  vt 0 0
  vt 0 1
  vt 1 1 
  vt 1 0
  vn 0 1 0
- usemtl texture
- f 1/1/1 2/2/1 3/3/1 4/4/1
+ usemtl texture${vOffset}
+ f ${1 + vOffset}/${1 + vOffset}/${1 + vOffset} ${2 + vOffset}/${2 + vOffset}/${1 + vOffset} ${3 + vOffset}/${3 + vOffset}/${1 + vOffset} ${4 + vOffset}/${4 + vOffset}/${1 + vOffset}
  `;
 
-  fs.writeFileSync(`${baseName}.obj`, obj);
+  fs.appendFileSync(`${baseName}.obj`, obj);
 
   //Second generate the mtl file
 
   let mtl = `
-  newmtl texture
+  newmtl texture${vOffset}
   Ka 0 0 0
   Kd 1 1 1
-  map_Ka ${fileBase}.jpg
-  map_Kd ${fileBase}.jpg
+  map_Ka ${fileBase}${vOffset}.jpg
+  map_Kd ${fileBase}${vOffset}.jpg
   `;
 
-  fs.writeFileSync(`${baseName}.mtl`, mtl);
+  fs.appendFileSync(`${baseName}.mtl`, mtl);
 
 
 
@@ -112,10 +112,10 @@ function flatGenerator(width, height, baseName, textureOptions) {
 
   const jpgBuffer = canvas.toBuffer('image/jpeg');
 
-  fs.writeFileSync(`./${baseName}.jpg`, jpgBuffer);
+  fs.writeFileSync(`./${baseName}${vOffset}.jpg`, jpgBuffer);
 
-
-  // return clean(toReturn);
+  //returns the offset adjusted for the 4 added vertices
+  return vOffset + 4;
 
 }
 
