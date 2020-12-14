@@ -29,7 +29,6 @@ function wallGenerator(width, length, height, baseName, textureOptions, wOffset 
   //First generate the wavefront obj file
   let obj =
     `  
- mtllib ${fileBase}.mtl
  v ${-(width / 2) + wOffset} ${-(length / 2) + lOffset} ${-(height / 2) + hOffset}
  v ${-(width / 2) + wOffset} ${-(length / 2) + lOffset} ${(height / 2) + hOffset}
  v ${-(width / 2) + wOffset} ${(length / 2) + lOffset} ${-(height / 2) + hOffset}

@@ -29,7 +29,6 @@ function flatGenerator(width, height, baseName, textureOptions, wOffset = 0, hOf
   //First generate the wavefront obj file
   let obj =
     `  
- mtllib ${fileBase}.mtl
  v ${-(width / 2) + wOffset} 0 ${-(height / 2) + hOffset}
  v ${-(width / 2) + wOffset} 0 ${height / 2}
  v ${width / 2} 0 ${height / 2}
