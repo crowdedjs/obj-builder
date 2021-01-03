@@ -22,26 +22,28 @@ function clean(objString) {
  * @param {number-like} length The length of the obj
  */
 function flatGenerator(width, length, baseName, textureOptions, wOffset = 0, lOffset = 0, hOffset = 0, vOffset = 0) {
-  if (!is.all.finite([width, length]) || !is.all.positive([width,length]) || !is.string(baseName) || arguments.length < 4 || arguments.length > 8) throw new "Invalid arguments."
+  if (!is.all.finite([width, length, wOffset, lOffset, hOffset]) || !is.all.positive([width,length]) || !is.string(baseName) || arguments.length < 4 || arguments.length > 8) throw new "Invalid arguments."
 
   let fileBase = getFileBase(baseName);
   //let folderBase = getFolderBase(baseName);
 
   //First generate the wavefront obj file
   let obj =
-    `  
- v ${-(width / 2) + wOffset} ${hOffset} ${-(length / 2) + lOffset}
- v ${-(width / 2) + wOffset} ${hOffset} ${length / 2 + lOffset}
- v ${width / 2 + wOffset} ${hOffset} ${length / 2 + lOffset}
- v ${width / 2 + wOffset} ${hOffset} ${-(length / 2) + lOffset}
- vt 0 0
- vt 0 1
- vt 1 1 
- vt 1 0
- vn 0 1 0
- usemtl texture${vOffset}
- f ${1 + vOffset}/${1 + vOffset}/${1 + vOffset} ${2 + vOffset}/${2 + vOffset}/${1 + vOffset} ${3 + vOffset}/${3 + vOffset}/${1 + vOffset} ${4 + vOffset}/${4 + vOffset}/${1 + vOffset}
- `;
+    `
+o object${vOffset}
+v ${-(width / 2) + wOffset} ${hOffset} ${-(length / 2) + lOffset}
+v ${-(width / 2) + wOffset} ${hOffset} ${length / 2 + lOffset}
+v ${width / 2 + wOffset} ${hOffset} ${length / 2 + lOffset}
+v ${width / 2 + wOffset} ${hOffset} ${-(length / 2) + lOffset}
+vt 0 0
+vt 0 1
+vt 1 1 
+vt 1 0
+vn 0 1 0
+usemtl texture${vOffset}
+s off
+f ${1 + vOffset}/${1 + vOffset}/${1 + vOffset} ${2 + vOffset}/${2 + vOffset}/${1 + vOffset} ${3 + vOffset}/${3 + vOffset}/${1 + vOffset} ${4 + vOffset}/${4 + vOffset}/${1 + vOffset}
+    \n`;
 
   fs.appendFileSync(`${baseName}.obj`, obj);
 
@@ -112,7 +114,7 @@ function flatGenerator(width, length, baseName, textureOptions, wOffset = 0, lOf
 
   const jpgBuffer = canvas.toBuffer('image/jpeg');
 
-  fs.writeFileSync(`./${baseName}${vOffset}.jpg`, jpgBuffer);
+  // fs.writeFileSync(`./${baseName}${vOffset}.jpg`, jpgBuffer);
 
   //returns the offset adjusted for the 4 added vertices
   return vOffset + 4;

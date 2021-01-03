@@ -1,0 +1,1946 @@
+
+
+  newmtl texture0
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test0.jpg
+  map_Kd test0.jpg
+  
+  newmtl texture4
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test4.jpg
+  map_Kd test4.jpg
+  
+  newmtl texture12
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test12.jpg
+  map_Kd test12.jpg
+  
+  newmtl texture20
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test20.jpg
+  map_Kd test20.jpg
+  
+  newmtl texture28
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test28.jpg
+  map_Kd test28.jpg
+  
+  newmtl texture36
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test36.jpg
+  map_Kd test36.jpg
+  
+  newmtl texture44
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test44.jpg
+  map_Kd test44.jpg
+  
+  newmtl texture52
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test52.jpg
+  map_Kd test52.jpg
+  
+  newmtl texture60
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test60.jpg
+  map_Kd test60.jpg
+  
+  newmtl texture68
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test68.jpg
+  map_Kd test68.jpg
+  
+  newmtl texture72
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test72.jpg
+  map_Kd test72.jpg
+  
+  newmtl texture80
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test80.jpg
+  map_Kd test80.jpg
+  
+  newmtl texture88
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test88.jpg
+  map_Kd test88.jpg
+  
+  newmtl texture96
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test96.jpg
+  map_Kd test96.jpg
+  
+  newmtl texture104
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test104.jpg
+  map_Kd test104.jpg
+  
+  newmtl texture112
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test112.jpg
+  map_Kd test112.jpg
+  
+  newmtl texture120
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test120.jpg
+  map_Kd test120.jpg
+  
+  newmtl texture128
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test128.jpg
+  map_Kd test128.jpg
+  
+  newmtl texture136
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test136.jpg
+  map_Kd test136.jpg
+  
+  newmtl texture140
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test140.jpg
+  map_Kd test140.jpg
+  
+  newmtl texture148
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test148.jpg
+  map_Kd test148.jpg
+  
+  newmtl texture156
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test156.jpg
+  map_Kd test156.jpg
+  
+  newmtl texture164
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test164.jpg
+  map_Kd test164.jpg
+  
+  newmtl texture172
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test172.jpg
+  map_Kd test172.jpg
+  
+  newmtl texture180
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test180.jpg
+  map_Kd test180.jpg
+  
+  newmtl texture188
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test188.jpg
+  map_Kd test188.jpg
+  
+  newmtl texture196
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test196.jpg
+  map_Kd test196.jpg
+  
+  newmtl texture204
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test204.jpg
+  map_Kd test204.jpg
+  
+  newmtl texture208
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test208.jpg
+  map_Kd test208.jpg
+  
+  newmtl texture216
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test216.jpg
+  map_Kd test216.jpg
+  
+  newmtl texture224
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test224.jpg
+  map_Kd test224.jpg
+  
+  newmtl texture232
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test232.jpg
+  map_Kd test232.jpg
+  
+  newmtl texture240
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test240.jpg
+  map_Kd test240.jpg
+  
+  newmtl texture248
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test248.jpg
+  map_Kd test248.jpg
+  
+  newmtl texture256
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test256.jpg
+  map_Kd test256.jpg
+  
+  newmtl texture264
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test264.jpg
+  map_Kd test264.jpg
+  
+  newmtl texture272
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test272.jpg
+  map_Kd test272.jpg
+  
+  newmtl texture276
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test276.jpg
+  map_Kd test276.jpg
+  
+  newmtl texture284
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test284.jpg
+  map_Kd test284.jpg
+  
+  newmtl texture292
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test292.jpg
+  map_Kd test292.jpg
+  
+  newmtl texture300
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test300.jpg
+  map_Kd test300.jpg
+  
+  newmtl texture308
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test308.jpg
+  map_Kd test308.jpg
+  
+  newmtl texture316
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test316.jpg
+  map_Kd test316.jpg
+  
+  newmtl texture324
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test324.jpg
+  map_Kd test324.jpg
+  
+  newmtl texture332
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test332.jpg
+  map_Kd test332.jpg
+  
+  newmtl texture340
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test340.jpg
+  map_Kd test340.jpg
+  
+  newmtl texture344
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test344.jpg
+  map_Kd test344.jpg
+  
+  newmtl texture352
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test352.jpg
+  map_Kd test352.jpg
+  
+  newmtl texture360
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test360.jpg
+  map_Kd test360.jpg
+  
+  newmtl texture368
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test368.jpg
+  map_Kd test368.jpg
+  
+  newmtl texture376
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test376.jpg
+  map_Kd test376.jpg
+  
+  newmtl texture384
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test384.jpg
+  map_Kd test384.jpg
+  
+  newmtl texture392
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test392.jpg
+  map_Kd test392.jpg
+  
+  newmtl texture400
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test400.jpg
+  map_Kd test400.jpg
+  
+  newmtl texture408
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test408.jpg
+  map_Kd test408.jpg
+  
+  newmtl texture412
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test412.jpg
+  map_Kd test412.jpg
+  
+  newmtl texture420
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test420.jpg
+  map_Kd test420.jpg
+  
+  newmtl texture428
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test428.jpg
+  map_Kd test428.jpg
+  
+  newmtl texture436
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test436.jpg
+  map_Kd test436.jpg
+  
+  newmtl texture444
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test444.jpg
+  map_Kd test444.jpg
+  
+  newmtl texture452
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test452.jpg
+  map_Kd test452.jpg
+  
+  newmtl texture460
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test460.jpg
+  map_Kd test460.jpg
+  
+  newmtl texture468
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test468.jpg
+  map_Kd test468.jpg
+  
+  newmtl texture476
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test476.jpg
+  map_Kd test476.jpg
+  
+  newmtl texture480
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test480.jpg
+  map_Kd test480.jpg
+  
+  newmtl texture488
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test488.jpg
+  map_Kd test488.jpg
+  
+  newmtl texture496
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test496.jpg
+  map_Kd test496.jpg
+  
+  newmtl texture504
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test504.jpg
+  map_Kd test504.jpg
+  
+  newmtl texture512
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test512.jpg
+  map_Kd test512.jpg
+  
+  newmtl texture520
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test520.jpg
+  map_Kd test520.jpg
+  
+  newmtl texture528
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test528.jpg
+  map_Kd test528.jpg
+  
+  newmtl texture536
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test536.jpg
+  map_Kd test536.jpg
+  
+  newmtl texture544
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test544.jpg
+  map_Kd test544.jpg
+  
+  newmtl texture548
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test548.jpg
+  map_Kd test548.jpg
+  
+  newmtl texture556
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test556.jpg
+  map_Kd test556.jpg
+  
+  newmtl texture564
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test564.jpg
+  map_Kd test564.jpg
+  
+  newmtl texture572
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test572.jpg
+  map_Kd test572.jpg
+  
+  newmtl texture580
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test580.jpg
+  map_Kd test580.jpg
+  
+  newmtl texture588
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test588.jpg
+  map_Kd test588.jpg
+  
+  newmtl texture596
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test596.jpg
+  map_Kd test596.jpg
+  
+  newmtl texture604
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test604.jpg
+  map_Kd test604.jpg
+  
+  newmtl texture612
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test612.jpg
+  map_Kd test612.jpg
+  
+  newmtl texture616
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test616.jpg
+  map_Kd test616.jpg
+  
+  newmtl texture624
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test624.jpg
+  map_Kd test624.jpg
+  
+  newmtl texture632
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test632.jpg
+  map_Kd test632.jpg
+  
+  newmtl texture640
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test640.jpg
+  map_Kd test640.jpg
+  
+  newmtl texture648
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test648.jpg
+  map_Kd test648.jpg
+  
+  newmtl texture656
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test656.jpg
+  map_Kd test656.jpg
+  
+  newmtl texture664
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test664.jpg
+  map_Kd test664.jpg
+  
+  newmtl texture672
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test672.jpg
+  map_Kd test672.jpg
+  
+  newmtl texture680
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test680.jpg
+  map_Kd test680.jpg
+  
+  newmtl texture684
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test684.jpg
+  map_Kd test684.jpg
+  
+  newmtl texture692
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test692.jpg
+  map_Kd test692.jpg
+  
+  newmtl texture700
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test700.jpg
+  map_Kd test700.jpg
+  
+  newmtl texture708
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test708.jpg
+  map_Kd test708.jpg
+  
+  newmtl texture716
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test716.jpg
+  map_Kd test716.jpg
+  
+  newmtl texture724
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test724.jpg
+  map_Kd test724.jpg
+  
+  newmtl texture732
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test732.jpg
+  map_Kd test732.jpg
+  
+  newmtl texture740
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test740.jpg
+  map_Kd test740.jpg
+  
+  newmtl texture748
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test748.jpg
+  map_Kd test748.jpg
+  
+  newmtl texture752
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test752.jpg
+  map_Kd test752.jpg
+  
+  newmtl texture760
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test760.jpg
+  map_Kd test760.jpg
+  
+  newmtl texture768
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test768.jpg
+  map_Kd test768.jpg
+  
+  newmtl texture776
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test776.jpg
+  map_Kd test776.jpg
+  
+  newmtl texture784
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test784.jpg
+  map_Kd test784.jpg
+  
+  newmtl texture792
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test792.jpg
+  map_Kd test792.jpg
+  
+  newmtl texture800
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test800.jpg
+  map_Kd test800.jpg
+  
+  newmtl texture808
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test808.jpg
+  map_Kd test808.jpg
+  
+  newmtl texture816
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test816.jpg
+  map_Kd test816.jpg
+  
+  newmtl texture820
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test820.jpg
+  map_Kd test820.jpg
+  
+  newmtl texture828
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test828.jpg
+  map_Kd test828.jpg
+  
+  newmtl texture836
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test836.jpg
+  map_Kd test836.jpg
+  
+  newmtl texture844
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test844.jpg
+  map_Kd test844.jpg
+  
+  newmtl texture852
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test852.jpg
+  map_Kd test852.jpg
+  
+  newmtl texture860
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test860.jpg
+  map_Kd test860.jpg
+  
+  newmtl texture868
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test868.jpg
+  map_Kd test868.jpg
+  
+  newmtl texture876
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test876.jpg
+  map_Kd test876.jpg
+  
+  newmtl texture884
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test884.jpg
+  map_Kd test884.jpg
+  
+  newmtl texture888
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test888.jpg
+  map_Kd test888.jpg
+  
+  newmtl texture896
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test896.jpg
+  map_Kd test896.jpg
+  
+  newmtl texture904
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test904.jpg
+  map_Kd test904.jpg
+  
+  newmtl texture912
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test912.jpg
+  map_Kd test912.jpg
+  
+  newmtl texture920
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test920.jpg
+  map_Kd test920.jpg
+  
+  newmtl texture928
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test928.jpg
+  map_Kd test928.jpg
+  
+  newmtl texture936
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test936.jpg
+  map_Kd test936.jpg
+  
+  newmtl texture944
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test944.jpg
+  map_Kd test944.jpg
+  
+  newmtl texture952
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test952.jpg
+  map_Kd test952.jpg
+  
+  newmtl texture956
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test956.jpg
+  map_Kd test956.jpg
+  
+  newmtl texture964
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test964.jpg
+  map_Kd test964.jpg
+  
+  newmtl texture972
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test972.jpg
+  map_Kd test972.jpg
+  
+  newmtl texture980
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test980.jpg
+  map_Kd test980.jpg
+  
+  newmtl texture988
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test988.jpg
+  map_Kd test988.jpg
+  
+  newmtl texture996
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test996.jpg
+  map_Kd test996.jpg
+  
+  newmtl texture1004
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1004.jpg
+  map_Kd test1004.jpg
+  
+  newmtl texture1012
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1012.jpg
+  map_Kd test1012.jpg
+  
+  newmtl texture1020
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1020.jpg
+  map_Kd test1020.jpg
+  
+  newmtl texture1024
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1024.jpg
+  map_Kd test1024.jpg
+  
+  newmtl texture1032
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1032.jpg
+  map_Kd test1032.jpg
+  
+  newmtl texture1040
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1040.jpg
+  map_Kd test1040.jpg
+  
+  newmtl texture1048
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1048.jpg
+  map_Kd test1048.jpg
+  
+  newmtl texture1056
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1056.jpg
+  map_Kd test1056.jpg
+  
+  newmtl texture1064
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1064.jpg
+  map_Kd test1064.jpg
+  
+  newmtl texture1072
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1072.jpg
+  map_Kd test1072.jpg
+  
+  newmtl texture1080
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1080.jpg
+  map_Kd test1080.jpg
+  
+  newmtl texture1088
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1088.jpg
+  map_Kd test1088.jpg
+  
+  newmtl texture1092
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1092.jpg
+  map_Kd test1092.jpg
+  
+  newmtl texture1100
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1100.jpg
+  map_Kd test1100.jpg
+  
+  newmtl texture1108
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1108.jpg
+  map_Kd test1108.jpg
+  
+  newmtl texture1116
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1116.jpg
+  map_Kd test1116.jpg
+  
+  newmtl texture1124
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1124.jpg
+  map_Kd test1124.jpg
+  
+  newmtl texture1132
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1132.jpg
+  map_Kd test1132.jpg
+  
+  newmtl texture1140
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1140.jpg
+  map_Kd test1140.jpg
+  
+  newmtl texture1148
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1148.jpg
+  map_Kd test1148.jpg
+  
+  newmtl texture1156
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1156.jpg
+  map_Kd test1156.jpg
+  
+  newmtl texture1160
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1160.jpg
+  map_Kd test1160.jpg
+  
+  newmtl texture1168
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1168.jpg
+  map_Kd test1168.jpg
+  
+  newmtl texture1176
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1176.jpg
+  map_Kd test1176.jpg
+  
+  newmtl texture1184
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1184.jpg
+  map_Kd test1184.jpg
+  
+  newmtl texture1192
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1192.jpg
+  map_Kd test1192.jpg
+  
+  newmtl texture1200
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1200.jpg
+  map_Kd test1200.jpg
+  
+  newmtl texture1208
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1208.jpg
+  map_Kd test1208.jpg
+  
+  newmtl texture1216
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1216.jpg
+  map_Kd test1216.jpg
+  
+  newmtl texture1224
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1224.jpg
+  map_Kd test1224.jpg
+  
+  newmtl texture1228
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1228.jpg
+  map_Kd test1228.jpg
+  
+  newmtl texture1236
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1236.jpg
+  map_Kd test1236.jpg
+  
+  newmtl texture1244
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1244.jpg
+  map_Kd test1244.jpg
+  
+  newmtl texture1252
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1252.jpg
+  map_Kd test1252.jpg
+  
+  newmtl texture1260
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1260.jpg
+  map_Kd test1260.jpg
+  
+  newmtl texture1268
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1268.jpg
+  map_Kd test1268.jpg
+  
+  newmtl texture1276
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1276.jpg
+  map_Kd test1276.jpg
+  
+  newmtl texture1284
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1284.jpg
+  map_Kd test1284.jpg
+  
+  newmtl texture1292
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1292.jpg
+  map_Kd test1292.jpg
+  
+  newmtl texture1296
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1296.jpg
+  map_Kd test1296.jpg
+  
+  newmtl texture1304
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1304.jpg
+  map_Kd test1304.jpg
+  
+  newmtl texture1312
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1312.jpg
+  map_Kd test1312.jpg
+  
+  newmtl texture1320
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1320.jpg
+  map_Kd test1320.jpg
+  
+  newmtl texture1328
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1328.jpg
+  map_Kd test1328.jpg
+  
+  newmtl texture1336
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1336.jpg
+  map_Kd test1336.jpg
+  
+  newmtl texture1344
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1344.jpg
+  map_Kd test1344.jpg
+  
+  newmtl texture1352
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1352.jpg
+  map_Kd test1352.jpg
+  
+  newmtl texture1360
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1360.jpg
+  map_Kd test1360.jpg
+  
+  newmtl texture1364
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1364.jpg
+  map_Kd test1364.jpg
+  
+  newmtl texture1372
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1372.jpg
+  map_Kd test1372.jpg
+  
+  newmtl texture1380
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1380.jpg
+  map_Kd test1380.jpg
+  
+  newmtl texture1388
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1388.jpg
+  map_Kd test1388.jpg
+  
+  newmtl texture1396
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1396.jpg
+  map_Kd test1396.jpg
+  
+  newmtl texture1404
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1404.jpg
+  map_Kd test1404.jpg
+  
+  newmtl texture1412
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1412.jpg
+  map_Kd test1412.jpg
+  
+  newmtl texture1420
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1420.jpg
+  map_Kd test1420.jpg
+  
+  newmtl texture1428
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1428.jpg
+  map_Kd test1428.jpg
+  
+  newmtl texture1432
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1432.jpg
+  map_Kd test1432.jpg
+  
+  newmtl texture1440
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1440.jpg
+  map_Kd test1440.jpg
+  
+  newmtl texture1448
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1448.jpg
+  map_Kd test1448.jpg
+  
+  newmtl texture1456
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1456.jpg
+  map_Kd test1456.jpg
+  
+  newmtl texture1464
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1464.jpg
+  map_Kd test1464.jpg
+  
+  newmtl texture1472
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1472.jpg
+  map_Kd test1472.jpg
+  
+  newmtl texture1480
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1480.jpg
+  map_Kd test1480.jpg
+  
+  newmtl texture1488
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1488.jpg
+  map_Kd test1488.jpg
+  
+  newmtl texture1496
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1496.jpg
+  map_Kd test1496.jpg
+  
+  newmtl texture1500
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1500.jpg
+  map_Kd test1500.jpg
+  
+  newmtl texture1508
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1508.jpg
+  map_Kd test1508.jpg
+  
+  newmtl texture1516
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1516.jpg
+  map_Kd test1516.jpg
+  
+  newmtl texture1524
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1524.jpg
+  map_Kd test1524.jpg
+  
+  newmtl texture1532
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1532.jpg
+  map_Kd test1532.jpg
+  
+  newmtl texture1540
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1540.jpg
+  map_Kd test1540.jpg
+  
+  newmtl texture1548
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1548.jpg
+  map_Kd test1548.jpg
+  
+  newmtl texture1556
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1556.jpg
+  map_Kd test1556.jpg
+  
+  newmtl texture1564
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1564.jpg
+  map_Kd test1564.jpg
+  
+  newmtl texture1568
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1568.jpg
+  map_Kd test1568.jpg
+  
+  newmtl texture1576
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1576.jpg
+  map_Kd test1576.jpg
+  
+  newmtl texture1584
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1584.jpg
+  map_Kd test1584.jpg
+  
+  newmtl texture1592
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1592.jpg
+  map_Kd test1592.jpg
+  
+  newmtl texture1600
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1600.jpg
+  map_Kd test1600.jpg
+  
+  newmtl texture1608
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1608.jpg
+  map_Kd test1608.jpg
+  
+  newmtl texture1616
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1616.jpg
+  map_Kd test1616.jpg
+  
+  newmtl texture1624
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1624.jpg
+  map_Kd test1624.jpg
+  
+  newmtl texture1632
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1632.jpg
+  map_Kd test1632.jpg
+  
+  newmtl texture1636
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1636.jpg
+  map_Kd test1636.jpg
+  
+  newmtl texture1644
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1644.jpg
+  map_Kd test1644.jpg
+  
+  newmtl texture1652
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1652.jpg
+  map_Kd test1652.jpg
+  
+  newmtl texture1660
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1660.jpg
+  map_Kd test1660.jpg
+  
+  newmtl texture1668
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1668.jpg
+  map_Kd test1668.jpg
+  
+  newmtl texture1676
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1676.jpg
+  map_Kd test1676.jpg
+  
+  newmtl texture1684
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1684.jpg
+  map_Kd test1684.jpg
+  
+  newmtl texture1692
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1692.jpg
+  map_Kd test1692.jpg
+  
+  newmtl texture1700
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1700.jpg
+  map_Kd test1700.jpg
+  
+  newmtl texture1704
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1704.jpg
+  map_Kd test1704.jpg
+  
+  newmtl texture1712
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1712.jpg
+  map_Kd test1712.jpg
+  
+  newmtl texture1720
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1720.jpg
+  map_Kd test1720.jpg
+  
+  newmtl texture1728
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1728.jpg
+  map_Kd test1728.jpg
+  
+  newmtl texture1736
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1736.jpg
+  map_Kd test1736.jpg
+  
+  newmtl texture1744
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1744.jpg
+  map_Kd test1744.jpg
+  
+  newmtl texture1752
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1752.jpg
+  map_Kd test1752.jpg
+  
+  newmtl texture1760
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1760.jpg
+  map_Kd test1760.jpg
+  
+  newmtl texture1768
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1768.jpg
+  map_Kd test1768.jpg
+  
+  newmtl texture1772
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1772.jpg
+  map_Kd test1772.jpg
+  
+  newmtl texture1780
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1780.jpg
+  map_Kd test1780.jpg
+  
+  newmtl texture1788
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1788.jpg
+  map_Kd test1788.jpg
+  
+  newmtl texture1796
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1796.jpg
+  map_Kd test1796.jpg
+  
+  newmtl texture1804
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1804.jpg
+  map_Kd test1804.jpg
+  
+  newmtl texture1812
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1812.jpg
+  map_Kd test1812.jpg
+  
+  newmtl texture1820
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1820.jpg
+  map_Kd test1820.jpg
+  
+  newmtl texture1828
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1828.jpg
+  map_Kd test1828.jpg
+  
+  newmtl texture1836
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1836.jpg
+  map_Kd test1836.jpg
+  
+  newmtl texture1840
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1840.jpg
+  map_Kd test1840.jpg
+  
+  newmtl texture1848
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1848.jpg
+  map_Kd test1848.jpg
+  
+  newmtl texture1856
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1856.jpg
+  map_Kd test1856.jpg
+  
+  newmtl texture1864
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1864.jpg
+  map_Kd test1864.jpg
+  
+  newmtl texture1872
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1872.jpg
+  map_Kd test1872.jpg
+  
+  newmtl texture1880
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1880.jpg
+  map_Kd test1880.jpg
+  
+  newmtl texture1888
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1888.jpg
+  map_Kd test1888.jpg
+  
+  newmtl texture1896
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1896.jpg
+  map_Kd test1896.jpg
+  
+  newmtl texture1904
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1904.jpg
+  map_Kd test1904.jpg
+  
+  newmtl texture1908
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1908.jpg
+  map_Kd test1908.jpg
+  
+  newmtl texture1916
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1916.jpg
+  map_Kd test1916.jpg
+  
+  newmtl texture1924
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1924.jpg
+  map_Kd test1924.jpg
+  
+  newmtl texture1932
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1932.jpg
+  map_Kd test1932.jpg
+  
+  newmtl texture1940
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1940.jpg
+  map_Kd test1940.jpg
+  
+  newmtl texture1948
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1948.jpg
+  map_Kd test1948.jpg
+  
+  newmtl texture1956
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1956.jpg
+  map_Kd test1956.jpg
+  
+  newmtl texture1964
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1964.jpg
+  map_Kd test1964.jpg
+  
+  newmtl texture1972
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1972.jpg
+  map_Kd test1972.jpg
+  
+  newmtl texture1976
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1976.jpg
+  map_Kd test1976.jpg
+  
+  newmtl texture1984
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1984.jpg
+  map_Kd test1984.jpg
+  
+  newmtl texture1992
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test1992.jpg
+  map_Kd test1992.jpg
+  
+  newmtl texture2000
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test2000.jpg
+  map_Kd test2000.jpg
+  
+  newmtl texture2008
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test2008.jpg
+  map_Kd test2008.jpg
+  
+  newmtl texture2016
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test2016.jpg
+  map_Kd test2016.jpg
+  
+  newmtl texture2024
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test2024.jpg
+  map_Kd test2024.jpg
+  
+  newmtl texture2032
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test2032.jpg
+  map_Kd test2032.jpg
+  
+  newmtl texture2040
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test2040.jpg
+  map_Kd test2040.jpg
+  
+  newmtl texture2044
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test2044.jpg
+  map_Kd test2044.jpg
+  
+  newmtl texture2052
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test2052.jpg
+  map_Kd test2052.jpg
+  
+  newmtl texture2060
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test2060.jpg
+  map_Kd test2060.jpg
+  
+  newmtl texture2068
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test2068.jpg
+  map_Kd test2068.jpg
+  
+  newmtl texture2076
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test2076.jpg
+  map_Kd test2076.jpg
+  
+  newmtl texture2084
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test2084.jpg
+  map_Kd test2084.jpg
+  
+  newmtl texture2092
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test2092.jpg
+  map_Kd test2092.jpg
+  
+  newmtl texture2100
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test2100.jpg
+  map_Kd test2100.jpg
+  
+  newmtl texture2108
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test2108.jpg
+  map_Kd test2108.jpg
+  
+  newmtl texture2112
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test2112.jpg
+  map_Kd test2112.jpg
+  
+  newmtl texture2120
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test2120.jpg
+  map_Kd test2120.jpg
+  
+  newmtl texture2128
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test2128.jpg
+  map_Kd test2128.jpg
+  
+  newmtl texture2136
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test2136.jpg
+  map_Kd test2136.jpg
+  
+  newmtl texture2144
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test2144.jpg
+  map_Kd test2144.jpg
+  
+  newmtl texture2152
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test2152.jpg
+  map_Kd test2152.jpg
+  
+  newmtl texture2160
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test2160.jpg
+  map_Kd test2160.jpg
+  
+  newmtl texture2168
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test2168.jpg
+  map_Kd test2168.jpg
+  
+  newmtl texture2176
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test2176.jpg
+  map_Kd test2176.jpg
+  
+  newmtl texture2180
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test2180.jpg
+  map_Kd test2180.jpg
+  
+  newmtl texture2188
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test2188.jpg
+  map_Kd test2188.jpg
+  
+  newmtl texture2196
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test2196.jpg
+  map_Kd test2196.jpg
+  
+  newmtl texture2204
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test2204.jpg
+  map_Kd test2204.jpg
+  
+  newmtl texture2212
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test2212.jpg
+  map_Kd test2212.jpg
+  
+  newmtl texture2220
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test2220.jpg
+  map_Kd test2220.jpg
+  
+  newmtl texture2228
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test2228.jpg
+  map_Kd test2228.jpg
+  
+  newmtl texture2236
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test2236.jpg
+  map_Kd test2236.jpg
+  
+  newmtl texture2244
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test2244.jpg
+  map_Kd test2244.jpg
+  
+  newmtl texture2248
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test2248.jpg
+  map_Kd test2248.jpg
+  
+  newmtl texture2256
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test2256.jpg
+  map_Kd test2256.jpg
+  
+  newmtl texture2264
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test2264.jpg
+  map_Kd test2264.jpg
+  
+  newmtl texture2272
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test2272.jpg
+  map_Kd test2272.jpg
+  
+  newmtl texture2280
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test2280.jpg
+  map_Kd test2280.jpg
+  
+  newmtl texture2288
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test2288.jpg
+  map_Kd test2288.jpg
+  
+  newmtl texture2296
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test2296.jpg
+  map_Kd test2296.jpg
+  
+  newmtl texture2304
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test2304.jpg
+  map_Kd test2304.jpg
+  
+  newmtl texture2312
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test2312.jpg
+  map_Kd test2312.jpg
+  
+  newmtl texture2316
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test2316.jpg
+  map_Kd test2316.jpg
+  
+  newmtl texture2324
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test2324.jpg
+  map_Kd test2324.jpg
+  
+  newmtl texture2332
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test2332.jpg
+  map_Kd test2332.jpg
+  
+  newmtl texture2340
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test2340.jpg
+  map_Kd test2340.jpg
+  
+  newmtl texture2348
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test2348.jpg
+  map_Kd test2348.jpg
+  
+  newmtl texture2356
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test2356.jpg
+  map_Kd test2356.jpg
+  
+  newmtl texture2364
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test2364.jpg
+  map_Kd test2364.jpg
+  
+  newmtl texture2372
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test2372.jpg
+  map_Kd test2372.jpg
+  
+  newmtl texture2380
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test2380.jpg
+  map_Kd test2380.jpg
+  
+  newmtl texture2384
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test2384.jpg
+  map_Kd test2384.jpg
+  
+  newmtl texture2392
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test2392.jpg
+  map_Kd test2392.jpg
+  
+  newmtl texture2400
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test2400.jpg
+  map_Kd test2400.jpg
+  
+  newmtl texture2408
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test2408.jpg
+  map_Kd test2408.jpg
+  
+  newmtl texture2416
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test2416.jpg
+  map_Kd test2416.jpg
+  
+  newmtl texture2424
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test2424.jpg
+  map_Kd test2424.jpg
+  
+  newmtl texture2432
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test2432.jpg
+  map_Kd test2432.jpg
+  
+  newmtl texture2440
+  Ka 0 0 0
+  Kd 1 1 1
+  map_Ka test2440.jpg
+  map_Kd test2440.jpg
+  
