@@ -22,7 +22,10 @@ function clean(objString) {
  * @param {number-like} length The length of the obj
  */
 function flatGenerator(width, length, baseName, textureOptions, wOffset = 0, lOffset = 0, hOffset = 0, vOffset = 0) {
-  if (!is.all.finite([width, length, wOffset, lOffset, hOffset]) || !is.all.positive([width,length]) || !is.string(baseName) || arguments.length < 4 || arguments.length > 8) throw new "Invalid arguments."
+  if (!is.all.finite([width, length, wOffset, lOffset, hOffset]) || !is.all.positive([width,length]) || !is.string(baseName) || arguments.length < 4 || arguments.length > 8) {
+    console.log(width,length)
+    throw new "Invalid arguments."
+  }
 
   let fileBase = getFileBase(baseName);
   //let folderBase = getFolderBase(baseName);

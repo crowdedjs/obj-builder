@@ -2,15 +2,155 @@ import flatGenerator from "./flatGenerator.js"
 import {makeRoom} from "./room.js"
 import fs from 'fs';
 
+function fillHelper(filePath, emptySpace, filledSpace, vOffset, width, length) {
+    while (emptySpace.length != 0) {
+        let minIdx = -1;
+        let minVal = [Infinity, Infinity];
+    
+        for (let i = 0; i < emptySpace.length; i++) {
+            if (emptySpace[i].TL.y < minVal[0]) {
+                if (emptySpace[i].TL.x < minVal[1]) {
+                    minIdx = i;
+                    minVal = [emptySpace[i].TL.y, emptySpace[i].TL.x];
+                }
+            }
+        };
+    
+        let newSpace = {
+            TL:{x:emptySpace[minIdx].TL.x, y:emptySpace[minIdx].TL.y},
+            BR:{x:emptySpace[minIdx].TL.x + width, y:emptySpace[minIdx].TL.y + length},
+            isRoom:true
+        };
+        
+        if (newSpace.TL.x - newSpace.BR.x < 0 && newSpace.TL.y - newSpace.BR.y < 0) {
+            vOffset = allocate(filePath, newSpace, 3, minIdx, emptySpace, filledSpace, vOffset);
+        } else {
+            console.log("Error")
+            emptySpace.splice(minIdx, 1)
+        }
+    }
+    return vOffset;
+}
 
-export function allocate(filePath, filled, doorSize, isRoom, index, emptySpace, filledSpace, vOffset) {
+function fillProcessing(dimension) {
+    let count = 1;
+    while (dimension / count > 15)
+        count++
+    return dimension / (count - 1);
+}
+
+export function basicFill(filePath, emptySpace, filledSpace, vOffset) {
+    let width = fillProcessing(emptySpace[0].BR.x - emptySpace[0].TL.x);
+    let length = fillProcessing(emptySpace[0].BR.y - emptySpace[0].TL.y);
+
+    return fillHelper(filePath, emptySpace, filledSpace, vOffset, width, length);
+}
+
+export function lineFill(filePath, emptySpace, filledSpace, vOffset) {
+    let width, length;
+
+    if (emptySpace[0].BR.x - emptySpace[0].TL.x > emptySpace[0].BR.y - emptySpace[0].TL.y) {
+        length = emptySpace[0].BR.y - emptySpace[0].TL.y;
+        width = fillProcessing(emptySpace[0].BR.x - emptySpace[0].TL.x);
+    } else {
+        width = emptySpace[0].BR.x - emptySpace[0].TL.x;
+        length = fillProcessing(emptySpace[0].BR.y - emptySpace[0].TL.y);
+    }
+
+    return fillHelper(filePath, emptySpace, filledSpace, vOffset, width, length);
+}
+
+export function threeHallFill(filePath, emptySpace, filledSpace, vOffset, halls) {
+    let splitValue;
+
+    console.log(halls)
+
+    if (emptySpace[0].BR.x - emptySpace[0].TL.x > emptySpace[0].BR.y - emptySpace[0].TL.y) {
+        splitValue = (emptySpace[0].BR.y - emptySpace[0].TL.y) / 2;
+        if (!halls[0] || !halls[2]) {
+            console.log("Location 1")
+            emptySpace.push({TL:{x:emptySpace[0].TL.x,y:emptySpace[0].TL.y},BR:{x:(emptySpace[0].TL.x + emptySpace[0].BR.x) / 2,y:emptySpace[0].BR.y},isRoom:false})
+            emptySpace.push({TL:{x:(emptySpace[0].TL.x + emptySpace[0].BR.x) / 2,y:emptySpace[0].TL.y},BR:{x:emptySpace[0].BR.x,y:emptySpace[0].BR.y},isRoom:false})
+        } else if (!halls[3]) {
+            console.log("Location 2")
+            emptySpace.push({TL:{x:emptySpace[0].TL.x,y:emptySpace[0].TL.y},BR:{x:emptySpace[0].BR.x - splitValue,y:emptySpace[0].BR.y - splitValue},isRoom:false})
+            emptySpace.push({TL:{x:emptySpace[0].TL.x,y:emptySpace[0].TL.y + splitValue},BR:{x:emptySpace[0].BR.x - splitValue,y:emptySpace[0].BR.y},isRoom:false})
+            emptySpace.push({TL:{x:emptySpace[0].BR.x - splitValue,y:emptySpace[0].TL.y},BR:{x:emptySpace[0].BR.x,y:emptySpace[0].BR.y},isRoom:false})
+        } else {
+            console.log("Location 3")
+            emptySpace.push({TL:{x:emptySpace[0].TL.x,y:emptySpace[0].TL.y},BR:{x:emptySpace[0].TL.x + splitValue,y:emptySpace[0].BR.y},isRoom:false})
+            emptySpace.push({TL:{x:emptySpace[0].TL.x + splitValue,y:emptySpace[0].TL.y},BR:{x:emptySpace[0].BR.x,y:emptySpace[0].BR.y - splitValue},isRoom:false})
+            emptySpace.push({TL:{x:emptySpace[0].TL.x + splitValue,y:emptySpace[0].TL.y + splitValue},BR:{x:emptySpace[0].BR.x,y:emptySpace[0].BR.y},isRoom:false})
+        }
+    } else {
+        splitValue = (emptySpace[0].BR.x - emptySpace[0].TL.x) / 2;
+        if (!halls[1] || !halls[3]) {
+            console.log("Location 4")
+            emptySpace.push({TL:{x:emptySpace[0].TL.x,y:emptySpace[0].TL.y},BR:{x:emptySpace[0].BR.x,y:(emptySpace[0].TL.y + emptySpace[0].BR.y) / 2},isRoom:false})
+            emptySpace.push({TL:{x:emptySpace[0].TL.x,y:(emptySpace[0].TL.y + emptySpace[0].BR.y) / 2},BR:{x:emptySpace[0].BR.x,y:emptySpace[0].BR.y},isRoom:false})
+        } else if (!halls[2]) {
+            console.log("Location 5")
+            emptySpace.push({TL:{x:emptySpace[0].TL.x,y:emptySpace[0].TL.y},BR:{x:emptySpace[0].BR.x,y:emptySpace[0].TL.y + splitValue},isRoom:false})
+            emptySpace.push({TL:{x:emptySpace[0].TL.x,y:emptySpace[0].TL.y + splitValue},BR:{x:emptySpace[0].BR.x - splitValue,y:emptySpace[0].BR.y},isRoom:false})
+            emptySpace.push({TL:{x:emptySpace[0].TL.x + splitValue,y:emptySpace[0].TL.y + splitValue},BR:{x:emptySpace[0].BR.x,y:emptySpace[0].BR.y},isRoom:false})
+        } else {
+            console.log("Location 6")
+            emptySpace.push({TL:{x:emptySpace[0].TL.x,y:emptySpace[0].TL.y},BR:{x:emptySpace[0].BR.x - splitValue,y:emptySpace[0].BR.y - splitValue},isRoom:false})
+            emptySpace.push({TL:{x:emptySpace[0].TL.x + splitValue,y:emptySpace[0].TL.y},BR:{x:emptySpace[0].BR.x,y:emptySpace[0].BR.y - splitValue},isRoom:false})
+            emptySpace.push({TL:{x:emptySpace[0].TL.x,y:emptySpace[0].BR.y - splitValue},BR:{x:emptySpace[0].BR.x,y:emptySpace[0].BR.y},isRoom:false})
+        }
+    }
+
+    for (let i = 1; i < emptySpace.length; i++) {
+        vOffset = lineFill(filePath, [emptySpace[i]], filledSpace, vOffset)
+    }
+
+    return vOffset;
+}
+
+export function fourHallFill(filePath, emptySpace, filledSpace, vOffset) {
+    let splitValue;
+
+    if (emptySpace[0].BR.x - emptySpace[0].TL.x >= (emptySpace[0].BR.y - emptySpace[0].TL.y) * 2) {
+        splitValue = (emptySpace[0].BR.y - emptySpace[0].TL.y) / 2;
+        emptySpace.push({TL:{x:emptySpace[0].TL.x,y:emptySpace[0].TL.y},BR:{x:emptySpace[0].TL.x + splitValue,y:emptySpace[0].BR.y},isRoom:false})
+        emptySpace.push({TL:{x:emptySpace[0].TL.x + splitValue,y:emptySpace[0].TL.y},BR:{x:emptySpace[0].BR.x - splitValue,y:emptySpace[0].BR.y - splitValue},isRoom:false})
+        emptySpace.push({TL:{x:emptySpace[0].TL.x + splitValue,y:emptySpace[0].TL.y + splitValue},BR:{x:emptySpace[0].BR.x - splitValue,y:emptySpace[0].BR.y},isRoom:false})
+        emptySpace.push({TL:{x:emptySpace[0].BR.x - splitValue,y:emptySpace[0].TL.y},BR:{x:emptySpace[0].BR.x,y:emptySpace[0].BR.y},isRoom:false})
+    } else if ((emptySpace[0].BR.x - emptySpace[0].TL.x) * 2 <= emptySpace[0].BR.y - emptySpace[0].TL.y) {
+        splitValue = (emptySpace[0].BR.x - emptySpace[0].TL.x) / 2;
+        emptySpace.push({TL:{x:emptySpace[0].TL.x,y:emptySpace[0].TL.y},BR:{x:emptySpace[0].BR.x,y:emptySpace[0].TL.y + splitValue},isRoom:false})
+        emptySpace.push({TL:{x:emptySpace[0].TL.x,y:emptySpace[0].TL.y + splitValue},BR:{x:emptySpace[0].BR.x - splitValue,y:emptySpace[0].BR.y - splitValue},isRoom:false})
+        emptySpace.push({TL:{x:emptySpace[0].TL.x + splitValue,y:emptySpace[0].TL.y + splitValue},BR:{x:emptySpace[0].BR.x,y:emptySpace[0].BR.y - splitValue},isRoom:false})
+        emptySpace.push({TL:{x:emptySpace[0].TL.x,y:emptySpace[0].BR.y - splitValue},BR:{x:emptySpace[0].BR.x,y:emptySpace[0].BR.y},isRoom:false})
+    } else {
+        splitValue = (emptySpace[0].BR.x - emptySpace[0].TL.x) / 2;
+        emptySpace.push({TL:{x:emptySpace[0].TL.x,y:emptySpace[0].TL.y},BR:{x:emptySpace[0].BR.x - splitValue,y:emptySpace[0].BR.y},isRoom:false})
+        emptySpace.push({TL:{x:emptySpace[0].TL.x + splitValue,y:emptySpace[0].TL.y},BR:{x:emptySpace[0].BR.x,y:emptySpace[0].BR.y},isRoom:false})
+    }
+
+    for (let i = 1; i < emptySpace.length; i++) {
+        vOffset = lineFill(filePath, [emptySpace[i]], filledSpace, vOffset)
+    }
+
+    return vOffset;
+}
+
+export function allocate(filePath, filled, doorSize, index, emptySpace, filledSpace, vOffset) {
+    let hallEdges = checkForHalls(filledSpace, filled);
     let alignedEdges = checkValidPartition(emptySpace[index], filled);
     cutSpace(emptySpace[index], filled, alignedEdges, emptySpace);
 
-    if (isRoom) {
+    if (filled.isRoom && hallEdges) {
         vOffset = makeRoom(
             filled.BR.x - filled.TL.x, filled.BR.y - filled.TL.y, 2,
-            [doorSize, doorSize, doorSize, doorSize], "./" + filePath,
+            hallEdges.map(x => x * doorSize), "./" + filePath,
+            (filled.BR.x + filled.TL.x) / 2, (filled.BR.y + filled.TL.y) / 2, 0, vOffset
+        );
+    } else if (filled.isRoom) {
+        vOffset = makeRoom(
+            filled.BR.x - filled.TL.x, filled.BR.y - filled.TL.y, 2,
+            [0,0,0,0], "./" + filePath,
             (filled.BR.x + filled.TL.x) / 2, (filled.BR.y + filled.TL.y) / 2, 0, vOffset
         );
     } else {
@@ -24,17 +164,38 @@ export function allocate(filePath, filled, doorSize, isRoom, index, emptySpace, 
     return vOffset;
 }
 
+export function checkForHalls(filledSpace, filled) {
+    let T = false, R = false, B = false, L = false;
+    
+    filledSpace.forEach(space => {
+        if (space.BR.y == filled.TL.y && !space.isRoom)
+            T = true;
+        if (space.TL.x == filled.BR.x && !space.isRoom)
+            R = true;
+        if (space.TL.y == filled.BR.y && !space.isRoom)
+            B = true;
+        if (space.BR.x == filled.TL.x && !space.isRoom)
+            L = true;
+    });
+    
+    if (!T && !R && !B && !L) {
+        return false;
+    } else {
+        return [T,R,B,L];
+    }
+}
+
 function checkValidPartition(empty, filled) {
     let alignedEdges = [false, false, false, false];
     
     if (empty.TL.y == filled.TL.y)
-    alignedEdges[0] = true;
+        alignedEdges[0] = true;
     if (empty.BR.x == filled.BR.x)
-    alignedEdges[1] = true;
+        alignedEdges[1] = true;
     if (empty.BR.y == filled.BR.y)
-    alignedEdges[2] = true;
+        alignedEdges[2] = true;
     if (empty.TL.x == filled.TL.x)
-    alignedEdges[3] = true;
+        alignedEdges[3] = true;
     
     if (!alignedEdges.some((edge) => {return edge})) {
         return false;
@@ -68,13 +229,12 @@ function cutSpace(empty, filled, alignedEdges, emptySpace) {
         newSpace.BR.x = filled.TL.x;
         emptySpace.push(newSpace);
     }
-    
 }
 
 function removeOverlappingEmptySpace(filled, emptySpace) {
     let toRemove = {};
     emptySpace.forEach(space => {
-        if (overlaps(filled, space)) {
+        if (overlaps(filled, space) || space.BR.x - space.TL.x < 1 || space.BR.y - space.TL.y < 1) {
             toRemove[[space.BR.x, space.TL.x, space.BR.y, space.TL.y]] = true;
         }
     });
@@ -101,6 +261,7 @@ function deepCloneSpace(target, source) {
     target.BR.x = source.BR.x;
     target.TL.y = source.TL.y;
     target.BR.y = source.BR.y;
+    target.isRoom = source.isRoom;
 }
 
 export function generateLabels(filledSpace, filePath) {
@@ -123,9 +284,9 @@ export function generateLabels(filledSpace, filePath) {
     fs.appendFileSync(filePath + "Labels.json", "]");
 }
 
-export function visualizeEmpty(emptySpace, vOffset, hOffset) {
+export function visualizeEmpty(emptySpace, filePath, vOffset, hOffset) {
     emptySpace.forEach(space => {
-        vOffset = flatGenerator(space.BR.x - space.TL.x, space.BR.y - space.TL.y,
+        vOffset = flatGenerator(Math.abs(space.BR.x - space.TL.x), Math.abs(space.BR.y - space.TL.y),
             "./" + filePath, {},
             (space.BR.x + space.TL.x) / 2, (space.BR.y + space.TL.y) / 2, hOffset, vOffset
         );

@@ -34,8 +34,12 @@ function randDoor(max) {
  * @param {int} vOffset The offset for the previous vertices for obj file.  First room should always be 0.
  */
 export function makeRoom(width, length, wallHeight, doorLocs, baseName, wOffset = 0, lOffset = 0, hOffset = 0, vOffset = 0) {
-    if (!is.all.finite([width, length, wallHeight]) || width < 10 || length < 10 || doorLocs.length != 4  || Math.max(doorLocs) >= (width - 2) || Math.max(doorLocs) >= (length - 2) || arguments.length < 5 || arguments.length > 9) throw new "Invalid arguments."
-    
+    // if (!is.all.finite([width, length, wallHeight]) || width < 8 || length < 8 || doorLocs.length != 4  || Math.max(doorLocs) >= (width - 2) || Math.max(doorLocs) >= (length - 2) || arguments.length < 5 || arguments.length > 9) {
+    if (!is.all.finite([width, length, wallHeight]) || doorLocs.length != 4  || Math.max(doorLocs) >= (width - 2) || Math.max(doorLocs) >= (length - 2) || arguments.length < 5 || arguments.length > 9) {
+        console.log(width, length)
+        throw new "Invalid arguments."
+    }
+
     // fs.writeFileSync(`${baseName}.obj`, "mtllib room.mtl\n");
     // fs.writeFileSync(`${baseName}.mtl`, "\n");
 
