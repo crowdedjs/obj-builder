@@ -1,6 +1,7 @@
 import fs from "fs";
 import { allocate, generateLabels, visualizeEmpty, checkForHalls, threeHallFill, fourHallFill, lineFill } from "./spacesSharedFunctions.js"
 import { makeRoom } from "./room.js";
+import { makeWalls } from "./outerWalls.js";
 import flatGenerator from "./flatGenerator.js"
 
 const w = Math.floor(Math.random() * 150) + 51;
@@ -22,11 +23,9 @@ export function innerCircleLayout(filePath = "test", spaceToFill = defaultSpace,
     emptySpace.push(spaceToFill);
 
     //Hallways (Top, Left, Right, Bottom, Entry Hall)
-    // vOffset = allocate(filePath, {TL:{x:spaceToFill.TL.x / 3 -hallWidth,y:spaceToFill.TL.y / 3 -hallWidth},BR:{x:spaceToFill.BR.x / 3 +hallWidth,y:spaceToFill.TL.y / 3},isRoom:false}, 3, 0, emptySpace, filledSpace, vOffset);
     vOffset = allocate(filePath, {TL:{x:spaceToFill.TL.x,y:spaceToFill.TL.y / 3 -hallWidth},BR:{x:spaceToFill.BR.x,y:spaceToFill.TL.y / 3},isRoom:false}, 3, 0, emptySpace, filledSpace, vOffset);
     vOffset = allocate(filePath, {TL:{x:spaceToFill.TL.x / 3 -hallWidth,y:spaceToFill.TL.y / 3},BR:{x:spaceToFill.TL.x / 3,y:spaceToFill.BR.y / 3},isRoom:false}, 3, 0, emptySpace, filledSpace, vOffset);
     vOffset = allocate(filePath, {TL:{x:spaceToFill.BR.x / 3,y:spaceToFill.TL.y / 3},BR:{x:spaceToFill.BR.x / 3 +hallWidth,y:spaceToFill.BR.y / 3},isRoom:false}, 3, 0, emptySpace, filledSpace, vOffset);
-    // vOffset = allocate(filePath, {TL:{x:spaceToFill.TL.x / 3 -hallWidth,y:spaceToFill.BR.y / 3},BR:{x:spaceToFill.BR.x / 3 +hallWidth,y:spaceToFill.BR.y / 3 +hallWidth},isRoom:false}, 3, 0, emptySpace, filledSpace, vOffset);
     vOffset = allocate(filePath, {TL:{x:spaceToFill.TL.x,y:spaceToFill.BR.y / 3},BR:{x:spaceToFill.BR.x,y:spaceToFill.BR.y / 3 +hallWidth},isRoom:false}, 3, 0, emptySpace, filledSpace, vOffset);
     vOffset = allocate(filePath, {TL:{x:(spaceToFill.BR.x+spaceToFill.TL.x) / 2 -hallWidth/2,y:spaceToFill.BR.y / 3 +hallWidth},BR:{x:(spaceToFill.BR.x+spaceToFill.TL.x) / 2 +hallWidth/2,y:spaceToFill.BR.y},isRoom:false}, 3, 0, emptySpace, filledSpace, vOffset);
    
@@ -66,15 +65,20 @@ export function innerCircleLayout(filePath = "test", spaceToFill = defaultSpace,
         }
     }
 
+
+    let width = spaceToFill.BR.x - spaceToFill.TL.x;
+    let length = spaceToFill.BR.y - spaceToFill.TL.y;
+    
     //Generate Outer Wall
-    vOffset = makeRoom(
-        spaceToFill.BR.x - spaceToFill.TL.x, spaceToFill.BR.y - spaceToFill.TL.y, 2,
-        [0,0,5,0], "./" + filePath,
+    vOffset = makeWalls(
+        width, length, 4,
+        [[width],[length],[width/2 - hallWidth/2, width/2 - hallWidth/2],[length]],
+        hallWidth, "./" + filePath,
         (spaceToFill.BR.x + spaceToFill.TL.x) / 2, (spaceToFill.BR.y + spaceToFill.TL.y) / 2, 0, vOffset
     );
 
     //Generate Outside Of Building
-    vOffset = flatGenerator(spaceToFill.BR.x - spaceToFill.TL.x + 30, spaceToFill.BR.y - spaceToFill.TL.y + 30,
+    vOffset = flatGenerator(width + 30, length + 30,
         "./" + filePath, {},
         (spaceToFill.BR.x + spaceToFill.TL.x) / 2, (spaceToFill.BR.y + spaceToFill.TL.y) / 2, 0, vOffset
     );

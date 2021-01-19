@@ -1,5 +1,8 @@
 import fs from "fs";
 import { allocate, basicFill, lineFill, generateLabels, visualizeEmpty, checkForHalls, threeHallFill, fourHallFill } from "./spacesSharedFunctions.js"
+import { makeRoom } from "./room.js";
+import flatGenerator from "./flatGenerator.js";
+import { makeWalls } from "./outerWalls.js";
 
 const w = Math.floor(Math.random() * 150) + 51;
 const l = Math.floor(Math.random() * 150) + 51;
@@ -45,9 +48,8 @@ export function HLayout(filePath = "test", spaceToFill = defaultSpace, hallWidth
                 vOffset = basicFill(filePath, [emptySpace[i]], filledSpace, vOffset);
                 break;
             case 1:
-                vOffset = lineFill(filePath, [emptySpace[i]], filledSpace, vOffset);
-                break;
             case 2:
+                vOffset = lineFill(filePath, [emptySpace[i]], filledSpace, vOffset);
                 break;
             case 3:
                 vOffset = threeHallFill(filePath, [emptySpace[i]], filledSpace, vOffset, halls);
@@ -59,6 +61,23 @@ export function HLayout(filePath = "test", spaceToFill = defaultSpace, hallWidth
                 console.log("Error! Abnormal number of adjacent halls.")
         }
     }
+
+    let width = spaceToFill.BR.x - spaceToFill.TL.x;
+    let length = spaceToFill.BR.y - spaceToFill.TL.y;
+    //Generate Outer Wall
+    vOffset = makeWalls(
+        width, length, 4,
+        [[width/3 - hallWidth, width/3, width/3 - hallWidth],
+        [length],[width/3 - hallWidth, width/3, width/3 - hallWidth],[length]],
+        hallWidth, "./" + filePath,
+        (spaceToFill.BR.x + spaceToFill.TL.x) / 2, (spaceToFill.BR.y + spaceToFill.TL.y) / 2, 0, vOffset
+    );
+
+    //Generate Outside Of Building
+    vOffset = flatGenerator(width + 30, length + 30,
+        "./" + filePath, {},
+        (spaceToFill.BR.x + spaceToFill.TL.x) / 2, (spaceToFill.BR.y + spaceToFill.TL.y) / 2, 0, vOffset
+    );
 
     generateLabels(filledSpace, filePath);
 }

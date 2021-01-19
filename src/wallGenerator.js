@@ -21,7 +21,10 @@ function clean(objString) {
  * @param {number-like} height The height of the obj
  */
 function wallGenerator(width, length, height, baseName, textureOptions, wOffset = 0, lOffset = 0, hOffset = 0, vOffset = 0) {
-  if (!is.all.finite([width, length, height, wOffset, lOffset, hOffset]) || !is.all.positive([width, length, height]) || !is.string(baseName) || arguments.length < 5 || arguments.length > 9) throw new "Invalid arguments."
+  if (!is.all.finite([width, length, height, wOffset, lOffset, hOffset]) || !is.all.positive([width, length, height]) || !is.string(baseName) || arguments.length < 5 || arguments.length > 9) {
+    console.log(width, length, height, wOffset, lOffset, hOffset)
+    throw new "Invalid arguments."
+  }
 
   let fileBase = getFileBase(baseName);
   //let folderBase = getFolderBase(baseName);

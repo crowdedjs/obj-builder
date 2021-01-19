@@ -2,6 +2,15 @@ import flatGenerator from "./flatGenerator.js"
 import {makeRoom} from "./room.js"
 import fs from 'fs';
 
+/**
+ * Fills all given empty spaces with rooms.
+ * @param {String} filePath The base path to the files we write to
+ * @param {Array} emptySpace An array of spaces that have yet to be filled
+ * @param {Array} filledSpace An array of spaces that have already been filled
+ * @param {Integer} vOffset An integer that aids in the creation of vertices for objects
+ * @param {Float} width The width of the space to fill
+ * @param {Float} length The length of the space to fill
+ */
 function fillHelper(filePath, emptySpace, filledSpace, vOffset, width, length) {
     while (emptySpace.length != 0) {
         let minIdx = -1;
@@ -21,6 +30,7 @@ function fillHelper(filePath, emptySpace, filledSpace, vOffset, width, length) {
             BR:{x:emptySpace[minIdx].TL.x + width, y:emptySpace[minIdx].TL.y + length},
             isRoom:true
         };
+
         
         if (newSpace.TL.x - newSpace.BR.x < 0 && newSpace.TL.y - newSpace.BR.y < 0) {
             vOffset = allocate(filePath, newSpace, 3, minIdx, emptySpace, filledSpace, vOffset);
@@ -32,13 +42,24 @@ function fillHelper(filePath, emptySpace, filledSpace, vOffset, width, length) {
     return vOffset;
 }
 
+/**
+ * Calculates the maximum number of rooms that can fit evenly in a space
+ * @param {Float} dimension The length or width of the space to fill
+ */
 function fillProcessing(dimension) {
     let count = 1;
     while (dimension / count > 15)
         count++
-    return dimension / (count - 1);
+    return count > 1 ? dimension / (count - 1) : dimension;
 }
 
+/**
+ * Evenly fills a space with square rooms
+ * @param {String} filePath The base path to the files we write to
+ * @param {Array} emptySpace An array of spaces that have yet to be filled
+ * @param {Array} filledSpace An array of spaces that have already been filled
+ * @param {Integer} vOffset An integer that aids in the creation of vertices for objects
+ */
 export function basicFill(filePath, emptySpace, filledSpace, vOffset) {
     let width = fillProcessing(emptySpace[0].BR.x - emptySpace[0].TL.x);
     let length = fillProcessing(emptySpace[0].BR.y - emptySpace[0].TL.y);
@@ -46,6 +67,13 @@ export function basicFill(filePath, emptySpace, filledSpace, vOffset) {
     return fillHelper(filePath, emptySpace, filledSpace, vOffset, width, length);
 }
 
+/**
+ * Fills a space with rooms in a line
+ * @param {String} filePath The base path to the files we write to
+ * @param {Array} emptySpace An array of spaces that have yet to be filled
+ * @param {Array} filledSpace An array of spaces that have already been filled
+ * @param {Integer} vOffset An integer that aids in the creation of vertices for objects
+ */
 export function lineFill(filePath, emptySpace, filledSpace, vOffset) {
     let width, length;
 
@@ -60,24 +88,27 @@ export function lineFill(filePath, emptySpace, filledSpace, vOffset) {
     return fillHelper(filePath, emptySpace, filledSpace, vOffset, width, length);
 }
 
+/**
+ * Fills a space that has halls on three sides with rooms
+ * @param {String} filePath The base path to the files we write to
+ * @param {Array} emptySpace An array of spaces that have yet to be filled
+ * @param {Array} filledSpace An array of spaces that have already been filled
+ * @param {Integer} vOffset An integer that aids in the creation of vertices for objects
+ * @param {*} halls An array of length four with booleans corresponding to which sides of the space have halls. TRBL.
+ */
 export function threeHallFill(filePath, emptySpace, filledSpace, vOffset, halls) {
     let splitValue;
-
-    console.log(halls)
 
     if (emptySpace[0].BR.x - emptySpace[0].TL.x > emptySpace[0].BR.y - emptySpace[0].TL.y) {
         splitValue = (emptySpace[0].BR.y - emptySpace[0].TL.y) / 2;
         if (!halls[0] || !halls[2]) {
-            console.log("Location 1")
             emptySpace.push({TL:{x:emptySpace[0].TL.x,y:emptySpace[0].TL.y},BR:{x:(emptySpace[0].TL.x + emptySpace[0].BR.x) / 2,y:emptySpace[0].BR.y},isRoom:false})
             emptySpace.push({TL:{x:(emptySpace[0].TL.x + emptySpace[0].BR.x) / 2,y:emptySpace[0].TL.y},BR:{x:emptySpace[0].BR.x,y:emptySpace[0].BR.y},isRoom:false})
         } else if (!halls[3]) {
-            console.log("Location 2")
             emptySpace.push({TL:{x:emptySpace[0].TL.x,y:emptySpace[0].TL.y},BR:{x:emptySpace[0].BR.x - splitValue,y:emptySpace[0].BR.y - splitValue},isRoom:false})
             emptySpace.push({TL:{x:emptySpace[0].TL.x,y:emptySpace[0].TL.y + splitValue},BR:{x:emptySpace[0].BR.x - splitValue,y:emptySpace[0].BR.y},isRoom:false})
             emptySpace.push({TL:{x:emptySpace[0].BR.x - splitValue,y:emptySpace[0].TL.y},BR:{x:emptySpace[0].BR.x,y:emptySpace[0].BR.y},isRoom:false})
         } else {
-            console.log("Location 3")
             emptySpace.push({TL:{x:emptySpace[0].TL.x,y:emptySpace[0].TL.y},BR:{x:emptySpace[0].TL.x + splitValue,y:emptySpace[0].BR.y},isRoom:false})
             emptySpace.push({TL:{x:emptySpace[0].TL.x + splitValue,y:emptySpace[0].TL.y},BR:{x:emptySpace[0].BR.x,y:emptySpace[0].BR.y - splitValue},isRoom:false})
             emptySpace.push({TL:{x:emptySpace[0].TL.x + splitValue,y:emptySpace[0].TL.y + splitValue},BR:{x:emptySpace[0].BR.x,y:emptySpace[0].BR.y},isRoom:false})
@@ -85,16 +116,13 @@ export function threeHallFill(filePath, emptySpace, filledSpace, vOffset, halls)
     } else {
         splitValue = (emptySpace[0].BR.x - emptySpace[0].TL.x) / 2;
         if (!halls[1] || !halls[3]) {
-            console.log("Location 4")
             emptySpace.push({TL:{x:emptySpace[0].TL.x,y:emptySpace[0].TL.y},BR:{x:emptySpace[0].BR.x,y:(emptySpace[0].TL.y + emptySpace[0].BR.y) / 2},isRoom:false})
             emptySpace.push({TL:{x:emptySpace[0].TL.x,y:(emptySpace[0].TL.y + emptySpace[0].BR.y) / 2},BR:{x:emptySpace[0].BR.x,y:emptySpace[0].BR.y},isRoom:false})
         } else if (!halls[2]) {
-            console.log("Location 5")
             emptySpace.push({TL:{x:emptySpace[0].TL.x,y:emptySpace[0].TL.y},BR:{x:emptySpace[0].BR.x,y:emptySpace[0].TL.y + splitValue},isRoom:false})
             emptySpace.push({TL:{x:emptySpace[0].TL.x,y:emptySpace[0].TL.y + splitValue},BR:{x:emptySpace[0].BR.x - splitValue,y:emptySpace[0].BR.y},isRoom:false})
             emptySpace.push({TL:{x:emptySpace[0].TL.x + splitValue,y:emptySpace[0].TL.y + splitValue},BR:{x:emptySpace[0].BR.x,y:emptySpace[0].BR.y},isRoom:false})
         } else {
-            console.log("Location 6")
             emptySpace.push({TL:{x:emptySpace[0].TL.x,y:emptySpace[0].TL.y},BR:{x:emptySpace[0].BR.x - splitValue,y:emptySpace[0].BR.y - splitValue},isRoom:false})
             emptySpace.push({TL:{x:emptySpace[0].TL.x + splitValue,y:emptySpace[0].TL.y},BR:{x:emptySpace[0].BR.x,y:emptySpace[0].BR.y - splitValue},isRoom:false})
             emptySpace.push({TL:{x:emptySpace[0].TL.x,y:emptySpace[0].BR.y - splitValue},BR:{x:emptySpace[0].BR.x,y:emptySpace[0].BR.y},isRoom:false})
@@ -108,6 +136,13 @@ export function threeHallFill(filePath, emptySpace, filledSpace, vOffset, halls)
     return vOffset;
 }
 
+/**
+ * Fills a space that has halls on all sides with rooms.
+ * @param {String} filePath The base path to the files we write to
+ * @param {Array} emptySpace An array of spaces that have yet to be filled
+ * @param {Array} filledSpace An array of spaces that have already been filled
+ * @param {Integer} vOffset An integer that aids in the creation of vertices for objects
+ */
 export function fourHallFill(filePath, emptySpace, filledSpace, vOffset) {
     let splitValue;
 
@@ -136,6 +171,16 @@ export function fourHallFill(filePath, emptySpace, filledSpace, vOffset) {
     return vOffset;
 }
 
+/**
+ * Allocates some empty space to be filled and generates a room in that space
+ * @param {String} filePath The base path to the files we write to
+ * @param {Space} filled The space that will be filled
+ * @param {Integer} doorSize The size of the doors for the room to be generated
+ * @param {Integer} index The target index in the empty space array
+ * @param {Array} emptySpace An array of spaces that have yet to be filled
+ * @param {Array} filledSpace An array of spaces that have already been filled
+ * @param {Integer} vOffset An integer that aids in the creation of vertices for objects
+ */
 export function allocate(filePath, filled, doorSize, index, emptySpace, filledSpace, vOffset) {
     let hallEdges = checkForHalls(filledSpace, filled);
     let alignedEdges = checkValidPartition(emptySpace[index], filled);
@@ -164,17 +209,23 @@ export function allocate(filePath, filled, doorSize, index, emptySpace, filledSp
     return vOffset;
 }
 
+/**
+ * Checks around the space that will be filled to see if any halls are adjacent to it
+ * @param {Array} filledSpace An array of spaces that have already been filled 
+ * @param {Space} filled The space that will be filled
+ */
 export function checkForHalls(filledSpace, filled) {
     let T = false, R = false, B = false, L = false;
-    
+
+    let leeway = 0.1;
     filledSpace.forEach(space => {
-        if (space.BR.y == filled.TL.y && !space.isRoom)
+        if (between(space.BR.y, filled.TL.y - leeway, filled.TL.y + leeway) && !space.isRoom)
             T = true;
-        if (space.TL.x == filled.BR.x && !space.isRoom)
+        if (between(space.TL.x, filled.BR.x - leeway, filled.BR.x + leeway) && !space.isRoom)
             R = true;
-        if (space.TL.y == filled.BR.y && !space.isRoom)
+        if (between(space.TL.y, filled.BR.y - leeway, filled.BR.y + leeway) && !space.isRoom)
             B = true;
-        if (space.BR.x == filled.TL.x && !space.isRoom)
+        if (between(space.BR.x, filled.TL.x - leeway, filled.TL.x + leeway) && !space.isRoom)
             L = true;
     });
     
@@ -185,6 +236,22 @@ export function checkForHalls(filledSpace, filled) {
     }
 }
 
+/**
+ * Checks to see if a value is between a minimum and maximum range
+ * @param {Float} val The value to be tested
+ * @param {Float} min The minimum value of the range
+ * @param {Float} max The maximum value of the range
+ */
+function between(val, min, max) {
+    return val >= min && val <= max;
+}
+
+/**
+ * Returns an array describing which edges are the same in the empty and filled space,
+ * or false if it is an invalid partition.
+ * @param {Space} empty A portion of empty space
+ * @param {Space} filled The space that will be filled
+ */
 function checkValidPartition(empty, filled) {
     let alignedEdges = [false, false, false, false];
     
@@ -204,6 +271,13 @@ function checkValidPartition(empty, filled) {
     }
 }
 
+/**
+ * "Cuts out," or removes, a space from a portion of empty space
+ * @param {Space} empty A portion of empty space
+ * @param {Space} filled The space that will be filled
+ * @param {Array} alignedEdges A length four boolean array describing which edges of the filled space match the empty space
+ * @param {Array} emptySpace An array of spaces that have yet to be filled
+ */
 function cutSpace(empty, filled, alignedEdges, emptySpace) {
     if (!alignedEdges[0]) { 
         let newSpace = {TL:{x:0,y:0},BR:{x:0,y:0}};
@@ -231,6 +305,11 @@ function cutSpace(empty, filled, alignedEdges, emptySpace) {
     }
 }
 
+/**
+ * Removes spaces in the empty array that overlap with a given filled space
+ * @param {Space} filled The space that will be filled
+ * @param {Array} emptySpace An array of spaces that have yet to be filled
+ */
 function removeOverlappingEmptySpace(filled, emptySpace) {
     let toRemove = {};
     emptySpace.forEach(space => {
@@ -246,6 +325,11 @@ function removeOverlappingEmptySpace(filled, emptySpace) {
     })
 }
 
+/**
+ * Returns true if two spaces have any overlap, false otherwise
+ * @param {Space} space1 The first space in the comparison
+ * @param {Space} space2 The second space in the comparison
+ */
 function overlaps(space1, space2) {
     if (space1.TL.x >= space2.BR.x || space2.TL.x >= space1.BR.x) {
         return false;
@@ -256,6 +340,11 @@ function overlaps(space1, space2) {
     return true;
 }
 
+/**
+ * A function to copy a source space into a target space
+ * @param {Space} target The space to be overwritten
+ * @param {Space} source The space to be copied
+ */
 function deepCloneSpace(target, source) {
     target.TL.x = source.TL.x;
     target.BR.x = source.BR.x;
@@ -264,6 +353,11 @@ function deepCloneSpace(target, source) {
     target.isRoom = source.isRoom;
 }
 
+/**
+ * Creates labels for each room
+ * @param {Array} filledSpace An array of spaces that have already been filled
+ * @param {String} filePath The base path to the files we write to
+ */
 export function generateLabels(filledSpace, filePath) {
     let nameCount = 1;
     fs.writeFileSync(filePath + "Labels.json", "[\n");
@@ -284,7 +378,14 @@ export function generateLabels(filledSpace, filePath) {
     fs.appendFileSync(filePath + "Labels.json", "]");
 }
 
-export function visualizeEmpty(emptySpace, filePath, vOffset, hOffset) {
+/**
+ * A debugging function to aid in visualizing an array of spaces.
+ * @param {Array} emptySpace An array of spaces that have yet to be filled
+ * @param {String} filePath The base path to the files we write to
+ * @param {Integer} vOffset An integer that aids in the creation of vertices for objects
+ */
+export function visualizeEmpty(emptySpace, filePath, vOffset) {
+    let hOffset = 30;
     emptySpace.forEach(space => {
         vOffset = flatGenerator(Math.abs(space.BR.x - space.TL.x), Math.abs(space.BR.y - space.TL.y),
             "./" + filePath, {},
