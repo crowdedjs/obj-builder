@@ -366,9 +366,8 @@ export function generateLabels(filledSpace, filePath) {
         let annotationName = name;
         let position = {x:0,y:0,z:0};
         position.x = (space.TL.x + space.BR.x) / 2;
-        position.y = (space.TL.y + space.BR.y) / 2;
-        //may need to change position.z
-        position.z = 0;
+        position.y = 0;
+        position.z = (space.TL.y + space.BR.y) / 2;
         if (filledSpace.length >= nameCount) {
             fs.appendFileSync(filePath + "Labels.json", `\t{\n\t\t"name": "${name}",\n\t\t"annotationName": "${annotationName}",\n\t\t"position": {\n\t\t\t"x": ${position.x},\n\t\t\t"y": ${position.y},\n\t\t\t"z": ${position.z}\n\t\t}\n\t},\n`)
         } else {
