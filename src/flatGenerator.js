@@ -60,7 +60,7 @@ f ${1 + vOffset}/${1 + vOffset}/${1 + vOffset} ${2 + vOffset}/${2 + vOffset}/${1
   map_Kd ${fileBase}${vOffset}.jpg
   `;
 
-  fs.appendFileSync(`${baseName}.mtl`, mtl);
+  // fs.appendFileSync(`${baseName}.mtl`, mtl);
 
 
 

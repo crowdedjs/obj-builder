@@ -1,83 +1,82 @@
 import fs from "fs";
-import { allocate, basicFill, lineFill, generateLabels, visualizeEmpty, checkForHalls, threeHallFill, fourHallFill } from "./spacesSharedFunctions.js"
-import { makeRoom } from "./room.js";
+import { allocate, basicFill, lineFill, generateLabels, visualizeEmpty, checkForHalls, threeHallFill, fourHallFill, adjustVertices } from "./spacesSharedFunctions.js"
 import flatGenerator from "./flatGenerator.js";
 import { makeWalls } from "./outerWalls.js";
+import { group } from "console";
+import { triangleRoom } from "./triangleRoom.js";
+import { basename } from "path";
 
-const w = Math.floor(Math.random() * 150) + 51;
-const l = Math.floor(Math.random() * 150) + 51;
-const defaultSpace = {
-    TL:{x:-w/2,y:-l/2},
-    BR:{x:w/2,y:l/2}
-}
 
-export function YLayout(filePath = "test", spaceToFill = defaultSpace, hallWidth = 6) {
+const wingLengths = [50, 100, 100];
+
+export function YLayout(filePath = "test", hallWidth = 6, rotations = [0, Math.PI * 2 / 3, Math.PI * 4 / 3]) {
     fs.writeFileSync(filePath + `.obj`, "mtllib room.mtl\n");
     fs.writeFileSync(filePath + `.mtl`, "\n");
 
     let emptySpace = [];
     let filledSpace = [];
+    let temp = (wingLengths[0] + wingLengths[1] + wingLengths[2]) / 2;
+    let spaceToFill = {TL:{x:-temp/2,y:-temp/2},BR:{x:temp/2,y:temp/2}}
     
     let vOffset = 0;
-    emptySpace.push(spaceToFill);
-    
-    //Hallways
-    vOffset = allocate(filePath, {TL:{x:spaceToFill.TL.x / 3 -hallWidth,y:spaceToFill.TL.y / 3 -hallWidth},BR:{x:spaceToFill.BR.x / 3 +hallWidth,y:spaceToFill.BR.y / 3 +hallWidth},isRoom:false}, 3, 0, emptySpace, filledSpace, vOffset);    
-    vOffset = allocate(filePath, {TL:{x:spaceToFill.TL.x / 3 -hallWidth,y:spaceToFill.TL.y},BR:{x:spaceToFill.TL.x / 3,y:spaceToFill.BR.y},isRoom:false}, 3, 0, emptySpace, filledSpace, vOffset);
-    vOffset = allocate(filePath, {TL:{x:spaceToFill.BR.x / 3,y:spaceToFill.TL.y},BR:{x:spaceToFill.BR.x / 3 +hallWidth,y:spaceToFill.BR.y},isRoom:false}, 3, 0, emptySpace, filledSpace, vOffset);
-    
-    
+    let wingWidth = 30 + hallWidth;
+    let centerDist = 20;
+
     emptySpace.length = 0;
 
-    let innerSpace = {TL:{x:spaceToFill.TL.x / 3,y:spaceToFill.TL.y / 3},BR:{x:spaceToFill.BR.x / 3,y:spaceToFill.BR.y / 3},isRoom:false};
-    
-    //add sides back in
-    emptySpace.push({TL:{x:spaceToFill.TL.x,y:spaceToFill.TL.y},BR:{x:spaceToFill.TL.x / 3 -hallWidth,y:spaceToFill.BR.y},isRoom:false});
-    emptySpace.push({TL:{x:innerSpace.TL.x,y:spaceToFill.TL.y},BR:{x:innerSpace.BR.x,y:spaceToFill.TL.y / 3 -hallWidth},isRoom:false});
-    emptySpace.push({TL:{x:innerSpace.TL.x,y:spaceToFill.BR.y / 3 +hallWidth},BR:{x:innerSpace.BR.x,y:spaceToFill.BR.y},isRoom:false});
-    emptySpace.push({TL:{x:spaceToFill.BR.x / 3 +hallWidth,y:spaceToFill.TL.y},BR:{x:spaceToFill.BR.x,y:spaceToFill.BR.y},isRoom:false});
+    emptySpace.push([{TL:{x:-wingWidth/2,y:-wingLengths[0] - centerDist},BR:{x:wingWidth/2,y: - centerDist},isRoom:false}]);
+    emptySpace.push([{TL:{x:-wingWidth/2,y:-wingLengths[1] - centerDist},BR:{x:wingWidth/2,y: - centerDist},isRoom:false}]);
+    emptySpace.push([{TL:{x:-wingWidth/2,y:-wingLengths[2] - centerDist},BR:{x:wingWidth/2,y: - centerDist},isRoom:false}]);
+
     
     //For each empty space, test the number of hall connections.  Use this to decide how to fill the space.
 
     for (let i = 0; i < emptySpace.length; i++) {
-        let halls = checkForHalls(filledSpace, emptySpace[i]);
-        let hallCount = halls[0] + halls[1] + halls[2] + halls[3];
-        console.log(hallCount)
-        switch (hallCount) {
-            case 0:
-                vOffset = basicFill(filePath, [emptySpace[i]], filledSpace, vOffset);
-                break;
-            case 1:
-            case 2:
-                vOffset = lineFill(filePath, [emptySpace[i]], filledSpace, vOffset);
-                break;
-            case 3:
-                vOffset = threeHallFill(filePath, [emptySpace[i]], filledSpace, vOffset, halls);
-                break;
-            case 4:
-                vOffset = fourHallFill(filePath, [emptySpace[i]], filledSpace, vOffset);
-                break;
-            default:
-                console.log("Error! Abnormal number of adjacent halls.")
+        let grouping = "g " + rotations[i] + '\n';
+        fs.appendFileSync(filePath + '.obj', grouping);
+
+        //hall through the middle
+        vOffset = allocate(filePath, {TL:{x:-hallWidth/2,y:emptySpace[i][0].TL.y},BR:{x:hallWidth/2,y: emptySpace[i][0].BR.y},isRoom:false}, 3, 0, emptySpace[i], filledSpace, vOffset);
+
+        //outer wall
+        vOffset = makeWalls(
+            wingWidth, wingLengths[i], 4,
+            [[wingWidth/2 - hallWidth/2, wingWidth/2 - hallWidth/2],
+            [wingLengths[i]],[],[wingLengths[i]]],
+            hallWidth, "./" + filePath,
+            0, -wingLengths[i] / 2 - centerDist, 0, vOffset
+        );
+
+
+        for (let j = 0; j < emptySpace[i].length; j++){
+            let halls = checkForHalls(filledSpace, emptySpace[i][j]);
+            let hallCount = halls[0] + halls[1] + halls[2] + halls[3];
+            switch (hallCount) {
+                case 0:
+                    vOffset = basicFill(filePath, [emptySpace[i][j]], filledSpace, vOffset);
+                    break;
+                case 1:
+                case 2:
+                    vOffset = lineFill(filePath, [emptySpace[i][j]], filledSpace, vOffset);
+                    break;
+                case 3:
+                    vOffset = threeHallFill(filePath, [emptySpace[i][j]], filledSpace, vOffset, halls);
+                    break;
+                case 4:
+                    vOffset = fourHallFill(filePath, [emptySpace[i][j]], filledSpace, vOffset);
+                    break;
+                default:
+                    console.log("Error! Abnormal number of adjacent halls.")
+            }
         }
     }
 
-    let width = spaceToFill.BR.x - spaceToFill.TL.x;
-    let length = spaceToFill.BR.y - spaceToFill.TL.y;
-    //Generate Outer Wall
-    vOffset = makeWalls(
-        width, length, 4,
-        [[width/3 - hallWidth, width/3, width/3 - hallWidth],
-        [length],[width/3 - hallWidth, width/3, width/3 - hallWidth],[length]],
-        hallWidth, "./" + filePath,
-        (spaceToFill.BR.x + spaceToFill.TL.x) / 2, (spaceToFill.BR.y + spaceToFill.TL.y) / 2, 0, vOffset
-    );
 
-    //Generate Outside Of Building
-    vOffset = flatGenerator(width + 30, length + 30,
-        "./" + filePath, {},
-        (spaceToFill.BR.x + spaceToFill.TL.x) / 2, (spaceToFill.BR.y + spaceToFill.TL.y) / 2, 0, vOffset
-    );
+    vOffset = triangleRoom(centerDist, rotations, wingWidth, hallWidth, filePath, 0, 0, 0, vOffset)
+
+    adjustVertices(filePath)
+
+ 
 
     generateLabels(filledSpace, filePath);
 }

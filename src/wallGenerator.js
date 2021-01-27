@@ -29,18 +29,22 @@ function wallGenerator(width, length, height, baseName, textureOptions, wOffset 
   let fileBase = getFileBase(baseName);
   //let folderBase = getFolderBase(baseName);
 
+  let halfWidth = width / 2;
+  let halfHeight = height / 2;
+  let halfLength = length / 2;
+
   //First generate the wavefront obj file
   let obj =
-    `
-o object${vOffset}
-v ${(width / 2) + wOffset} ${(height / 2) + hOffset} ${(length / 2) + lOffset}
-v ${(width / 2) + wOffset} ${(height / 2) + hOffset} ${-(length / 2) + lOffset}
-v ${(width / 2) + wOffset} ${-(height / 2) + hOffset} ${(length / 2) + lOffset}
-v ${(width / 2) + wOffset} ${-(height / 2) + hOffset} ${-(length / 2) + lOffset}
-v ${-(width / 2) + wOffset} ${(height / 2) + hOffset} ${(length / 2) + lOffset}
-v ${-(width / 2) + wOffset} ${(height / 2) + hOffset} ${-(length / 2) + lOffset}
-v ${-(width / 2) + wOffset} ${-(height / 2) + hOffset} ${(length / 2) + lOffset}
-v ${-(width / 2) + wOffset} ${-(height / 2) + hOffset} ${-(length / 2) + lOffset}
+  `
+  o object${vOffset}
+v ${halfWidth + wOffset} ${halfHeight + hOffset} ${halfLength + lOffset}
+v ${halfWidth + wOffset} ${halfHeight + hOffset} ${-halfLength + lOffset}
+v ${halfWidth + wOffset} ${-halfHeight + hOffset} ${halfLength + lOffset}
+v ${halfWidth + wOffset} ${-halfHeight + hOffset} ${-halfLength + lOffset}
+v ${-halfWidth + wOffset} ${halfHeight + hOffset} ${halfLength + lOffset}
+v ${-halfWidth + wOffset} ${halfHeight + hOffset} ${-halfLength + lOffset}
+v ${-halfWidth + wOffset} ${-halfHeight + hOffset} ${halfLength + lOffset}
+v ${-halfWidth + wOffset} ${-halfHeight + hOffset} ${-halfLength + lOffset}
 vt 1 1
 vt 1 0
 vt 0 1
@@ -72,7 +76,7 @@ f ${4 + vOffset}/${4 + vOffset}/${1 + vOffset} ${2 + vOffset}/${2 + vOffset}/${1
   map_Kd ${fileBase}${vOffset}.jpg
   `;
 
-  fs.appendFileSync(`${baseName}.mtl`, mtl);
+  // fs.appendFileSync(`${baseName}.mtl`, mtl);
 
 
 

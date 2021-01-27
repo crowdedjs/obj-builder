@@ -1,6 +1,7 @@
 import flatGenerator from "./flatGenerator.js"
 import {makeRoom} from "./room.js"
 import fs from 'fs';
+import readline from 'readline';
 
 /**
  * Fills all given empty spaces with rooms.
@@ -358,11 +359,11 @@ function deepCloneSpace(target, source) {
  * @param {Array} filledSpace An array of spaces that have already been filled
  * @param {String} filePath The base path to the files we write to
  */
-export function generateLabels(filledSpace, filePath) {
+export function generateLabels(filledSpace, filePath, labelBase = "room") {
     let nameCount = 1;
     fs.writeFileSync(filePath + "Labels.json", "[\n");
     filledSpace.forEach(space => {
-        let name = "room " + nameCount++;
+        let name = labelBase + " " + nameCount++;
         let annotationName = name;
         let position = {x:0,y:0,z:0};
         position.x = (space.TL.x + space.BR.x) / 2;
@@ -393,6 +394,41 @@ export function visualizeEmpty(emptySpace, filePath, vOffset) {
         hOffset += 10;
     });
     return vOffset;
+}
+
+
+/**
+ * A function to apply rotation to a group of objects
+ * @param {String} filePath The base path to the files we write to
+ */
+export async function adjustVertices(filePath) {
+    const fileStream = fs.createReadStream(filePath + '.obj')
+
+    const rl = readline.createInterface({
+        input: fileStream,
+        crlfDelay: Infinity
+    })
+
+    let fileContent = "";
+    let adjustment = 0;
+
+    for await (const line of rl) {
+        if (line.includes("g")) {
+            adjustment = Number(line.slice(2, line.length))
+        } else if (line.includes('v ') && adjustment != 0) {
+            //NOTE: This only pivots around the Y-Axis at the moment.
+            let vals = line.split(' '), x, y, z;
+            x = Math.cos(adjustment) * vals[1] + Math.sin(adjustment) * vals[3];
+            y = vals[2];
+            z = -Math.sin(adjustment) * vals[1] + Math.cos(adjustment) * vals[3];
+
+            fileContent += `v ${x} ${y} ${z}\n`
+        } else {
+            fileContent += line + "\n";
+        }
+    }
+
+    fs.writeFileSync(filePath + '.obj', fileContent)
 }
 
 
