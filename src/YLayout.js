@@ -9,7 +9,7 @@ import { basename } from "path";
 
 const wingLengths = [50, 100, 100];
 
-export function YLayout(filePath = "test", hallWidth = 6, rotations = [0, Math.PI * 2 / 3, Math.PI * 4 / 3]) {
+export function YLayout(filePath = "test", hallWidth = 6, rotations = [0, Math.PI * 2 / 3, Math.PI * 4 / 3], doorSize = 3) {
     fs.writeFileSync(filePath + `.obj`, "mtllib room.mtl\n");
     fs.writeFileSync(filePath + `.mtl`, "\n");
 
@@ -40,7 +40,7 @@ export function YLayout(filePath = "test", hallWidth = 6, rotations = [0, Math.P
 
         //outer wall
         vOffset = makeWalls(
-            wingWidth, wingLengths[i], 4,
+            wingWidth, wingLengths[i], doorSize,
             [[wingWidth/2 - hallWidth/2, wingWidth/2 - hallWidth/2],
             [wingLengths[i]],[],[wingLengths[i]]],
             hallWidth, "./" + filePath,
@@ -53,17 +53,17 @@ export function YLayout(filePath = "test", hallWidth = 6, rotations = [0, Math.P
             let hallCount = halls[0] + halls[1] + halls[2] + halls[3];
             switch (hallCount) {
                 case 0:
-                    vOffset = basicFill(filePath, [emptySpace[i][j]], filledSpace, vOffset);
+                    vOffset = basicFill(filePath, [emptySpace[i][j]], filledSpace, vOffset, doorSize);
                     break;
                 case 1:
                 case 2:
-                    vOffset = lineFill(filePath, [emptySpace[i][j]], filledSpace, vOffset);
+                    vOffset = lineFill(filePath, [emptySpace[i][j]], filledSpace, vOffset, doorSize);
                     break;
                 case 3:
-                    vOffset = threeHallFill(filePath, [emptySpace[i][j]], filledSpace, vOffset, halls);
+                    vOffset = threeHallFill(filePath, [emptySpace[i][j]], filledSpace, vOffset, halls, doorSize);
                     break;
                 case 4:
-                    vOffset = fourHallFill(filePath, [emptySpace[i][j]], filledSpace, vOffset);
+                    vOffset = fourHallFill(filePath, [emptySpace[i][j]], filledSpace, vOffset, doorSize);
                     break;
                 default:
                     console.log("Error! Abnormal number of adjacent halls.")

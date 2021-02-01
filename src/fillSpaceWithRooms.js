@@ -8,7 +8,7 @@ const defaultSpace = {
     BR:{x:w/2,y:l/2}
 }
 
-export function fillSpaceWithRooms(filePath = "test", spaceToFill = defaultSpace) {
+export function fillSpaceWithRooms(filePath = "test", spaceToFill = defaultSpace, doorSize = 3) {
     fs.writeFileSync(filePath + `.obj`, "mtllib room.mtl\n");
     fs.writeFileSync(filePath + `.mtl`, "\n");
 
@@ -21,7 +21,7 @@ export function fillSpaceWithRooms(filePath = "test", spaceToFill = defaultSpace
         
     
     for (let i = 0; i < emptySpace.length; i++) {
-        vOffset = basicFill(filePath, [emptySpace[i]], filledSpace, vOffset);
+        vOffset = basicFill(filePath, [emptySpace[i]], filledSpace, vOffset, doorSize);
     }
 
     generateLabels(filledSpace, filePath);

@@ -11,7 +11,7 @@ const defaultSpace = {
     BR:{x:w/2,y:l/2}
 }
 
-export function HLayout(filePath = "test", spaceToFill = defaultSpace, hallWidth = 6) {
+export function HLayout(filePath = "test", spaceToFill = defaultSpace, hallWidth = 6, doorSize = 3) {
     fs.writeFileSync(filePath + `.obj`, "mtllib room.mtl\n");
     fs.writeFileSync(filePath + `.mtl`, "\n");
 
@@ -42,20 +42,19 @@ export function HLayout(filePath = "test", spaceToFill = defaultSpace, hallWidth
     for (let i = 0; i < emptySpace.length; i++) {
         let halls = checkForHalls(filledSpace, emptySpace[i]);
         let hallCount = halls[0] + halls[1] + halls[2] + halls[3];
-        console.log(hallCount)
         switch (hallCount) {
             case 0:
-                vOffset = basicFill(filePath, [emptySpace[i]], filledSpace, vOffset);
+                vOffset = basicFill(filePath, [emptySpace[i]], filledSpace, vOffset, doorSize);
                 break;
             case 1:
             case 2:
-                vOffset = lineFill(filePath, [emptySpace[i]], filledSpace, vOffset);
+                vOffset = lineFill(filePath, [emptySpace[i]], filledSpace, vOffset, doorSize);
                 break;
             case 3:
-                vOffset = threeHallFill(filePath, [emptySpace[i]], filledSpace, vOffset, halls);
+                vOffset = threeHallFill(filePath, [emptySpace[i]], filledSpace, vOffset, halls, doorSize);
                 break;
             case 4:
-                vOffset = fourHallFill(filePath, [emptySpace[i]], filledSpace, vOffset);
+                vOffset = fourHallFill(filePath, [emptySpace[i]], filledSpace, vOffset, doorSize);
                 break;
             default:
                 console.log("Error! Abnormal number of adjacent halls.")
@@ -66,7 +65,7 @@ export function HLayout(filePath = "test", spaceToFill = defaultSpace, hallWidth
     let length = spaceToFill.BR.y - spaceToFill.TL.y;
     //Generate Outer Wall
     vOffset = makeWalls(
-        width, length, 4,
+        width, length, doorSize,
         [[width/3 - hallWidth, width/3, width/3 - hallWidth],
         [length],[width/3 - hallWidth, width/3, width/3 - hallWidth],[length]],
         hallWidth, "./" + filePath,

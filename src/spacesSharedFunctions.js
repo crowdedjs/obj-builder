@@ -12,7 +12,7 @@ import readline from 'readline';
  * @param {Float} width The width of the space to fill
  * @param {Float} length The length of the space to fill
  */
-function fillHelper(filePath, emptySpace, filledSpace, vOffset, width, length) {
+function fillHelper(filePath, emptySpace, filledSpace, vOffset, width, length, doorSize) {
     while (emptySpace.length != 0) {
         let minIdx = -1;
         let minVal = [Infinity, Infinity];
@@ -34,7 +34,7 @@ function fillHelper(filePath, emptySpace, filledSpace, vOffset, width, length) {
 
         
         if (newSpace.TL.x - newSpace.BR.x < 0 && newSpace.TL.y - newSpace.BR.y < 0) {
-            vOffset = allocate(filePath, newSpace, 3, minIdx, emptySpace, filledSpace, vOffset);
+            vOffset = allocate(filePath, newSpace, doorSize, minIdx, emptySpace, filledSpace, vOffset);
         } else {
             console.log("Error")
             emptySpace.splice(minIdx, 1)
@@ -47,9 +47,9 @@ function fillHelper(filePath, emptySpace, filledSpace, vOffset, width, length) {
  * Calculates the maximum number of rooms that can fit evenly in a space
  * @param {Float} dimension The length or width of the space to fill
  */
-function fillProcessing(dimension) {
+function fillProcessing(dimension, maxRoomSize) {
     let count = 1;
-    while (dimension / count > 15)
+    while (dimension / count > maxRoomSize)
         count++
     return count > 1 ? dimension / (count - 1) : dimension;
 }
@@ -61,11 +61,11 @@ function fillProcessing(dimension) {
  * @param {Array} filledSpace An array of spaces that have already been filled
  * @param {Integer} vOffset An integer that aids in the creation of vertices for objects
  */
-export function basicFill(filePath, emptySpace, filledSpace, vOffset) {
-    let width = fillProcessing(emptySpace[0].BR.x - emptySpace[0].TL.x);
-    let length = fillProcessing(emptySpace[0].BR.y - emptySpace[0].TL.y);
+export function basicFill(filePath, emptySpace, filledSpace, vOffset, doorSize, maxRoomSize = 15) {
+    let width = fillProcessing(emptySpace[0].BR.x - emptySpace[0].TL.x, maxRoomSize);
+    let length = fillProcessing(emptySpace[0].BR.y - emptySpace[0].TL.y, maxRoomSize);
 
-    return fillHelper(filePath, emptySpace, filledSpace, vOffset, width, length);
+    return fillHelper(filePath, emptySpace, filledSpace, vOffset, width, length, doorSize);
 }
 
 /**
@@ -75,18 +75,18 @@ export function basicFill(filePath, emptySpace, filledSpace, vOffset) {
  * @param {Array} filledSpace An array of spaces that have already been filled
  * @param {Integer} vOffset An integer that aids in the creation of vertices for objects
  */
-export function lineFill(filePath, emptySpace, filledSpace, vOffset) {
+export function lineFill(filePath, emptySpace, filledSpace, vOffset, doorSize, maxRoomSize = 15) {
     let width, length;
 
     if (emptySpace[0].BR.x - emptySpace[0].TL.x > emptySpace[0].BR.y - emptySpace[0].TL.y) {
         length = emptySpace[0].BR.y - emptySpace[0].TL.y;
-        width = fillProcessing(emptySpace[0].BR.x - emptySpace[0].TL.x);
+        width = fillProcessing(emptySpace[0].BR.x - emptySpace[0].TL.x, maxRoomSize);
     } else {
         width = emptySpace[0].BR.x - emptySpace[0].TL.x;
-        length = fillProcessing(emptySpace[0].BR.y - emptySpace[0].TL.y);
+        length = fillProcessing(emptySpace[0].BR.y - emptySpace[0].TL.y, maxRoomSize);
     }
 
-    return fillHelper(filePath, emptySpace, filledSpace, vOffset, width, length);
+    return fillHelper(filePath, emptySpace, filledSpace, vOffset, width, length, doorSize);
 }
 
 /**
@@ -97,7 +97,7 @@ export function lineFill(filePath, emptySpace, filledSpace, vOffset) {
  * @param {Integer} vOffset An integer that aids in the creation of vertices for objects
  * @param {*} halls An array of length four with booleans corresponding to which sides of the space have halls. TRBL.
  */
-export function threeHallFill(filePath, emptySpace, filledSpace, vOffset, halls) {
+export function threeHallFill(filePath, emptySpace, filledSpace, vOffset, halls, doorSize, maxRoomSize = 15) {
     let splitValue;
 
     if (emptySpace[0].BR.x - emptySpace[0].TL.x > emptySpace[0].BR.y - emptySpace[0].TL.y) {
@@ -131,7 +131,7 @@ export function threeHallFill(filePath, emptySpace, filledSpace, vOffset, halls)
     }
 
     for (let i = 1; i < emptySpace.length; i++) {
-        vOffset = lineFill(filePath, [emptySpace[i]], filledSpace, vOffset)
+        vOffset = lineFill(filePath, [emptySpace[i]], filledSpace, vOffset, doorSize, maxRoomSize)
     }
 
     return vOffset;
@@ -144,7 +144,7 @@ export function threeHallFill(filePath, emptySpace, filledSpace, vOffset, halls)
  * @param {Array} filledSpace An array of spaces that have already been filled
  * @param {Integer} vOffset An integer that aids in the creation of vertices for objects
  */
-export function fourHallFill(filePath, emptySpace, filledSpace, vOffset) {
+export function fourHallFill(filePath, emptySpace, filledSpace, vOffset, doorSize, maxRoomSize = 15) {
     let splitValue;
 
     if (emptySpace[0].BR.x - emptySpace[0].TL.x >= (emptySpace[0].BR.y - emptySpace[0].TL.y) * 2) {
@@ -166,7 +166,7 @@ export function fourHallFill(filePath, emptySpace, filledSpace, vOffset) {
     }
 
     for (let i = 1; i < emptySpace.length; i++) {
-        vOffset = lineFill(filePath, [emptySpace[i]], filledSpace, vOffset)
+        vOffset = lineFill(filePath, [emptySpace[i]], filledSpace, vOffset, doorSize, maxRoomSize)
     }
 
     return vOffset;

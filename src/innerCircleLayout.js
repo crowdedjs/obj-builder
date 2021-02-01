@@ -5,13 +5,7 @@ import { makeWalls } from "./outerWalls.js";
 import flatGenerator from "./flatGenerator.js"
 
 
-export function innerCircleLayout(filePath = "test", hallWidth = 4, w = 50, l = 50, midRatio = 1/3) {
-    console.log(
-        "hall width: " + hallWidth +
-        "\nfloor width: " + w +
-        "\nfloor length: " + l +
-        "\nmid ratio: " + midRatio)
-
+export function innerCircleLayout(filePath = "test", hallWidth = 4, doorSize = 3, w = 50, l = 50, midRatio = 1/3, maxRoomSize = 15) {
     fs.writeFileSync(filePath + `.obj`, "\n");
     // fs.writeFileSync(filePath + `.obj`, "mtllib room.mtl\n");
     // fs.writeFileSync(filePath + `.mtl`, "\n");
@@ -36,7 +30,7 @@ export function innerCircleLayout(filePath = "test", hallWidth = 4, w = 50, l = 
     vOffset = allocate(filePath, {TL:{x:(spaceToFill.BR.x+spaceToFill.TL.x) / 2 -hallWidth/2,y:spaceToFill.BR.y * midRatio +hallWidth},BR:{x:(spaceToFill.BR.x+spaceToFill.TL.x) / 2 +hallWidth/2,y:spaceToFill.BR.y},isRoom:false}, 3, 0, emptySpace, filledSpace, vOffset);
    
     emptySpace.length = 0;
-    
+
     //center
     emptySpace.push({TL:{x:spaceToFill.TL.x * midRatio,y:spaceToFill.TL.y * midRatio},BR:{x:spaceToFill.BR.x * midRatio,y:spaceToFill.BR.y * midRatio},isRoom:false});
 
@@ -54,17 +48,17 @@ export function innerCircleLayout(filePath = "test", hallWidth = 4, w = 50, l = 
         let hallCount = halls[0] + halls[1] + halls[2] + halls[3];
         switch (hallCount) {
             case 0:
-                vOffset = basicFill(filePath, [emptySpace[i]], filledSpace, vOffset);
+                vOffset = basicFill(filePath, [emptySpace[i]], filledSpace, vOffset, doorSize, maxRoomSize);
                 break;
             case 1:
             case 2:
-                vOffset = lineFill(filePath, [emptySpace[i]], filledSpace, vOffset);
+                vOffset = lineFill(filePath, [emptySpace[i]], filledSpace, vOffset, doorSize, maxRoomSize);
                 break;
             case 3:
-                vOffset = threeHallFill(filePath, [emptySpace[i]], filledSpace, vOffset, halls);
+                vOffset = threeHallFill(filePath, [emptySpace[i]], filledSpace, vOffset, halls, doorSize, maxRoomSize);
                 break;
             case 4:
-                vOffset = fourHallFill(filePath, [emptySpace[i]], filledSpace, vOffset);
+                vOffset = fourHallFill(filePath, [emptySpace[i]], filledSpace, vOffset, doorSize, maxRoomSize);
                 break;
             default:
                 console.log("Error! Abnormal number of adjacent halls.")
@@ -77,7 +71,7 @@ export function innerCircleLayout(filePath = "test", hallWidth = 4, w = 50, l = 
     
     //Generate Outer Wall
     // vOffset = makeWalls(
-    //     width, length, 4,
+    //     width, length, doorSize,
     //     [[width],[length],[width/2 - hallWidth/2, width/2 - hallWidth/2],[length]],
     //     hallWidth, "./" + filePath,
     //     (spaceToFill.BR.x + spaceToFill.TL.x) / 2, (spaceToFill.BR.y + spaceToFill.TL.y) / 2, 0, vOffset

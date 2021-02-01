@@ -8,7 +8,7 @@ const vertL = Math.floor(Math.random() * 150) + 51;
 const horizL = Math.floor(Math.random() * 150) + 51;
 
 
-export function XLayout(filePath = "test", w = 40, vertL = Math.floor(Math.random() * 150) + 51, horizL = Math.floor(Math.random() * 150) + 51, hallWidth = 6) {
+export function XLayout(filePath = "test", w = 40, vertL = Math.floor(Math.random() * 150) + 51, horizL = Math.floor(Math.random() * 150) + 51, hallWidth = 6, doorSize = 3) {
     fs.writeFileSync(filePath + `.obj`, "mtllib room.mtl\n");
     fs.writeFileSync(filePath + `.mtl`, "\n");
 
@@ -42,20 +42,19 @@ export function XLayout(filePath = "test", w = 40, vertL = Math.floor(Math.rando
     for (let i = 0; i < emptySpace.length; i++) {
         let halls = checkForHalls(filledSpace, emptySpace[i]);
         let hallCount = halls[0] + halls[1] + halls[2] + halls[3];
-        console.log(hallCount)
         switch (hallCount) {
             case 0:
-                vOffset = basicFill(filePath, [emptySpace[i]], filledSpace, vOffset);
+                vOffset = basicFill(filePath, [emptySpace[i]], filledSpace, vOffset, doorSize);
                 break;
             case 1:
             case 2:
-                vOffset = lineFill(filePath, [emptySpace[i]], filledSpace, vOffset);
+                vOffset = lineFill(filePath, [emptySpace[i]], filledSpace, vOffset, doorSize);
                 break;
             case 3:
-                vOffset = threeHallFill(filePath, [emptySpace[i]], filledSpace, vOffset, halls);
+                vOffset = threeHallFill(filePath, [emptySpace[i]], filledSpace, vOffset, halls, doorSize);
                 break;
             case 4:
-                vOffset = fourHallFill(filePath, [emptySpace[i]], filledSpace, vOffset);
+                vOffset = fourHallFill(filePath, [emptySpace[i]], filledSpace, vOffset, doorSize);
                 break;
             default:
                 console.log("Error! Abnormal number of adjacent halls.")
@@ -64,38 +63,38 @@ export function XLayout(filePath = "test", w = 40, vertL = Math.floor(Math.rando
 
     //Generate Outer Wall
     vOffset = makeWalls(
-        (horizL-w)/2, (vertL-w)/2, 4,
+        (horizL-w)/2, (vertL-w)/2, doorSize,
         [[],[(vertL-w)/2],[(horizL-w)/2],[]],
         hallWidth, "./" + filePath,
         -(horizL-w)/4 - w/2, -(vertL-w)/4 - w/2, 0, vOffset
     );
     vOffset = makeWalls(
-        (horizL-w)/2, (vertL-w)/2, 4,
+        (horizL-w)/2, (vertL-w)/2, doorSize,
         [[],[],[(horizL-w)/2],[(vertL-w)/2]],
         hallWidth, "./" + filePath,
         (horizL-w)/4 + w/2, -(vertL-w)/4 - w/2, 0, vOffset
     );
     vOffset = makeWalls(
-        (horizL-w)/2, (vertL-w)/2, 4,
+        (horizL-w)/2, (vertL-w)/2, doorSize,
         [[(horizL-w)/2],[],[],[(vertL-w)/2]],
         hallWidth, "./" + filePath,
         (horizL-w)/4 + w/2, (vertL-w)/4 + w/2, 0, vOffset
     );
     vOffset = makeWalls(
-        (horizL-w)/2, (vertL-w)/2, 4,
+        (horizL-w)/2, (vertL-w)/2, doorSize,
         [[(horizL-w)/2],[(vertL-w)/2],[],[]],
         hallWidth, "./" + filePath,
         -(horizL-w)/4 - w/2, (vertL-w)/4 + w/2, 0, vOffset
     );
 
     vOffset = makeWalls(
-        w, vertL, 4,
+        w, vertL, doorSize,
         [[(w-hallWidth)/2,(w-hallWidth)/2],[],[(w-hallWidth)/2,(w-hallWidth)/2],[]],
         hallWidth, "./" + filePath,
         0, 0, 0, vOffset
     );
     vOffset = makeWalls(
-        horizL, w, 4,
+        horizL, w, doorSize,
         [[],[(w-hallWidth)/2,(w-hallWidth)/2],[],[(w-hallWidth)/2,(w-hallWidth)/2]],
         hallWidth, "./" + filePath,
         0, 0, 0, vOffset
