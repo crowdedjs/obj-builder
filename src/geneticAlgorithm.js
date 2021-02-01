@@ -16,19 +16,18 @@ import readline from 'readline';
     //or booleans that control whether those side halls spawn
     //or a maximum room size (an edit to the "15" value in fillProcessing)
 const searchSpace = [
-    {name:"HALL_WIDTH", min:3, max:15},
-    // {name:"BUILDING_WIDTH", min:80, max:200},
-    // {name:"BUILDING_LENGTH", min:80, max:200},
-    {name:"BUILDING_WIDTH", min:80, max:100},
-    {name:"BUILDING_LENGTH", min:80, max:100},
+    {name:"HALL_WIDTH", min:3, max:13},
+    // We could have door size
+    {name:"BUILDING_WIDTH", min:90, max:150},
+    {name:"BUILDING_LENGTH", min:90, max:150},
     {name:"MID_RATIO", min:0.3, max:0.6}
 ];
 const populationLength = 18;
-const iterations = 10;
+const iterations = 100;
 
 
-let nextPop = genAlgLoop(initPopulation(), 0);
-for (let i = 1; i < iterations; i++) {
+let nextPop = genAlgLoop(initPopulation(), 1);
+for (let i = 2; i <= iterations; i++) {
     nextPop = genAlgLoop(repopulate(nextPop), i)
 }
 
@@ -67,7 +66,7 @@ function generateBuildings(population) {
     population.forEach(buildingVector => {
         console.log("\nBeginning " + count + "\n");
         innerCircleLayout(
-            "../runs/ga/a" + count,
+            "../runs/ga/thisGeneration/a" + count,
             buildingVector[0] * (searchSpace[0].max - searchSpace[0].min) + searchSpace[0].min,
             buildingVector[1] * (searchSpace[1].max - searchSpace[1].min) + searchSpace[1].min,
             buildingVector[2] * (searchSpace[2].max - searchSpace[2].min) + searchSpace[2].min,
@@ -115,7 +114,7 @@ function removeLeastFit(fitnessVals, population, iteration, numToRemove = popula
         if (i >= numToRemove)
             newPopulation.push(population[i])
     }
-    fs.copyFileSync("../runs/ga/a" + fitnessVals[0][1] + ".obj", "../runs/ga/best/bestOfGeneration" + iteration + ".obj")
+    fs.copyFileSync("../runs/ga/thisGeneration/a" + (fitnessVals[0][1] + 1) + ".obj", "../runs/ga/best/bestGen" + iteration + ".obj")
     return newPopulation;
 }
 
@@ -135,7 +134,7 @@ function evalFitness(population) {
     let hallHeuristics = []
 
     for (let i = 0; i < population.length; i++) {
-        roomHeuristics.push(roomHeuristic("../runs/ga/a" + (i+1) + "Labels.json"));
+        roomHeuristics.push(roomHeuristic("../runs/ga/thisGeneration/a" + (i+1) + "Labels.json"));
         hallHeuristics.push(hallHeuristic(population, i));
 
         if (roomHeuristics[i] > bestHeuristics[0])
@@ -172,5 +171,3 @@ function hallHeuristic(population, vectorNum) {
     let hallCutoff = 6;
     return hallValue < hallCutoff ? population[vectorNum][0] : hallCutoff / hallValue;
 }
-
-

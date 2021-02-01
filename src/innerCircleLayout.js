@@ -36,6 +36,7 @@ export function innerCircleLayout(filePath = "test", hallWidth = 4, w = 50, l = 
     vOffset = allocate(filePath, {TL:{x:(spaceToFill.BR.x+spaceToFill.TL.x) / 2 -hallWidth/2,y:spaceToFill.BR.y * midRatio +hallWidth},BR:{x:(spaceToFill.BR.x+spaceToFill.TL.x) / 2 +hallWidth/2,y:spaceToFill.BR.y},isRoom:false}, 3, 0, emptySpace, filledSpace, vOffset);
    
     emptySpace.length = 0;
+    
     //center
     emptySpace.push({TL:{x:spaceToFill.TL.x * midRatio,y:spaceToFill.TL.y * midRatio},BR:{x:spaceToFill.BR.x * midRatio,y:spaceToFill.BR.y * midRatio},isRoom:false});
 

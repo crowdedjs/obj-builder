@@ -4,6 +4,7 @@ import flatGenerator from "./src/flatGenerator.js"
 import wallGenerator from "./src/wallGenerator.js"
 import { HLayout } from "./src/HLayout.js";
 import { YLayout } from "./src/YLayout.js";
+import { XLayout } from "./src/XLayout.js";
 import { makeRoom } from "./src/room.js";
 
 
@@ -13,6 +14,7 @@ let l = 100;
 let midRatio = 3/4;
 
 // fillSpaceWithRooms("./runs/BasicFilledSpace");
-innerCircleLayout("./runs/InnerCircle", hallWidth, w, l, midRatio);
+// innerCircleLayout("./runs/InnerCircle", hallWidth, w, l, midRatio);
 // HLayout("./runs/HLayout");
 // YLayout("./runs/YLayout");
+XLayout("./runs/XLayout");
