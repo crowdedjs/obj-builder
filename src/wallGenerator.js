@@ -88,50 +88,50 @@ f ${4 + vOffset}/${4 + vOffset}/${1 + vOffset} ${2 + vOffset}/${2 + vOffset}/${1
   //Then saving the result as a png file
 
 
-  let dpu = textureDefaults.dotsPerUnit
-  let maxDim = Math.max(width, length, height);
-  let dimensions = maxDim * dpu;
+  // let dpu = textureDefaults.dotsPerUnit
+  // let maxDim = Math.max(width, length, height);
+  // let dimensions = maxDim * dpu;
 
-  const canvas = Canvas.createCanvas(dimensions, dimensions);
-  const ctx = canvas.getContext('2d');
-  ctx.fillStyle = 'white';
-  ctx.fillRect(0, 0, dimensions, dimensions);
+  // const canvas = Canvas.createCanvas(dimensions, dimensions);
+  // const ctx = canvas.getContext('2d');
+  // ctx.fillStyle = 'white';
+  // ctx.fillRect(0, 0, dimensions, dimensions);
 
-  ctx.save();
-  ctx.scale(dpu, dpu);
-  ctx.translate(maxDim / 2, maxDim / 2);
+  // ctx.save();
+  // ctx.scale(dpu, dpu);
+  // ctx.translate(maxDim / 2, maxDim / 2);
 
-  for (let i = Math.ceil(maxDim / 2); i > -Math.ceil(maxDim / 2); i--) {
-    ctx.strokeStyle = "black";
-    if (i == 0)
-      ctx.strokeStyle = "green"
+  // for (let i = Math.ceil(maxDim / 2); i > -Math.ceil(maxDim / 2); i--) {
+  //   ctx.strokeStyle = "black";
+  //   if (i == 0)
+  //     ctx.strokeStyle = "green"
 
-    ctx.lineWidth = textureDefaults.minorWidth / dpu;
-    if (i % textureDefaults.major == 0)
-      ctx.lineWidth = textureDefaults.majorWidth / dpu;
-    ctx.beginPath();
-    ctx.moveTo(i, maxDim / 2);
-    ctx.lineTo(i, -maxDim / 2);
-    ctx.stroke();
-  }
-  for (let i = Math.ceil(maxDim / 2); i > -Math.ceil(maxDim / 2); i--) {
-    ctx.strokeStyle = "black";
-    if (i == 0)
-      ctx.strokeStyle = "red"
-    ctx.lineWidth = textureDefaults.minorWidth / dpu;
-    if (i % textureDefaults.major == 0)
-      ctx.lineWidth = textureDefaults.majorWidth / dpu;
+  //   ctx.lineWidth = textureDefaults.minorWidth / dpu;
+  //   if (i % textureDefaults.major == 0)
+  //     ctx.lineWidth = textureDefaults.majorWidth / dpu;
+  //   ctx.beginPath();
+  //   ctx.moveTo(i, maxDim / 2);
+  //   ctx.lineTo(i, -maxDim / 2);
+  //   ctx.stroke();
+  // }
+  // for (let i = Math.ceil(maxDim / 2); i > -Math.ceil(maxDim / 2); i--) {
+  //   ctx.strokeStyle = "black";
+  //   if (i == 0)
+  //     ctx.strokeStyle = "red"
+  //   ctx.lineWidth = textureDefaults.minorWidth / dpu;
+  //   if (i % textureDefaults.major == 0)
+  //     ctx.lineWidth = textureDefaults.majorWidth / dpu;
 
-    ctx.beginPath();
-    ctx.moveTo(maxDim / 2, i);
-    ctx.lineTo(-maxDim / 2, i);
-    ctx.stroke();
-  }
+  //   ctx.beginPath();
+  //   ctx.moveTo(maxDim / 2, i);
+  //   ctx.lineTo(-maxDim / 2, i);
+  //   ctx.stroke();
+  // }
 
-  ctx.restore();
+  // ctx.restore();
 
 
-  const jpgBuffer = canvas.toBuffer('image/jpeg');
+  // const jpgBuffer = canvas.toBuffer('image/jpeg');
 
   // fs.writeFileSync(`./${baseName}${vOffset}.jpg`, jpgBuffer);
 

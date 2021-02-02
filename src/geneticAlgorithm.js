@@ -1,36 +1,30 @@
 import { innerCircleLayout } from "./innerCircleLayout.js";
 import fs from 'fs';
-import readline from 'readline';
 
 
 
-
-// innerCircleLayout("./runs/InnerCircle", hallWidth, w, l);
-
-//The space we are searching:
-    //HALL_WIDTH : Min 3, Max 20
-    //BUILDING_WIDTH : Min 80, Max 200
-    //BUILDING_LENGTH : Min 80, Max 200
-    //MID_RATIO : Min 0.3 Max 0.6
-        //I think we should have more, such as 
-    //or booleans that control whether those side halls spawn
-    //or a maximum room size (an edit to the "15" value in fillProcessing)
 const searchSpace = [
     {name:"HALL_WIDTH", min:3, max:13},
     {name:"DOOR_SIZE", min:3, max:8},
-    {name:"BUILDING_WIDTH", min:90, max:150},
-    {name:"BUILDING_LENGTH", min:90, max:150},
+    {name:"BUILDING_WIDTH", min:100, max:200},
+    {name:"BUILDING_LENGTH", min:100, max:200},
     {name:"MID_RATIO", min:0.3, max:0.6},
     {name:"MAX_ROOM_SIZE", min:10, max:20}
 ];
-const populationLength = 18;
+const populationLength = 25;
 const iterations = 100;
+const mutationRate = 0.2;
 
+
+
+fs.writeFileSync("../runs/ga/best.txt", "");
+fs.writeFileSync("../runs/ga/best.csv", "Hall Width,Door Size, Building Width, Building Length, Mid-Ratio, Max Room Size\n");
 
 console.log("\n\n~~~~~~~BEGINNING GENERATION 1~~~~~~~");
 let nextPop = genAlgLoop(initPopulation(), 1);
 for (let i = 2; i <= iterations; i++) {
     console.log("\n\n~~~~~~~BEGINNING GENERATION " + i + "~~~~~~~");
+    fs.appendFileSync("../runs/ga/best.txt", "\n\nBEST OF GEN " + i + "\n");
     nextPop = genAlgLoop(repopulate(nextPop), i)
 }
 
@@ -49,12 +43,15 @@ function initPopulation() {
 }
 
 function repopulate(population) {
+    fs.appendFileSync("../runs/ga/best.txt", printStats(population[0]));
+    fs.appendFileSync("../runs/ga/best.csv", toCSV(population[0]));
     let newPopulation = [];
+    newPopulation.push(population[0]);
     for (let i = 0; i < population.length; i++) {
         for (let j = i + 1; j < population.length; j++) {
             newPopulation.push(crossover(population[i], population[j]))
         }
-        newPopulation.push(mutate(population[i], 0.05))
+        newPopulation.push(mutate(population[i]))
     }
 
     for (let i = newPopulation.length; i < populationLength; i++) {
@@ -66,17 +63,15 @@ function repopulate(population) {
 
 function generateBuildings(population) {
     let count = 1;
-    population.forEach(buildingVector => {
-        console.log("\nLayout " + count);
-        printStats(buildingVector);
+    population.forEach(vector => {
         innerCircleLayout(
             "../runs/ga/thisGeneration/a" + count,
-            buildingVector[0] * (searchSpace[0].max - searchSpace[0].min) + searchSpace[0].min,
-            buildingVector[1] * (searchSpace[1].max - searchSpace[1].min) + searchSpace[1].min,
-            buildingVector[2] * (searchSpace[2].max - searchSpace[2].min) + searchSpace[2].min,
-            buildingVector[3] * (searchSpace[3].max - searchSpace[3].min) + searchSpace[3].min,
-            buildingVector[4] * (searchSpace[4].max - searchSpace[4].min) + searchSpace[4].min,
-            buildingVector[5] * (searchSpace[5].max - searchSpace[5].min) + searchSpace[5].min
+            vector[0] * (searchSpace[0].max - searchSpace[0].min) + searchSpace[0].min,
+            vector[1] * (searchSpace[1].max - searchSpace[1].min) + searchSpace[1].min,
+            vector[2] * (searchSpace[2].max - searchSpace[2].min) + searchSpace[2].min,
+            vector[3] * (searchSpace[3].max - searchSpace[3].min) + searchSpace[3].min,
+            vector[4] * (searchSpace[4].max - searchSpace[4].min) + searchSpace[4].min,
+            vector[5] * (searchSpace[5].max - searchSpace[5].min) + searchSpace[5].min
         );
         count++;
     });
@@ -102,23 +97,22 @@ function crossover(parentA, parentB) {
     return newVector;
 }
 
-function mutate(vector, mutationOdds) {
+function mutate(vector) {
     for (let i = 0; i < searchSpace.length; i++) {
-        if (Math.random() < mutationOdds)
+        if (Math.random() < mutationRate)
             vector[i] = Math.random();
     }
     return vector;
 }
 
-function removeLeastFit(fitnessVals, population, iteration, numToRemove = populationLength-5) {
-    //sort
+function removeLeastFit(fitnessVals, population, iteration, numToKeep = 5) {
     fitnessVals.sort((a, b) => b[0] - a[0])
     let newPopulation = []
     
     for (let i = 0; i < fitnessVals.length; i++)
     {
-        if (i >= numToRemove)
-            newPopulation.push(population[i])
+        if (i < numToKeep)
+            newPopulation.push(population[fitnessVals[i][1]])
     }
     fs.copyFileSync("../runs/ga/thisGeneration/a" + (fitnessVals[0][1] + 1) + ".obj", "../runs/ga/best/bestGen" + iteration + ".obj")
     return newPopulation;
@@ -174,7 +168,7 @@ function evalFitness(population) {
 }
 
 function roomHeuristic(filePath) {
-    //we use a heuristic to save time.  The size of the json file should be proportional to the number of rooms.
+    //The size of the json file should be proportional to the number of rooms.
     const stats = fs.statSync(filePath)
     return stats.size;
 }
@@ -196,5 +190,14 @@ function printStats(vector) {
     for (let i = 0; i < searchSpace.length; i++) {
         toPrint += "> " + searchSpace[i].name + ": " + (vector[i] * (searchSpace[i].max - searchSpace[i].min) + searchSpace[i].min) + "\n";
     }
-    console.log(toPrint);
+    return toPrint;
+}
+
+function toCSV(vector) {
+    let line = "";
+    for (let i = 0; i < searchSpace.length; i++) {
+        line += (vector[i] * (searchSpace[i].max - searchSpace[i].min) + searchSpace[i].min) + ",";
+    }
+    line += "\n";
+    return line;
 }

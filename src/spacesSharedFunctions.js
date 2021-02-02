@@ -13,32 +13,21 @@ import readline from 'readline';
  * @param {Float} length The length of the space to fill
  */
 function fillHelper(filePath, emptySpace, filledSpace, vOffset, width, length, doorSize) {
-    while (emptySpace.length != 0) {
-        let minIdx = -1;
-        let minVal = [Infinity, Infinity];
-    
-        for (let i = 0; i < emptySpace.length; i++) {
-            if (emptySpace[i].TL.y < minVal[0]) {
-                if (emptySpace[i].TL.x < minVal[1]) {
-                    minIdx = i;
-                    minVal = [emptySpace[i].TL.y, emptySpace[i].TL.x];
-                }
-            }
-        };
-    
+    while (emptySpace.length != 0) {    
         let newSpace = {
-            TL:{x:emptySpace[minIdx].TL.x, y:emptySpace[minIdx].TL.y},
-            BR:{x:emptySpace[minIdx].TL.x + width, y:emptySpace[minIdx].TL.y + length},
+            TL:{x:emptySpace[0].TL.x, y:emptySpace[0].TL.y},
+            BR:{x:emptySpace[0].TL.x + width, y:emptySpace[0].TL.y + length},
             isRoom:true
         };
 
-        
-        if (newSpace.TL.x - newSpace.BR.x < 0 && newSpace.TL.y - newSpace.BR.y < 0) {
-            vOffset = allocate(filePath, newSpace, doorSize, minIdx, emptySpace, filledSpace, vOffset);
-        } else {
-            console.log("Error")
-            emptySpace.splice(minIdx, 1)
-        }
+        vOffset = allocate(filePath, newSpace, doorSize, 0, emptySpace, filledSpace, vOffset);
+
+        // if (newSpace.TL.x - newSpace.BR.x < 0 && newSpace.TL.y - newSpace.BR.y < 0) {
+        //     vOffset = allocate(filePath, newSpace, doorSize, 0, emptySpace, filledSpace, vOffset);
+        // } else {
+        //     console.log("Error")
+        //     emptySpace.splice(0, 1)
+        // }
     }
     return vOffset;
 }

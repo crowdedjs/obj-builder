@@ -69,19 +69,19 @@ export function innerCircleLayout(filePath = "test", hallWidth = 4, doorSize = 3
     let width = spaceToFill.BR.x - spaceToFill.TL.x;
     let length = spaceToFill.BR.y - spaceToFill.TL.y;
     
-    //Generate Outer Wall
-    // vOffset = makeWalls(
-    //     width, length, doorSize,
-    //     [[width],[length],[width/2 - hallWidth/2, width/2 - hallWidth/2],[length]],
-    //     hallWidth, "./" + filePath,
-    //     (spaceToFill.BR.x + spaceToFill.TL.x) / 2, (spaceToFill.BR.y + spaceToFill.TL.y) / 2, 0, vOffset
-    // );
+    // Generate Outer Wall
+    vOffset = makeWalls(
+        width, length, doorSize,
+        [[width],[length],[width/2 - hallWidth/2, width/2 - hallWidth/2],[length]],
+        hallWidth, "./" + filePath,
+        (spaceToFill.BR.x + spaceToFill.TL.x) / 2, (spaceToFill.BR.y + spaceToFill.TL.y) / 2, 0, vOffset
+    );
 
-    //Generate Outside Of Building
-    // vOffset = flatGenerator(width + 30, length + 30,
-    //     "./" + filePath, {},
-    //     (spaceToFill.BR.x + spaceToFill.TL.x) / 2, (spaceToFill.BR.y + spaceToFill.TL.y) / 2, 0, vOffset
-    // );
+    // Generate Outside Of Building
+    vOffset = flatGenerator(width + 30, length + 30,
+        "./" + filePath, {},
+        (spaceToFill.BR.x + spaceToFill.TL.x) / 2, (spaceToFill.BR.y + spaceToFill.TL.y) / 2, 0, vOffset
+    );
 
     generateLabels(filledSpace, filePath, "room");
 }
