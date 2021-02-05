@@ -43,7 +43,7 @@ export function makeRoom(width, length, wallHeight, doorLocs, baseName, wOffset 
     // fs.writeFileSync(`${baseName}.obj`, "mtllib room.mtl\n");
     // fs.writeFileSync(`${baseName}.mtl`, "\n");
 
-    // vOffset = flatGenerator(width, length, baseName, {}, wOffset, lOffset, hOffset, vOffset);
+    vOffset = flatGenerator(width, length, baseName, {}, wOffset, lOffset, hOffset, vOffset);
     
     if (doorLocs[0])
         vOffset = wallWithDoorT(width, length, wallHeight, wOffset, lOffset, hOffset, vOffset, baseName, doorLocs[0]);

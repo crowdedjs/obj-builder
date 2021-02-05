@@ -15,12 +15,10 @@ export function YLayout(filePath = "test", hallWidth = 6, rotations = [0, Math.P
 
     let emptySpace = [];
     let filledSpace = [];
-    let temp = (wingLengths[0] + wingLengths[1] + wingLengths[2]) / 2;
-    let spaceToFill = {TL:{x:-temp/2,y:-temp/2},BR:{x:temp/2,y:temp/2}}
     
     let vOffset = 0;
     let wingWidth = 30 + hallWidth;
-    let centerDist = 20;
+    let centerDist = 40;
 
     emptySpace.length = 0;
 
@@ -72,7 +70,7 @@ export function YLayout(filePath = "test", hallWidth = 6, rotations = [0, Math.P
     }
 
 
-    vOffset = triangleRoom(centerDist, rotations, wingWidth, hallWidth, filePath, 0, 0, 0, vOffset)
+    vOffset = triangleRoom(centerDist, rotations, wingWidth, filePath, 0, 0, 0, vOffset)
 
     adjustVertices(filePath)
 

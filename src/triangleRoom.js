@@ -16,35 +16,37 @@ import wallGenerator from "./wallGenerator.js";
  * @param {double} hOffset The offset on the height axis
  * @param {int} vOffset The offset for the previous vertices for obj file.  First room should always be 0.
  */
-export function triangleRoom(centerDist, rotations, wingWidth, hallWidth, filePath, wOffset = 0, lOffset = 0, hOffset = 0, vOffset = 0) {
+export function triangleRoom(centerDist, rotations, wingWidth, filePath, wOffset = 0, lOffset = 0, hOffset = 0, vOffset = 0) {
 
-    vOffset = flatGenerator(centerDist*4, centerDist*4,
+    vOffset = flatGenerator(centerDist*2.3, centerDist*2.3,
         "./" + filePath, {},
         wOffset, lOffset, hOffset, vOffset
     );
 
     let points = [];
     let calculatedRotations = [];
+    let addRot = rotations[0]+rotations[1]+rotations[2];
 
     for (let i = 0; i < rotations.length; i++) {
         let rotation = (rotations[i] + rotations[(i+1) % 3])/2;
         if (i == 2)
             rotation += Math.PI;
 
-        points.push(rotate(rotation, -wingWidth, centerDist))
-        points.push(rotate(rotation, wingWidth, centerDist))
+        points.push(rotate(rotations[i]+addRot, -wingWidth, centerDist))
+        points.push(rotate(rotations[i]+addRot, wingWidth, centerDist))
         calculatedRotations.push(rotation);
     }
 
-    for (let i = 0; i < rotations.length*2; i+=2) {
-        let grouping = "g " + calculatedRotations[i/2] + '\n';
+    // points.forEach(point => {
+    //     vOffset = visualizePoint(point, filePath, vOffset)
+    // });
+    
+    for (let i = 1; i < rotations.length*2; i+=2) {
+        let grouping = "g " + calculatedRotations[Math.floor(i/2)] + '\n';
         fs.appendFileSync(filePath + '.obj', grouping);
 
-        let distA = Math.sqrt(Math.pow(points[(i+3)%6].x - points[i].x, 2) + Math.pow(points[(i+3)%6].z - points[i].z, 2))
-        let distB = Math.sqrt(Math.pow(points[(i+5)%6].x - points[i].x, 2) + Math.pow(points[(i+5)%6].z - points[i].z, 2))
-
-        let wallLength = distA < distB ? distA : distB;
-        let centerOffset = Math.sqrt(Math.pow(centerDist, 2) - Math.pow(wallLength/2, 2)) + 40/Math.log2(centerDist);
+        let wallLength = Math.sqrt(Math.pow(points[(i+1)%6].x - points[i].x, 2) + Math.pow(points[(i+1)%6].z - points[i].z, 2));
+        let centerOffset = Math.sqrt(Math.abs(Math.pow(centerDist, 2) - Math.pow(wallLength/2, 2))) + 40/Math.log2(centerDist);
 
         vOffset = wallGenerator(
             wallLength+centerDist/10, 2, 4, 
@@ -65,4 +67,11 @@ function rotate(rotation, wingWidth, centerDist) {
     point.z = -Math.sin(rotation) * temp.x + Math.cos(rotation) * temp.z;
 
     return point;
+}
+
+function visualizePoint(point, filePath, vOffset) {
+    vOffset = wallGenerator(
+        3,3,15,filePath,{},point.x,point.z,0,vOffset
+    );
+    return vOffset;
 }

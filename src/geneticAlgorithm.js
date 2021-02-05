@@ -1,5 +1,6 @@
 import { innerCircleLayout } from "./innerCircleLayout.js";
 import fs from 'fs';
+import fse from 'fs-extra';
 
 
 
@@ -12,7 +13,7 @@ const searchSpace = [
     {name:"MAX_ROOM_SIZE", min:10, max:20}
 ];
 const populationLength = 25;
-const iterations = 100;
+const iterations = 1000;
 const mutationRate = 0.2;
 
 
@@ -45,6 +46,8 @@ function initPopulation() {
 function repopulate(population) {
     fs.appendFileSync("../runs/ga/best.txt", printStats(population[0]));
     fs.appendFileSync("../runs/ga/best.csv", toCSV(population[0]));
+    fse.emptyDirSync("../runs/ga/thisGeneration");
+    
     let newPopulation = [];
     newPopulation.push(population[0]);
     for (let i = 0; i < population.length; i++) {
