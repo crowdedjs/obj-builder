@@ -1,7 +1,7 @@
 import { innerCircleLayout } from "./innerCircleLayout.js";
 import fs from 'fs';
 import fse from 'fs-extra';
-// import boot from "../../examples/src/index.js"
+import boot from "../../examples/src/index.js"
 
 
 const searchSpace = [
