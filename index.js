@@ -16,9 +16,9 @@ let randAngles = randomAngles();
 
 
 // fillSpaceWithRooms("./runs/BasicFilledSpace");
-// innerCircleLayout("./runs/InnerCircle");
-// HLayout("./runs/HLayout");
-YLayout("./runs/YLayout", undefined, [0, randAngles[0], randAngles[1]], undefined);
+innerCircleLayout("./runs/InnerCircle");
+HLayout("./runs/HLayout");
+// YLayout("./runs/YLayout", undefined, [0, randAngles[0], randAngles[1]], undefined);
 // YLayout("./runs/YLayout", undefined, undefined, undefined);
 // XLayout("./runs/XLayout");
 // demo("./runs/demo");

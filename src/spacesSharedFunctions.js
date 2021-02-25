@@ -368,6 +368,29 @@ export function generateLabels(filledSpace, filePath, labelBase = "room") {
 }
 
 /**
+ * Creates an arrival json where one person arrives in each room.
+ * @param {Array} filledSpace An array of spaces that have already been filled
+ * @param {String} filePath The base path to the files we write to
+ */
+export function arrivalOnePerRoom(filledSpace, filePath, labelBase = "room") {
+    fs.writeFileSync(filePath + "Arrivals.json", "[\n");
+    for (let i = 0; i < filledSpace.length; i++) {
+        let name = "Nurse";
+        let type = name;
+        let arrivalLocation = labelBase + " " + (i + 1);
+        let arrivalTick = 10;
+        let id = i;
+        
+        if ((i+1) < filledSpace.length) {
+            fs.appendFileSync(filePath + "Arrivals.json", `\t{\n\t\t"name": "${name}",\n\t\t"type": "${type}",\n\t\t"arrivalLocation": "${arrivalLocation}",\n\t\t"arrivalTick": "${arrivalTick}",\n\t\t"id": "${id}"\n\t},\n`)
+        } else {
+            fs.appendFileSync(filePath + "Arrivals.json", `\t{\n\t\t"name": "${name}",\n\t\t"type": "${type}",\n\t\t"arrivalLocation": "${arrivalLocation}",\n\t\t"arrivalTick": "${arrivalTick}",\n\t\t"id": "${id}"\n\t}\n`)
+        }
+    }
+    fs.appendFileSync(filePath + "Arrivals.json", "]");
+}
+
+/**
  * A debugging function to aid in visualizing an array of spaces.
  * @param {Array} emptySpace An array of spaces that have yet to be filled
  * @param {String} filePath The base path to the files we write to

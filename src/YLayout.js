@@ -18,7 +18,7 @@ export function YLayout(filePath = "test", hallWidth = 6, rotations = [0, Math.P
     
     let vOffset = 0;
     let wingWidth = 30 + hallWidth;
-    let centerDist = 40;
+    let centerDist = 30;
 
     emptySpace.length = 0;
 

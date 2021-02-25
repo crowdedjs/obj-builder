@@ -1,7 +1,7 @@
 import { innerCircleLayout } from "./innerCircleLayout.js";
 import fs from 'fs';
 import fse from 'fs-extra';
-
+// import boot from "../../examples/src/index.js"
 
 
 const searchSpace = [
@@ -137,11 +137,14 @@ function evalFitness(population) {
     let roomHeuristics = []
     let hallHeuristics = []
     let doorHeuristics = []
+    // let bestResult = 0;
+    // let runtimeResults = []
 
     for (let i = 0; i < population.length; i++) {
         roomHeuristics.push(roomHeuristic("../runs/ga/thisGeneration/a" + (i+1) + "Labels.json"));
         hallHeuristics.push(hallHeuristic(population, i));
         doorHeuristics.push(doorHeuristic(population, i));
+        // runtimeResults.push(runSimTest(i))
 
         if (roomHeuristics[i] > bestHeuristics[0])
             bestHeuristics[0] = roomHeuristics[i];
@@ -149,6 +152,8 @@ function evalFitness(population) {
             bestHeuristics[1] = hallHeuristics[i];
         if (doorHeuristics[i] > bestHeuristics[2])
             bestHeuristics[2] = doorHeuristics[i];
+        // if (runtimeResults[i] > bestResult)
+        //     bestResult = runtimeResults[i];
     };
 
     let fitnessVals = [];
@@ -186,6 +191,25 @@ function doorHeuristic(population, vectorNum) {
     let doorValue = population[vectorNum][1] * (searchSpace[1].max - searchSpace[1].min) + searchSpace[1].min;
     let doorCutoff = 4;
     return doorValue < doorCutoff ? population[vectorNum][1] : doorCutoff / doorValue;
+}
+
+// function runSimTest(vectorNum) {
+//     let params = {};
+
+//     let assetBase = "../runs/ga/thisGeneration/a" + (vectorNum+1);
+
+//     params.objPath = assetBase + ".obj";
+//     params.arrivalPath =  "../runs/ga/arrival.json"; //TODO
+//     params.locationsPath = assetBase + "Labels.json";
+//     params.secondsOfSimulation = 300;
+//     params.millisecondsBetweenFrames = 40;
+//     params = urlParser(window, params, assetBase);
+
+//     return boot(params);
+// }
+
+function evacHeuristic(params) {
+    //TODO: time how long it takes for all people to evacuate
 }
 
 function printStats(vector) {

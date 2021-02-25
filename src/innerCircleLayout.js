@@ -1,11 +1,11 @@
 import fs from "fs";
-import { allocate, generateLabels, visualizeEmpty, checkForHalls, threeHallFill, fourHallFill, lineFill } from "./spacesSharedFunctions.js"
+import { allocate, generateLabels, visualizeEmpty, checkForHalls, threeHallFill, fourHallFill, lineFill, arrivalOnePerRoom } from "./spacesSharedFunctions.js"
 import { makeRoom } from "./room.js";
 import { makeWalls } from "./outerWalls.js";
 import flatGenerator from "./flatGenerator.js"
 
 
-export function innerCircleLayout(filePath = "test", hallWidth = 4, doorSize = 3, w = 50, l = 50, midRatio = 1/3, maxRoomSize = 15) {
+export function innerCircleLayout(filePath = "test", hallWidth = 4, doorSize = 3, w = 100, l = 100, midRatio = 1/3, maxRoomSize = 15) {
     fs.writeFileSync(filePath + `.obj`, "\n");
     // fs.writeFileSync(filePath + `.obj`, "mtllib room.mtl\n");
     // fs.writeFileSync(filePath + `.mtl`, "\n");
@@ -84,4 +84,5 @@ export function innerCircleLayout(filePath = "test", hallWidth = 4, doorSize = 3
     );
 
     generateLabels(filledSpace, filePath, "room");
+    arrivalOnePerRoom(filledSpace, filePath, "room")
 }
