@@ -21,7 +21,7 @@ export function innerCircleLayout(filePath = "test", hallWidth = 4, doorSize = 3
     let vOffset = 0;
     
     emptySpace.push(spaceToFill);
-
+    
     //Hallways (Top, Left, Right, Bottom, Entry Hall)
     vOffset = allocate(filePath, {TL:{x:spaceToFill.TL.x,y:spaceToFill.TL.y * midRatio -hallWidth},BR:{x:spaceToFill.BR.x,y:spaceToFill.TL.y * midRatio},isRoom:false}, 3, 0, emptySpace, filledSpace, vOffset);
     vOffset = allocate(filePath, {TL:{x:spaceToFill.TL.x * midRatio -hallWidth,y:spaceToFill.TL.y * midRatio},BR:{x:spaceToFill.TL.x * midRatio,y:spaceToFill.BR.y * midRatio},isRoom:false}, 3, 0, emptySpace, filledSpace, vOffset);
@@ -82,6 +82,9 @@ export function innerCircleLayout(filePath = "test", hallWidth = 4, doorSize = 3
         "./" + filePath, {},
         (spaceToFill.BR.x + spaceToFill.TL.x) / 2, (spaceToFill.BR.y + spaceToFill.TL.y) / 2, 0, vOffset
     );
+
+    //Adding in the exit as the first "room" of filledSpace
+    filledSpace.push({TL:{x:(spaceToFill.BR.x+spaceToFill.TL.x) / 2 - 15,y:spaceToFill.BR.y},BR:{x:(spaceToFill.BR.x+spaceToFill.TL.x) / 2 + 15,y:spaceToFill.BR.y - 30},isRoom:false,name:"Exit"})
 
     generateLabels(filledSpace, filePath, "room");
     arrivalOnePerRoom(filledSpace, filePath, "room")
