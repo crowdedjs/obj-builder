@@ -48,7 +48,8 @@ s off
 f ${1 + vOffset}/${1 + vOffset}/${1 + vOffset} ${2 + vOffset}/${2 + vOffset}/${1 + vOffset} ${3 + vOffset}/${3 + vOffset}/${1 + vOffset} ${4 + vOffset}/${4 + vOffset}/${1 + vOffset}
     \n`;
 
-  fs.appendFileSync(`${baseName}.obj`, obj);
+    fs.appendFileSync(`${baseName}/objs/layout.obj`, obj);
+    fs.appendFileSync(`${baseName}/objs/layout.js`, obj);
 
   //Second generate the mtl file
 

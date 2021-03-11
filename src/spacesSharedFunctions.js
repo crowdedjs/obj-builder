@@ -350,13 +350,13 @@ function deepCloneSpace(target, source) {
  */
 export function generateLabels(filledSpace, filePath, labelBase = "room") {
     let nameCount = 1;
-    fs.writeFileSync(filePath + "Labels.json", "[\n");
+    fs.writeFileSync(filePath + "locations.js", "export default [\n");
     filledSpace.forEach(space => {
         let name;
         if (space.name !== undefined) {
             name = space.name;
         } else {
-            name = labelBase + " " + (nameCount + 1);
+            name = labelBase + " " + nameCount;
         }
         let annotationName = name;
         let position = {x:0,y:0,z:0};
@@ -364,13 +364,13 @@ export function generateLabels(filledSpace, filePath, labelBase = "room") {
         position.y = 0;
         position.z = (space.TL.y + space.BR.y) / 2;
         if (filledSpace.length == nameCount) {
-            fs.appendFileSync(filePath + "Labels.json", `\t{\n\t\t"name": "${name}",\n\t\t"annotationName": "${annotationName}",\n\t\t"position": {\n\t\t\t"x": ${position.x},\n\t\t\t"y": ${position.y},\n\t\t\t"z": ${position.z}\n\t\t}\n\t}\n`)
+            fs.appendFileSync(filePath + "locations.js", `\t{\n\t\t"name": "${name}",\n\t\t"annotationName": "${annotationName}",\n\t\t"position": {\n\t\t\t"x": ${position.x},\n\t\t\t"y": ${position.y},\n\t\t\t"z": ${position.z}\n\t\t}\n\t}\n`)
         } else {
-            fs.appendFileSync(filePath + "Labels.json", `\t{\n\t\t"name": "${name}",\n\t\t"annotationName": "${annotationName}",\n\t\t"position": {\n\t\t\t"x": ${position.x},\n\t\t\t"y": ${position.y},\n\t\t\t"z": ${position.z}\n\t\t}\n\t},\n`)
+            fs.appendFileSync(filePath + "locations.js", `\t{\n\t\t"name": "${name}",\n\t\t"annotationName": "${annotationName}",\n\t\t"position": {\n\t\t\t"x": ${position.x},\n\t\t\t"y": ${position.y},\n\t\t\t"z": ${position.z}\n\t\t}\n\t},\n`)
         }
         nameCount++;
     });
-    fs.appendFileSync(filePath + "Labels.json", "]");
+    fs.appendFileSync(filePath + "locations.js", "]");
 }
 
 /**
@@ -379,21 +379,21 @@ export function generateLabels(filledSpace, filePath, labelBase = "room") {
  * @param {String} filePath The base path to the files we write to
  */
 export function arrivalOnePerRoom(filledSpace, filePath, labelBase = "room") {
-    fs.writeFileSync(filePath + "Arrivals.json", "[\n");
-    for (let i = 0; i < filledSpace.length; i++) {
+    fs.writeFileSync(filePath + "arrivals.js", "export default [\n");
+    for (let i = 1; i < filledSpace.length; i++) {
         let name = "EscapePerson";
         let type = name;
-        let arrivalLocation = labelBase + " " + (i + 1);
+        let arrivalLocation = labelBase + " " + i;
         let arrivalTick = 10;
-        let id = i;
+        let id = i - 1;
         
-        if ((i+1) < filledSpace.length) {
-            fs.appendFileSync(filePath + "Arrivals.json", `\t{\n\t\t"name": "${name}",\n\t\t"type": "${type}",\n\t\t"arrivalLocation": "${arrivalLocation}",\n\t\t"arrivalTick": "${arrivalTick}",\n\t\t"id": "${id}"\n\t},\n`)
+        if (i < filledSpace.length) {
+            fs.appendFileSync(filePath + "arrivals.js", `\t{\n\t\t"name": "${name}",\n\t\t"type": "${type}",\n\t\t"arrivalLocation": "${arrivalLocation}",\n\t\t"arrivalTick": ${arrivalTick},\n\t\t"id": ${id}\n\t},\n`)
         } else {
-            fs.appendFileSync(filePath + "Arrivals.json", `\t{\n\t\t"name": "${name}",\n\t\t"type": "${type}",\n\t\t"arrivalLocation": "${arrivalLocation}",\n\t\t"arrivalTick": "${arrivalTick}",\n\t\t"id": "${id}"\n\t}\n`)
+            fs.appendFileSync(filePath + "arrivals.js", `\t{\n\t\t"name": "${name}",\n\t\t"type": "${type}",\n\t\t"arrivalLocation": "${arrivalLocation}",\n\t\t"arrivalTick": ${arrivalTick},\n\t\t"id": ${id}\n\t}\n`)
         }
     }
-    fs.appendFileSync(filePath + "Arrivals.json", "]");
+    fs.appendFileSync(filePath + "arrivals.js", "]");
 }
 
 /**

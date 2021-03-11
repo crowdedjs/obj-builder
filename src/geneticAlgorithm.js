@@ -1,7 +1,8 @@
 import { innerCircleLayout } from "./innerCircleLayout.js";
 import fs from 'fs';
 import fse from 'fs-extra';
-import boot from "../../examples/src/index.js"
+// import startup from "../../node/index.js"
+import child_process from "child_process"
 
 
 const searchSpace = [
@@ -31,8 +32,8 @@ for (let i = 2; i <= iterations; i++) {
 
 
 function genAlgLoop(population, iteration) {
-    generateBuildings(population);
-    return removeLeastFit(evalFitness(population), population, iteration);
+    let fitness = generateBuildings(population);
+    return removeLeastFit(evalFitness(population, fitness), population, iteration);
 }
 
 function initPopulation() {
@@ -66,9 +67,10 @@ function repopulate(population) {
 
 function generateBuildings(population) {
     let count = 1;
+    let fitness = [];
     population.forEach(vector => {
         innerCircleLayout(
-            "../runs/ga/thisGeneration/a" + count,
+            "../../node/node_modules/@crowdedjs/assets/",
             vector[0] * (searchSpace[0].max - searchSpace[0].min) + searchSpace[0].min,
             vector[1] * (searchSpace[1].max - searchSpace[1].min) + searchSpace[1].min,
             vector[2] * (searchSpace[2].max - searchSpace[2].min) + searchSpace[2].min,
@@ -76,8 +78,14 @@ function generateBuildings(population) {
             vector[4] * (searchSpace[4].max - searchSpace[4].min) + searchSpace[4].min,
             vector[5] * (searchSpace[5].max - searchSpace[5].min) + searchSpace[5].min
         );
+        console.log("Beginning Layout #" + count)
+        let result = parseInt(child_process.execSync("node ../../node/index.js").toString());
+        console.log("   > " + result)
+
+        fitness.push(result)
         count++;
     });
+    return fitness;
 }
 
 function randomVector() {
@@ -117,99 +125,28 @@ function removeLeastFit(fitnessVals, population, iteration, numToKeep = 5) {
         if (i < numToKeep)
             newPopulation.push(population[fitnessVals[i][1]])
     }
-    fs.copyFileSync("../runs/ga/thisGeneration/a" + (fitnessVals[0][1] + 1) + ".obj", "../runs/ga/best/bestGen" + iteration + ".obj")
+    // fs.copyFileSync("../runs/ga/thisGeneration/a" + (fitnessVals[0][1] + 1) + ".obj", "../runs/ga/best/bestGen" + iteration + ".obj")
     return newPopulation;
 }
 
-function evalFitness(population) {
-    //IN DEVELOPMENT. IDEAS:
-    //we could measure the distance between important points
-        //That would be keeping in mind that the most crucial, lifesaving travel distances should be weighted
-        //More commonly traveled distances should also be weighted
-    //hall width needs to be evaluated.  This would be more accurate to do in our simulation, but it would take SO long.
-        //Probably what we need is a heuristic.
-    //we could get a room count.  We need to make sure that the algorithm doesn't favor tiny ERs.
-    //we could use the average distance from the center..?
-
-
-    //REALLY BASIC HEURISTIC
-    let bestHeuristics = [0,0,0]
-    let roomHeuristics = []
-    let hallHeuristics = []
-    let doorHeuristics = []
-    // let bestResult = 0;
-    // let runtimeResults = []
+function evalFitness(population, fitness) {
+    let bestResult = Infinity;
+    let runtimeResults = fitness;
 
     for (let i = 0; i < population.length; i++) {
-        roomHeuristics.push(roomHeuristic("../runs/ga/thisGeneration/a" + (i+1) + "Labels.json"));
-        hallHeuristics.push(hallHeuristic(population, i));
-        doorHeuristics.push(doorHeuristic(population, i));
-        // runtimeResults.push(runSimTest(i))
-
-        if (roomHeuristics[i] > bestHeuristics[0])
-            bestHeuristics[0] = roomHeuristics[i];
-        if (hallHeuristics[i] > bestHeuristics[1])
-            bestHeuristics[1] = hallHeuristics[i];
-        if (doorHeuristics[i] > bestHeuristics[2])
-            bestHeuristics[2] = doorHeuristics[i];
-        // if (runtimeResults[i] > bestResult)
-        //     bestResult = runtimeResults[i];
+        if (runtimeResults[i] < bestResult)
+            bestResult = runtimeResults[i];
     };
 
     let fitnessVals = [];
 
     for (let i = 0; i < population.length; i++) {
         fitnessVals.push([
-            (
-                roomHeuristics[i] +
-                hallHeuristics[i] +
-                doorHeuristics[i]
-            ) / (
-                bestHeuristics[0] +
-                bestHeuristics[1] +
-                bestHeuristics[2]
-            ), i
+           bestResult / runtimeResults[i], i
         ])
     }
     
     return fitnessVals;
-}
-
-function roomHeuristic(filePath) {
-    //The size of the json file should be proportional to the number of rooms.
-    const stats = fs.statSync(filePath)
-    return stats.size;
-}
-
-function hallHeuristic(population, vectorNum) {
-    let hallValue = population[vectorNum][0] * (searchSpace[0].max - searchSpace[0].min) + searchSpace[0].min;
-    let hallCutoff = 6;
-    return hallValue < hallCutoff ? population[vectorNum][0] : hallCutoff / hallValue;
-}
-
-function doorHeuristic(population, vectorNum) {
-    let doorValue = population[vectorNum][1] * (searchSpace[1].max - searchSpace[1].min) + searchSpace[1].min;
-    let doorCutoff = 4;
-    return doorValue < doorCutoff ? population[vectorNum][1] : doorCutoff / doorValue;
-}
-
-// function runSimTest(vectorNum) {
-//     let params = {};
-
-//     let assetBase = "../runs/ga/thisGeneration/a" + (vectorNum+1);
-
-//     params.objPath = assetBase + ".obj";
-//     params.arrivalPath =  "../runs/ga/arrival.json"; //TODO
-//     params.locationsPath = assetBase + "Labels.json";
-//     params.secondsOfSimulation = 300;
-//     params.millisecondsBetweenFrames = 40;
-//     params = urlParser(window, params, assetBase);
-
-//     return boot(params);
-// }
-
-function evacHeuristic(params) {
-    //TODO: time how long it takes for all people to evacuate
 }
 
 function printStats(vector) {
