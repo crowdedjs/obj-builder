@@ -36,7 +36,7 @@ function wallGenerator(width, length, height, baseName, textureOptions, wOffset 
   //First generate the wavefront obj file
   let obj =
   `
-  o object${vOffset}
+o object${vOffset}
 v ${halfWidth + wOffset} ${halfHeight + hOffset} ${halfLength + lOffset}
 v ${halfWidth + wOffset} ${halfHeight + hOffset} ${-halfLength + lOffset}
 v ${halfWidth + wOffset} ${-halfHeight + hOffset} ${halfLength + lOffset}
@@ -64,7 +64,8 @@ f ${1 + vOffset}/${1 + vOffset}/${1 + vOffset} ${3 + vOffset}/${3 + vOffset}/${1
 f ${4 + vOffset}/${4 + vOffset}/${1 + vOffset} ${2 + vOffset}/${2 + vOffset}/${1 + vOffset} ${6 + vOffset}/${6 + vOffset}/${1 + vOffset} ${8 + vOffset}/${8 + vOffset}/${1 + vOffset}
  \n`;
  
-  fs.appendFileSync(`${baseName}.obj`, obj);
+  fs.appendFileSync(`${baseName}/objs/layout.obj`, obj);
+  fs.appendFileSync(`${baseName}/objs/layout.js`, obj);
 
   //Second generate the mtl file
 

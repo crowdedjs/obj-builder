@@ -6,7 +6,8 @@ import flatGenerator from "./flatGenerator.js"
 
 
 export function innerCircleLayout(filePath = "test", hallWidth = 4, doorSize = 3, w = 100, l = 100, midRatio = 1/3, maxRoomSize = 15) {
-    fs.writeFileSync(filePath + `.obj`, "\n");
+    fs.writeFileSync(filePath + `objs/layout.obj`, "\n");
+    fs.writeFileSync(filePath + `objs/layout.js`, "export default\n`");
     // fs.writeFileSync(filePath + `.obj`, "mtllib room.mtl\n");
     // fs.writeFileSync(filePath + `.mtl`, "\n");
 
@@ -86,6 +87,8 @@ export function innerCircleLayout(filePath = "test", hallWidth = 4, doorSize = 3
     //Adding in the exit as the first "room" of filledSpace
     filledSpace.push({TL:{x:(spaceToFill.BR.x+spaceToFill.TL.x) / 2 - 15,y:spaceToFill.BR.y},BR:{x:(spaceToFill.BR.x+spaceToFill.TL.x) / 2 + 15,y:spaceToFill.BR.y - 30},isRoom:false,name:"Exit"})
 
-    generateLabels(filledSpace, filePath, "room");
-    arrivalOnePerRoom(filledSpace, filePath, "room")
+    generateLabels(filledSpace, filePath + "locations/", "room");
+    arrivalOnePerRoom(filledSpace, filePath + "arrivals/", "room");
+
+    fs.appendFileSync(filePath + `objs/layout.js`, "`");
 }
