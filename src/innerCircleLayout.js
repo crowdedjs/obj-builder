@@ -5,9 +5,9 @@ import { makeWalls } from "./outerWalls.js";
 import flatGenerator from "./flatGenerator.js"
 
 
-export function innerCircleLayout(filePath = "test", hallWidth = 4, doorSize = 3, w = 100, l = 100, midRatio = 1/3, maxRoomSize = 15) {
-    fs.writeFileSync(filePath + `objs/layout.obj`, "\n");
-    fs.writeFileSync(filePath + `objs/layout.js`, "export default\n`");
+export function innerCircleLayout(filePath = "test", hallWidth = 4, doorSize = 3, w = 100, l = 100, midRatio = 1/3, maxRoomSize = 15, count = "") {
+    fs.writeFileSync(filePath + `objs/_${count}layout.obj`, "\n");
+    fs.writeFileSync(filePath + `objs/_${count}layout.js`, "export default\n`");
     // fs.writeFileSync(filePath + `.obj`, "mtllib room.mtl\n");
     // fs.writeFileSync(filePath + `.mtl`, "\n");
 
@@ -24,11 +24,11 @@ export function innerCircleLayout(filePath = "test", hallWidth = 4, doorSize = 3
     emptySpace.push(spaceToFill);
     
     //Hallways (Top, Left, Right, Bottom, Entry Hall)
-    vOffset = allocate(filePath, {TL:{x:spaceToFill.TL.x,y:spaceToFill.TL.y * midRatio -hallWidth},BR:{x:spaceToFill.BR.x,y:spaceToFill.TL.y * midRatio},isRoom:false}, 3, 0, emptySpace, filledSpace, vOffset);
-    vOffset = allocate(filePath, {TL:{x:spaceToFill.TL.x * midRatio -hallWidth,y:spaceToFill.TL.y * midRatio},BR:{x:spaceToFill.TL.x * midRatio,y:spaceToFill.BR.y * midRatio},isRoom:false}, 3, 0, emptySpace, filledSpace, vOffset);
-    vOffset = allocate(filePath, {TL:{x:spaceToFill.BR.x * midRatio,y:spaceToFill.TL.y * midRatio},BR:{x:spaceToFill.BR.x * midRatio +hallWidth,y:spaceToFill.BR.y * midRatio},isRoom:false}, 3, 0, emptySpace, filledSpace, vOffset);
-    vOffset = allocate(filePath, {TL:{x:spaceToFill.TL.x,y:spaceToFill.BR.y * midRatio},BR:{x:spaceToFill.BR.x,y:spaceToFill.BR.y * midRatio +hallWidth},isRoom:false}, 3, 0, emptySpace, filledSpace, vOffset);
-    vOffset = allocate(filePath, {TL:{x:(spaceToFill.BR.x+spaceToFill.TL.x) / 2 -hallWidth/2,y:spaceToFill.BR.y * midRatio +hallWidth},BR:{x:(spaceToFill.BR.x+spaceToFill.TL.x) / 2 +hallWidth/2,y:spaceToFill.BR.y},isRoom:false}, 3, 0, emptySpace, filledSpace, vOffset);
+    vOffset = allocate(filePath, {TL:{x:spaceToFill.TL.x,y:spaceToFill.TL.y * midRatio -hallWidth},BR:{x:spaceToFill.BR.x,y:spaceToFill.TL.y * midRatio},isRoom:false}, 3, 0, emptySpace, filledSpace, vOffset, count);
+    vOffset = allocate(filePath, {TL:{x:spaceToFill.TL.x * midRatio -hallWidth,y:spaceToFill.TL.y * midRatio},BR:{x:spaceToFill.TL.x * midRatio,y:spaceToFill.BR.y * midRatio},isRoom:false}, 3, 0, emptySpace, filledSpace, vOffset, count);
+    vOffset = allocate(filePath, {TL:{x:spaceToFill.BR.x * midRatio,y:spaceToFill.TL.y * midRatio},BR:{x:spaceToFill.BR.x * midRatio +hallWidth,y:spaceToFill.BR.y * midRatio},isRoom:false}, 3, 0, emptySpace, filledSpace, vOffset, count);
+    vOffset = allocate(filePath, {TL:{x:spaceToFill.TL.x,y:spaceToFill.BR.y * midRatio},BR:{x:spaceToFill.BR.x,y:spaceToFill.BR.y * midRatio +hallWidth},isRoom:false}, 3, 0, emptySpace, filledSpace, vOffset, count);
+    vOffset = allocate(filePath, {TL:{x:(spaceToFill.BR.x+spaceToFill.TL.x) / 2 -hallWidth/2,y:spaceToFill.BR.y * midRatio +hallWidth},BR:{x:(spaceToFill.BR.x+spaceToFill.TL.x) / 2 +hallWidth/2,y:spaceToFill.BR.y},isRoom:false}, 3, 0, emptySpace, filledSpace, vOffset, count);
    
     emptySpace.length = 0;
 
@@ -49,17 +49,17 @@ export function innerCircleLayout(filePath = "test", hallWidth = 4, doorSize = 3
         let hallCount = halls[0] + halls[1] + halls[2] + halls[3];
         switch (hallCount) {
             case 0:
-                vOffset = basicFill(filePath, [emptySpace[i]], filledSpace, vOffset, doorSize, maxRoomSize);
+                vOffset = basicFill(filePath, [emptySpace[i]], filledSpace, vOffset, doorSize, maxRoomSize, count);
                 break;
             case 1:
             case 2:
-                vOffset = lineFill(filePath, [emptySpace[i]], filledSpace, vOffset, doorSize, maxRoomSize);
+                vOffset = lineFill(filePath, [emptySpace[i]], filledSpace, vOffset, doorSize, maxRoomSize, count);
                 break;
             case 3:
-                vOffset = threeHallFill(filePath, [emptySpace[i]], filledSpace, vOffset, halls, doorSize, maxRoomSize);
+                vOffset = threeHallFill(filePath, [emptySpace[i]], filledSpace, vOffset, halls, doorSize, maxRoomSize, count);
                 break;
             case 4:
-                vOffset = fourHallFill(filePath, [emptySpace[i]], filledSpace, vOffset, doorSize, maxRoomSize);
+                vOffset = fourHallFill(filePath, [emptySpace[i]], filledSpace, vOffset, doorSize, maxRoomSize, count);
                 break;
             default:
                 console.log("Error! Abnormal number of adjacent halls.")
@@ -75,20 +75,20 @@ export function innerCircleLayout(filePath = "test", hallWidth = 4, doorSize = 3
         width, length, doorSize,
         [[width],[length],[width/2 - hallWidth/2, width/2 - hallWidth/2],[length]],
         hallWidth, "./" + filePath,
-        (spaceToFill.BR.x + spaceToFill.TL.x) / 2, (spaceToFill.BR.y + spaceToFill.TL.y) / 2, 0, vOffset
+        (spaceToFill.BR.x + spaceToFill.TL.x) / 2, (spaceToFill.BR.y + spaceToFill.TL.y) / 2, 0, vOffset, count
     );
 
     // Generate Outside Of Building
     vOffset = flatGenerator(width + 30, length + 30,
         "./" + filePath, {},
-        (spaceToFill.BR.x + spaceToFill.TL.x) / 2, (spaceToFill.BR.y + spaceToFill.TL.y) / 2, 0, vOffset
+        (spaceToFill.BR.x + spaceToFill.TL.x) / 2, (spaceToFill.BR.y + spaceToFill.TL.y) / 2, 0, vOffset, count
     );
 
     //Adding in the exit as the first "room" of filledSpace
     filledSpace.push({TL:{x:(spaceToFill.BR.x+spaceToFill.TL.x) / 2 - 15,y:spaceToFill.BR.y},BR:{x:(spaceToFill.BR.x+spaceToFill.TL.x) / 2 + 15,y:spaceToFill.BR.y - 30},isRoom:false,name:"Exit"})
 
-    generateLabels(filledSpace, filePath + "locations/", "room");
-    arrivalOnePerRoom(filledSpace, filePath + "arrivals/", "room");
+    generateLabels(filledSpace, filePath + `locations/_${count}`, "room");
+    arrivalOnePerRoom(filledSpace, filePath + `arrivals/_${count}`, "room");
 
-    fs.appendFileSync(filePath + `objs/layout.js`, "`");
+    fs.appendFileSync(filePath + `objs/_${count}layout.js`, "`");
 }

@@ -21,8 +21,8 @@ function clean(objString) {
  * @param {number-like} width The width of the obj
  * @param {number-like} length The length of the obj
  */
-function flatGenerator(width, length, baseName, textureOptions, wOffset = 0, lOffset = 0, hOffset = 0, vOffset = 0) {
-  if (!is.all.finite([width, length, wOffset, lOffset, hOffset]) || !is.all.positive([width,length]) || !is.string(baseName) || arguments.length < 4 || arguments.length > 8) {
+function flatGenerator(width, length, baseName, textureOptions, wOffset = 0, lOffset = 0, hOffset = 0, vOffset = 0, count) {
+  if (!is.all.finite([width, length, wOffset, lOffset, hOffset]) || !is.all.positive([width,length]) || !is.string(baseName) || arguments.length < 4 || arguments.length > 9) {
     console.log(width,length)
     throw new "Invalid arguments."
   }
@@ -48,8 +48,8 @@ s off
 f ${1 + vOffset}/${1 + vOffset}/${1 + vOffset} ${2 + vOffset}/${2 + vOffset}/${1 + vOffset} ${3 + vOffset}/${3 + vOffset}/${1 + vOffset} ${4 + vOffset}/${4 + vOffset}/${1 + vOffset}
     \n`;
 
-    fs.appendFileSync(`${baseName}/objs/layout.obj`, obj);
-    fs.appendFileSync(`${baseName}/objs/layout.js`, obj);
+    fs.appendFileSync(`${baseName}/objs/_${count}layout.obj`, obj);
+    fs.appendFileSync(`${baseName}/objs/_${count}layout.js`, obj);
 
   //Second generate the mtl file
 

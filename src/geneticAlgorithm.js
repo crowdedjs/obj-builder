@@ -1,8 +1,7 @@
 import { innerCircleLayout } from "./innerCircleLayout.js";
 import fs from 'fs';
 import fse from 'fs-extra';
-// import startup from "../../node/index.js"
-import child_process from "child_process"
+import {Worker} from "worker_threads"
 
 
 const searchSpace = [
@@ -16,27 +15,35 @@ const searchSpace = [
 const populationLength = 25;
 const iterations = 1000;
 const mutationRate = 0.2;
+let iteration = 0;
 
 
 
 fs.writeFileSync("../runs/ga/best.txt", "");
-fs.writeFileSync("../runs/ga/best.csv", "Hall Width,Door Size, Building Width, Building Length, Mid-Ratio, Max Room Size\n");
+fs.writeFileSync("../runs/ga/best.csv", "Hall Width, Door Size, Building Width, Building Length, Mid-Ratio, Max Room Size\n");
 
-console.log("\n\n~~~~~~~BEGINNING GENERATION 1~~~~~~~");
-let nextPop = genAlgLoop(initPopulation(), 1);
-for (let i = 2; i <= iterations; i++) {
-    console.log("\n\n~~~~~~~BEGINNING GENERATION " + i + "~~~~~~~");
-    fs.appendFileSync("../runs/ga/best.txt", "\n\nBEST OF GEN " + i + "\n");
-    nextPop = genAlgLoop(repopulate(nextPop), i)
+let population = [];
+let fitness = [];
+genAlgLoop();
+
+function genAlgLoop() {
+    iteration++;
+    if (iteration == 1) {
+        console.log("\n\n~~~~~~~BEGINNING GENERATION " + iteration + "~~~~~~~");
+        fs.appendFileSync("../runs/ga/best.txt", "\n\nBEST OF GEN " + iteration + "\n");
+        population = initPopulation();
+        generateBuildings();
+    } else if (iteration <= iterations) {
+        console.log("\n\n~~~~~~~BEGINNING GENERATION " + iteration + "~~~~~~~");
+        fs.appendFileSync("../runs/ga/best.txt", "\n\nBEST OF GEN " + iteration + "\n");
+        population = repopulate()
+        generateBuildings();
+    }
 }
 
-
-function genAlgLoop(population, iteration) {
-    let fitness = generateBuildings(population);
-    return removeLeastFit(evalFitness(population, fitness), population, iteration);
-}
 
 function initPopulation() {
+    console.log("initPopulation")
     let population = [];
     for (let i = 0; i < populationLength; i++) {
         population.push(randomVector());
@@ -44,10 +51,14 @@ function initPopulation() {
     return population;
 }
 
-function repopulate(population) {
+function repopulate() {
+    console.log("repopulate")
+    // throw("err")
     fs.appendFileSync("../runs/ga/best.txt", printStats(population[0]));
     fs.appendFileSync("../runs/ga/best.csv", toCSV(population[0]));
-    fse.emptyDirSync("../runs/ga/thisGeneration");
+    fse.emptyDirSync("../../node/node_modules/@crowdedjs/assets/arrivals");
+    fse.emptyDirSync("../../node/node_modules/@crowdedjs/assets/locations");
+    fse.emptyDirSync("../../node/node_modules/@crowdedjs/assets/obj");
     
     let newPopulation = [];
     newPopulation.push(population[0]);
@@ -65,27 +76,80 @@ function repopulate(population) {
     return newPopulation;
 }
 
-function generateBuildings(population) {
+function generateBuildings() {
+    console.log("generateBuildings")
     let count = 1;
-    let fitness = [];
+    fitness.length = 0;
     population.forEach(vector => {
         innerCircleLayout(
-            "../../node/node_modules/@crowdedjs/assets/",
+            `../../node/node_modules/@crowdedjs/assets/`,
             vector[0] * (searchSpace[0].max - searchSpace[0].min) + searchSpace[0].min,
             vector[1] * (searchSpace[1].max - searchSpace[1].min) + searchSpace[1].min,
             vector[2] * (searchSpace[2].max - searchSpace[2].min) + searchSpace[2].min,
             vector[3] * (searchSpace[3].max - searchSpace[3].min) + searchSpace[3].min,
             vector[4] * (searchSpace[4].max - searchSpace[4].min) + searchSpace[4].min,
-            vector[5] * (searchSpace[5].max - searchSpace[5].min) + searchSpace[5].min
+            vector[5] * (searchSpace[5].max - searchSpace[5].min) + searchSpace[5].min,
+            count
         );
-        console.log("Beginning Layout #" + count)
-        let result = parseInt(child_process.execSync("node ../../node/index.js").toString());
-        console.log("   > " + result)
-
-        fitness.push(result)
         count++;
     });
-    return fitness;
+
+
+    for (let i = 0; i < populationLength; i++) {
+        fitness.push(runSim(i))
+    }
+
+    Promise.all(fitness)
+    .then(results => {
+        fitness = results;
+        console.log(fitness)
+        evalFitness()
+    })
+}
+
+function evalFitness() {
+    console.log("evalFitness")
+    console.log(population.length)
+    let bestResult = Infinity;
+
+    for (let i = 0; i < populationLength; i++) {
+        if (fitness[i].endTick < bestResult)
+            bestResult = fitness[i].endTick;
+    };
+
+    let fitnessVals = [];
+
+    for (let i = 0; i < populationLength; i++) {
+        fitnessVals.push([
+           bestResult / fitness[i].endTick, i
+        ])
+    }
+    console.log(fitnessVals)
+    removeLeastFit(fitnessVals)
+}
+
+function removeLeastFit(fitnessVals, numToKeep = 5) {
+    console.log("removeLeastFit")
+    fitnessVals.sort((a, b) => b[0] - a[0])
+    let newPopulation = []
+    
+    for (let i = 0; i < fitnessVals.length; i++)
+    {
+        if (i < numToKeep)
+            newPopulation.push(population[fitnessVals[i][1]])
+    }
+    fs.copyFileSync("../../node/node_modules/@crowdedjs/assets/objs/_" + (fitnessVals[0][1] + 1) + "layout.obj", "../runs/ga/best/bestGen" + iteration + ".obj")
+    population = newPopulation;
+    genAlgLoop();
+}
+
+function runSim(workerData) {
+    return new Promise((resolve, reject) => {
+        const worker = new Worker("../../node/index.js", { workerData });
+        worker.on('message', data => {
+            resolve(data)
+        })
+    })
 }
 
 function randomVector() {
@@ -116,37 +180,13 @@ function mutate(vector) {
     return vector;
 }
 
-function removeLeastFit(fitnessVals, population, iteration, numToKeep = 5) {
-    fitnessVals.sort((a, b) => b[0] - a[0])
-    let newPopulation = []
-    
-    for (let i = 0; i < fitnessVals.length; i++)
-    {
-        if (i < numToKeep)
-            newPopulation.push(population[fitnessVals[i][1]])
+function checkSimilarity(vector1, vector2) {
+    let totalDifference = 0;
+    for (let i = 0; i < searchSpace.length; i++) {
+        totalDifference += Math.abs(vector1[i] - vector2[i]);
     }
-    // fs.copyFileSync("../runs/ga/thisGeneration/a" + (fitnessVals[0][1] + 1) + ".obj", "../runs/ga/best/bestGen" + iteration + ".obj")
-    return newPopulation;
-}
-
-function evalFitness(population, fitness) {
-    let bestResult = Infinity;
-    let runtimeResults = fitness;
-
-    for (let i = 0; i < population.length; i++) {
-        if (runtimeResults[i] < bestResult)
-            bestResult = runtimeResults[i];
-    };
-
-    let fitnessVals = [];
-
-    for (let i = 0; i < population.length; i++) {
-        fitnessVals.push([
-           bestResult / runtimeResults[i], i
-        ])
-    }
-    
-    return fitnessVals;
+    //the vectors are 10% or more different
+    return totalDifference / searchSpace.length >= 0.1
 }
 
 function printStats(vector) {

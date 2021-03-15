@@ -20,8 +20,8 @@ function clean(objString) {
  * @param {number-like} width The width of the obj
  * @param {number-like} height The height of the obj
  */
-function wallGenerator(width, length, height, baseName, textureOptions, wOffset = 0, lOffset = 0, hOffset = 0, vOffset = 0) {
-  if (!is.all.finite([width, length, height, wOffset, lOffset, hOffset]) || !is.all.positive([width, length, height]) || !is.string(baseName) || arguments.length < 5 || arguments.length > 9) {
+function wallGenerator(width, length, height, baseName, textureOptions, wOffset = 0, lOffset = 0, hOffset = 0, vOffset = 0, count) {
+  if (!is.all.finite([width, length, height, wOffset, lOffset, hOffset]) || !is.all.positive([width, length, height]) || !is.string(baseName) || arguments.length < 5 || arguments.length > 10) {
     console.log(width, length, height, wOffset, lOffset, hOffset)
     throw new "Invalid arguments."
   }
@@ -64,8 +64,8 @@ f ${1 + vOffset}/${1 + vOffset}/${1 + vOffset} ${3 + vOffset}/${3 + vOffset}/${1
 f ${4 + vOffset}/${4 + vOffset}/${1 + vOffset} ${2 + vOffset}/${2 + vOffset}/${1 + vOffset} ${6 + vOffset}/${6 + vOffset}/${1 + vOffset} ${8 + vOffset}/${8 + vOffset}/${1 + vOffset}
  \n`;
  
-  fs.appendFileSync(`${baseName}/objs/layout.obj`, obj);
-  fs.appendFileSync(`${baseName}/objs/layout.js`, obj);
+  fs.appendFileSync(`${baseName}/objs/_${count}layout.obj`, obj);
+  fs.appendFileSync(`${baseName}/objs/_${count}layout.js`, obj);
 
   //Second generate the mtl file
 

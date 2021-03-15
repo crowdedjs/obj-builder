@@ -33,9 +33,9 @@ function randDoor(max) {
  * @param {double} hOffset The offset on the height axis
  * @param {int} vOffset The offset for the previous vertices for obj file.  First room should always be 0.
  */
-export function makeRoom(width, length, wallHeight, doorLocs, baseName, wOffset = 0, lOffset = 0, hOffset = 0, vOffset = 0) {
+export function makeRoom(width, length, wallHeight, doorLocs, baseName, wOffset = 0, lOffset = 0, hOffset = 0, vOffset = 0, count = 0) {
     // if (!is.all.finite([width, length, wallHeight]) || width < 8 || length < 8 || doorLocs.length != 4  || Math.max(doorLocs) >= (width - 2) || Math.max(doorLocs) >= (length - 2) || arguments.length < 5 || arguments.length > 9) {
-    if (!is.all.finite([width, length, wallHeight]) || doorLocs.length != 4  || Math.max(doorLocs) >= (width - 2) || Math.max(doorLocs) >= (length - 2) || arguments.length < 5 || arguments.length > 9) {
+    if (!is.all.finite([width, length, wallHeight]) || doorLocs.length != 4  || Math.max(doorLocs) >= (width - 2) || Math.max(doorLocs) >= (length - 2) || arguments.length < 5 || arguments.length > 10) {
         console.log(width, length)
         throw new "Invalid arguments."
     }
@@ -43,52 +43,52 @@ export function makeRoom(width, length, wallHeight, doorLocs, baseName, wOffset 
     // fs.writeFileSync(`${baseName}.obj`, "mtllib room.mtl\n");
     // fs.writeFileSync(`${baseName}.mtl`, "\n");
 
-    vOffset = flatGenerator(width, length, baseName, {}, wOffset, lOffset, hOffset, vOffset);
+    vOffset = flatGenerator(width, length, baseName, {}, wOffset, lOffset, hOffset, vOffset, count);
     
     if (doorLocs[0])
-        vOffset = wallWithDoorT(width, length, wallHeight, wOffset, lOffset, hOffset, vOffset, baseName, doorLocs[0]);
+        vOffset = wallWithDoorT(width, length, wallHeight, wOffset, lOffset, hOffset, vOffset, baseName, doorLocs[0], count);
     else
-        vOffset = wallGenerator(width-wallWidth, wallWidth, wallHeight, baseName, {}, wOffset, -length/2 + lOffset, wallHeight/2 + hOffset, vOffset);
+        vOffset = wallGenerator(width-wallWidth, wallWidth, wallHeight, baseName, {}, wOffset, -length/2 + lOffset, wallHeight/2 + hOffset, vOffset, count);
     if (doorLocs[1])
-        vOffset = wallWithDoorR(width, length, wallHeight, wOffset, lOffset, hOffset, vOffset, baseName, doorLocs[1]);
+        vOffset = wallWithDoorR(width, length, wallHeight, wOffset, lOffset, hOffset, vOffset, baseName, doorLocs[1], count);
     else
-        vOffset = wallGenerator(wallWidth, length+1, wallHeight, baseName, {}, width/2 + wOffset, lOffset, wallHeight/2 + hOffset, vOffset);
+        vOffset = wallGenerator(wallWidth, length+1, wallHeight, baseName, {}, width/2 + wOffset, lOffset, wallHeight/2 + hOffset, vOffset, count);
     if (doorLocs[2])
-        vOffset = wallWithDoorB(width, length, wallHeight, wOffset, lOffset, hOffset, vOffset, baseName, doorLocs[2]);
+        vOffset = wallWithDoorB(width, length, wallHeight, wOffset, lOffset, hOffset, vOffset, baseName, doorLocs[2], count);
     else
-        vOffset = wallGenerator(width-wallWidth, wallWidth, wallHeight, baseName, {}, wOffset, length/2 + lOffset, wallHeight/2 + hOffset, vOffset);
+        vOffset = wallGenerator(width-wallWidth, wallWidth, wallHeight, baseName, {}, wOffset, length/2 + lOffset, wallHeight/2 + hOffset, vOffset, count);
     if (doorLocs[3])
-        vOffset = wallWithDoorL(width, length, wallHeight, wOffset, lOffset, hOffset, vOffset, baseName, doorLocs[3]);
+        vOffset = wallWithDoorL(width, length, wallHeight, wOffset, lOffset, hOffset, vOffset, baseName, doorLocs[3], count);
     else
-        vOffset = wallGenerator(wallWidth, length+1, wallHeight, baseName, {}, -width/2 + wOffset, lOffset, wallHeight/2 + hOffset, vOffset);
+        vOffset = wallGenerator(wallWidth, length+1, wallHeight, baseName, {}, -width/2 + wOffset, lOffset, wallHeight/2 + hOffset, vOffset, count);
 
     return vOffset;
 }
 
-function wallWithDoorT(width, length, wallHeight, wOffset, lOffset, hOffset, vOffset, baseName, doorSize) {
+function wallWithDoorT(width, length, wallHeight, wOffset, lOffset, hOffset, vOffset, baseName, doorSize, count) {
     let segLen = (width-doorSize)/2 - wallWidth/2;
-    vOffset = wallGenerator(segLen, wallWidth, wallHeight, baseName, {}, (segLen + doorSize)/2 + wOffset, -length/2 + lOffset, wallHeight/2 + hOffset, vOffset);
-    vOffset = wallGenerator(segLen, wallWidth, wallHeight, baseName, {}, -(segLen + doorSize)/2 + wOffset, -length/2 + lOffset, wallHeight/2 + hOffset, vOffset);
+    vOffset = wallGenerator(segLen, wallWidth, wallHeight, baseName, {}, (segLen + doorSize)/2 + wOffset, -length/2 + lOffset, wallHeight/2 + hOffset, vOffset, count);
+    vOffset = wallGenerator(segLen, wallWidth, wallHeight, baseName, {}, -(segLen + doorSize)/2 + wOffset, -length/2 + lOffset, wallHeight/2 + hOffset, vOffset, count);
     return vOffset;
 }
 
-function wallWithDoorR(width, length, wallHeight, wOffset, lOffset, hOffset, vOffset, baseName, doorSize) {
+function wallWithDoorR(width, length, wallHeight, wOffset, lOffset, hOffset, vOffset, baseName, doorSize, count) {
     let segLen = (length-doorSize)/2 + wallWidth/2;
-    vOffset = wallGenerator(wallWidth, segLen, wallHeight, baseName, {}, width/2 + wOffset, -(segLen + doorSize)/2 + lOffset, wallHeight/2 + hOffset, vOffset);
-    vOffset = wallGenerator(wallWidth, segLen, wallHeight, baseName, {}, width/2 + wOffset, (segLen + doorSize)/2 + lOffset, wallHeight/2 + hOffset, vOffset);
+    vOffset = wallGenerator(wallWidth, segLen, wallHeight, baseName, {}, width/2 + wOffset, -(segLen + doorSize)/2 + lOffset, wallHeight/2 + hOffset, vOffset, count);
+    vOffset = wallGenerator(wallWidth, segLen, wallHeight, baseName, {}, width/2 + wOffset, (segLen + doorSize)/2 + lOffset, wallHeight/2 + hOffset, vOffset, count);
     return vOffset;
 }
 
-function wallWithDoorB(width, length, wallHeight, wOffset, lOffset, hOffset, vOffset, baseName, doorSize) {
+function wallWithDoorB(width, length, wallHeight, wOffset, lOffset, hOffset, vOffset, baseName, doorSize, count) {
     let segLen = (width-doorSize)/2 - wallWidth/2;
-    vOffset = wallGenerator(segLen, wallWidth, wallHeight, baseName, {}, (segLen + doorSize)/2 + wOffset, length/2 + lOffset, wallHeight/2 + hOffset, vOffset);
-    vOffset = wallGenerator(segLen, wallWidth, wallHeight, baseName, {}, -(segLen + doorSize)/2 + wOffset, length/2 + lOffset, wallHeight/2 + hOffset, vOffset);
+    vOffset = wallGenerator(segLen, wallWidth, wallHeight, baseName, {}, (segLen + doorSize)/2 + wOffset, length/2 + lOffset, wallHeight/2 + hOffset, vOffset, count);
+    vOffset = wallGenerator(segLen, wallWidth, wallHeight, baseName, {}, -(segLen + doorSize)/2 + wOffset, length/2 + lOffset, wallHeight/2 + hOffset, vOffset, count);
     return vOffset;
 }
 
-function wallWithDoorL(width, length, wallHeight, wOffset, lOffset, hOffset, vOffset, baseName, doorSize) {
+function wallWithDoorL(width, length, wallHeight, wOffset, lOffset, hOffset, vOffset, baseName, doorSize, count) {
     let segLen = (length-doorSize)/2 + wallWidth/2;
-    vOffset = wallGenerator(wallWidth, segLen, wallHeight, baseName, {}, -width/2 + wOffset, -(segLen + doorSize)/2 + lOffset, wallHeight/2 + hOffset, vOffset);
-    vOffset = wallGenerator(wallWidth, segLen, wallHeight, baseName, {}, -width/2 + wOffset, (segLen + doorSize)/2 + lOffset, wallHeight/2 + hOffset, vOffset);
+    vOffset = wallGenerator(wallWidth, segLen, wallHeight, baseName, {}, -width/2 + wOffset, -(segLen + doorSize)/2 + lOffset, wallHeight/2 + hOffset, vOffset, count);
+    vOffset = wallGenerator(wallWidth, segLen, wallHeight, baseName, {}, -width/2 + wOffset, (segLen + doorSize)/2 + lOffset, wallHeight/2 + hOffset, vOffset, count);
     return vOffset;
 }
