@@ -12,9 +12,8 @@ const searchSpace = [
     {name:"MID_RATIO", min:0.3, max:0.6},
     {name:"MAX_ROOM_SIZE", min:10, max:20}
 ];
-const populationLength = 25;
+const populationLength = 20;
 const iterations = 1000;
-const mutationRate = 0.2;
 let iteration = 0;
 
 
@@ -53,7 +52,6 @@ function initPopulation() {
 
 function repopulate() {
     console.log("repopulate")
-    // throw("err")
     fs.appendFileSync("../runs/ga/best.txt", printStats(population[0]));
     fs.appendFileSync("../runs/ga/best.csv", toCSV(population[0]));
     fse.emptyDirSync("../../node/node_modules/@crowdedjs/assets/arrivals");
@@ -64,9 +62,9 @@ function repopulate() {
     newPopulation.push(population[0]);
     for (let i = 0; i < population.length; i++) {
         for (let j = i + 1; j < population.length; j++) {
-            newPopulation.push(crossover(population[i], population[j]))
+            newPopulation.push(crossover(population[i], population[j], newPopulation))
         }
-        newPopulation.push(mutate(population[i]))
+        newPopulation.push(mutate(population[i], newPopulation))
     }
 
     for (let i = newPopulation.length; i < populationLength; i++) {
@@ -109,7 +107,6 @@ function generateBuildings() {
 
 function evalFitness() {
     console.log("evalFitness")
-    console.log(population.length)
     let bestResult = Infinity;
 
     for (let i = 0; i < populationLength; i++) {
@@ -133,10 +130,9 @@ function removeLeastFit(fitnessVals, numToKeep = 5) {
     fitnessVals.sort((a, b) => b[0] - a[0])
     let newPopulation = []
     
-    for (let i = 0; i < fitnessVals.length; i++)
+    for (let i = 0; i < numToKeep; i++)
     {
-        if (i < numToKeep)
-            newPopulation.push(population[fitnessVals[i][1]])
+        newPopulation.push(population[fitnessVals[i][1]])
     }
     fs.copyFileSync("../../node/node_modules/@crowdedjs/assets/objs/_" + (fitnessVals[0][1] + 1) + "layout.obj", "../runs/ga/best/bestGen" + iteration + ".obj")
     population = newPopulation;
@@ -160,33 +156,46 @@ function randomVector() {
     return newVector;
 }
 
-function crossover(parentA, parentB) {
-    let newVector = [];
-    for (let i = 0; i < searchSpace.length; i++) {
-        if (Math.floor(Math.random()*2))
-            newVector.push(parentA[i])
-        else
-            newVector.push(parentB[i])
-
+function crossover(parentA, parentB, pop) {
+    let totalDifference = 0;
+    for (let j = 0; j < searchSpace.length; j++) {
+        totalDifference += Math.abs(parentA[j] - parentB[j]);
     }
-    return newVector;
+    //the vectors are "different enough"
+    if (totalDifference / searchSpace.length >= (0.1*Math.exp(-0.1*iteration))) {
+        let newVector = [];
+        for (let i = 0; i < searchSpace.length; i++) {
+            if (Math.floor(Math.random()*2))
+                newVector.push(parentA[i])
+            else
+                newVector.push(parentB[i])
+        }
+        return newVector;
+    }
+    return mutate(parentB, pop);
 }
 
-function mutate(vector) {
-    for (let i = 0; i < searchSpace.length; i++) {
-        if (Math.random() < mutationRate)
-            vector[i] = Math.random();
-    }
+
+function mutate(vector, pop) {
+    let doAgain;
+    do {
+        doAgain = checkSimilarity(vector, pop);
+        vector[Math.floor(Math.random() * searchSpace.length)] = Math.random();
+    } while (checkSimilarity(vector, pop))
     return vector;
 }
 
-function checkSimilarity(vector1, vector2) {
-    let totalDifference = 0;
-    for (let i = 0; i < searchSpace.length; i++) {
-        totalDifference += Math.abs(vector1[i] - vector2[i]);
+function checkSimilarity(vector, pop) {
+    for (let i = 0; i < pop.length; i++) {
+        let totalDifference = 0;
+        for (let j = 0; j < searchSpace.length; j++) {
+            totalDifference += Math.abs(vector[j] - pop[i][j]);
+        }
+        //the vectors are "different enough"
+        if (totalDifference / searchSpace.length >= (0.1*Math.exp(-0.1*iteration)) || pop.length == 1)
+            return false;
     }
-    //the vectors are 10% or more different
-    return totalDifference / searchSpace.length >= 0.1
+    return true
 }
 
 function printStats(vector) {

@@ -64,8 +64,13 @@ f ${1 + vOffset}/${1 + vOffset}/${1 + vOffset} ${3 + vOffset}/${3 + vOffset}/${1
 f ${4 + vOffset}/${4 + vOffset}/${1 + vOffset} ${2 + vOffset}/${2 + vOffset}/${1 + vOffset} ${6 + vOffset}/${6 + vOffset}/${1 + vOffset} ${8 + vOffset}/${8 + vOffset}/${1 + vOffset}
  \n`;
  
-  fs.appendFileSync(`${baseName}/objs/_${count}layout.obj`, obj);
-  fs.appendFileSync(`${baseName}/objs/_${count}layout.js`, obj);
+ try {
+   fs.appendFileSync(`${baseName}/objs/_${count}layout.obj`, obj);
+   fs.appendFileSync(`${baseName}/objs/_${count}layout.js`, obj);
+ } catch (error) {
+   console.log("We got an error in wall generator.")
+   console.log(error)
+ }
 
   //Second generate the mtl file
 
