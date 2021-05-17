@@ -5,7 +5,7 @@ import { makeWalls } from "./outerWalls.js";
 import flatGenerator from "./flatGenerator.js"
 
 
-export function innerCircleLayout(filePath = "test", hallWidth = 4, doorSize = 3, w = 100, l = 100, midRatio = 1/3, maxRoomSize = 15, count = "") {
+export function innerCircleLayout(filePath = "test", hallWidth = 4, doorSize = 3, w = 100, l = 100, midRatio = 1/3, maxRoomSize = 15, labelVal = 1, count = "") {
     fs.writeFileSync(filePath + `objs/_${count}layout.obj`, "\n");
     fs.writeFileSync(filePath + `objs/_${count}layout.js`, "export default\n`");
     // fs.writeFileSync(filePath + `.obj`, "mtllib room.mtl\n");
@@ -85,10 +85,10 @@ export function innerCircleLayout(filePath = "test", hallWidth = 4, doorSize = 3
     );
 
     //Adding in the exit as the first "room" of filledSpace
-    filledSpace.push({TL:{x:(spaceToFill.BR.x+spaceToFill.TL.x) / 2 - 15,y:spaceToFill.BR.y},BR:{x:(spaceToFill.BR.x+spaceToFill.TL.x) / 2 + 15,y:spaceToFill.BR.y - 30},isRoom:false,name:"Exit"})
+    filledSpace.push({TL:{x:(spaceToFill.BR.x+spaceToFill.TL.x) / 2 - 15,y:spaceToFill.BR.y},BR:{x:(spaceToFill.BR.x+spaceToFill.TL.x) / 2 + 15,y:spaceToFill.BR.y - 30},isRoom:false,name:"Main Entrance"})
 
-    generateLabels(filledSpace, filePath + `locations/_${count}`, "room");
-    arrivalOnePerRoom(filledSpace, filePath + `arrivals/_${count}`, "room");
+    generateLabels(filledSpace, filePath + `locations/_${count}`, labelVal);
+    // arrivalOnePerRoom(filledSpace, filePath + `arrivals/_${count}`, "room");
 
     fs.appendFileSync(filePath + `objs/_${count}layout.js`, "`");
 }

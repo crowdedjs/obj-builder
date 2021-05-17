@@ -2,6 +2,7 @@ import flatGenerator from "./flatGenerator.js"
 import {makeRoom} from "./room.js"
 import fs from 'fs';
 import readline from 'readline';
+import PerlinNoise from '../node_modules/@mohayonao/perlin-noise/index.js'
 
 /**
  * Fills all given empty spaces with rooms.
@@ -348,7 +349,81 @@ function deepCloneSpace(target, source) {
  * @param {Array} filledSpace An array of spaces that have already been filled
  * @param {String} filePath The base path to the files we write to
  */
-export function generateLabels(filledSpace, filePath, labelBase = "room") {
+export function generateLabels(filledSpace, filePath, labelVal) {
+    let pn = new PerlinNoise();
+    //offset should have same number of vals as requiredLabels
+    let offset = [
+        0.3589498927475854, 0.6731241996778812, 0.8609188242458334,
+        0.9204826579435137, 0.15580535791249406, 0.3545864876277909,
+        0.1876592832533981, 0.4802537341091899, 0.45769937168685537,
+        0.9440184060829737, 0.2976507230240073, 0.9611906065795968        
+    ]
+    let requiredLabels = [
+        {name:"TriageNursePlace", annotationName:"Triage Nurse Place"},
+        {name:"Fast Track 1", annotationName:"Fast Track"},
+        {name:"Greeter Nurse Wait", annotationName:"Greeter"},
+        {name:"Check In", annotationName:"Check In"},
+        {name:"NursePlace", annotationName:"Nurse Place"},
+        {name:"B Desk", annotationName:"B Desk"},
+        {name:"TechPlace", annotationName:"Tech Place"},
+        {name:"ResidentStart", annotationName:"Resident Start"},
+        {name:"Tech Start", annotationName:"Tech Start"},
+        {name:"CT 1", annotationName:"CT 1"},
+        {name:"CT 2", annotationName:"CT 2"},
+        {name:"C", annotationName:"C Room"},
+        {name:"E1", annotationName:"E Room"},
+    ];
+
+    let myRooms = [];
+    for (let i = 0; i < requiredLabels.length; i++) {
+        let newRoom = {
+            room:requiredLabels[i],
+            value:pn.noise(offset[i] + labelVal)
+        }
+            
+        myRooms.push(newRoom);
+    }
+    myRooms = myRooms.sort((a,b) => a.value < b.value ? a : b)
+
+
+    //now we need to assign rooms labels.  Go through the myRooms array,
+    //returning to the beginning when you hit the end
+    //Each space in filledSpace gets a name.
+    let roomCount = 0;
+    let cRoomIter = 1;
+    fs.writeFileSync(filePath + "locations.js", "export default [\n");
+    filledSpace.forEach(space => {
+        let name, annotationName;
+        if (space.name !== undefined) {
+            name = space.name;
+            annotationName = space.name;
+        } else {
+            annotationName = myRooms[roomCount % myRooms.length].room.annotationName;
+            if (annotationName == "C Room")
+                name = "C" + cRoomIter++;
+            else
+                name = myRooms[roomCount % myRooms.length].room.name;
+        }
+        let position = {x:0,y:0,z:0};
+        position.x = (space.TL.x + space.BR.x) / 2;
+        position.y = 0;
+        position.z = (space.TL.y + space.BR.y) / 2;
+        if (filledSpace.length == roomCount + 1) {
+            fs.appendFileSync(filePath + "locations.js", `\t{\n\t\t"name": "${name}",\n\t\t"annotationName": "${annotationName}",\n\t\t"position": {\n\t\t\t"x": ${position.x},\n\t\t\t"y": ${position.y},\n\t\t\t"z": ${position.z}\n\t\t}\n\t}\n`)
+        } else {
+            fs.appendFileSync(filePath + "locations.js", `\t{\n\t\t"name": "${name}",\n\t\t"annotationName": "${annotationName}",\n\t\t"position": {\n\t\t\t"x": ${position.x},\n\t\t\t"y": ${position.y},\n\t\t\t"z": ${position.z}\n\t\t}\n\t},\n`)
+        }
+        roomCount++;
+    });
+    fs.appendFileSync(filePath + "locations.js", "]");
+}
+
+/**
+ * Creates labels for each room
+ * @param {Array} filledSpace An array of spaces that have already been filled
+ * @param {String} filePath The base path to the files we write to
+ */
+export function generateLabelsOld(filledSpace, filePath, labelBase = "room") {
     let nameCount = 1;
     fs.writeFileSync(filePath + "locations.js", "export default [\n");
     filledSpace.forEach(space => {
