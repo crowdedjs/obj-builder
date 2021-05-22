@@ -5,14 +5,14 @@ export default [
 		"position": {
 			"x": 0,
 			"y": 0,
-			"z": -21.43523604856224
+			"z": -50.094603340717796
 		}
 	},
 	{
 		"name": "Fast Track 1",
 		"annotationName": "Fast Track",
 		"position": {
-			"x": -21.762630338261456,
+			"x": -61.03795610468826,
 			"y": 0,
 			"z": 0
 		}
@@ -21,7 +21,7 @@ export default [
 		"name": "Greeter Nurse Wait",
 		"annotationName": "Greeter",
 		"position": {
-			"x": 21.762630338261456,
+			"x": 61.03795610468826,
 			"y": 0,
 			"z": 0
 		}
@@ -32,7 +32,7 @@ export default [
 		"position": {
 			"x": 0,
 			"y": 0,
-			"z": 21.43523604856224
+			"z": 50.094603340717796
 		}
 	},
 	{
@@ -41,205 +41,358 @@ export default [
 		"position": {
 			"x": 0,
 			"y": 0,
-			"z": 39.03494376815199
+			"z": 66.93091938090643
 		}
 	},
 	{
 		"name": "B Desk",
 		"annotationName": "B Desk",
 		"position": {
-			"x": -8.329243037751123,
+			"x": -28.754994975230055,
 			"y": 0,
-			"z": -8.165545892901514
+			"z": -37.25330974919171
 		}
 	},
 	{
 		"name": "TechPlace",
 		"annotationName": "Tech Place",
 		"position": {
-			"x": -8.329243037751123,
+			"x": -28.754994975230055,
 			"y": 0,
-			"z": 8.165545892901514
+			"z": -18.626654874595857
 		}
 	},
 	{
 		"name": "ResidentStart",
 		"annotationName": "Resident Start",
 		"position": {
-			"x": 8.329243037751123,
+			"x": -28.754994975230055,
 			"y": 0,
-			"z": -8.165545892901514
+			"z": -1.7763568394002505e-15
 		}
 	},
 	{
 		"name": "Tech Start",
 		"annotationName": "Tech Start",
 		"position": {
-			"x": 8.329243037751123,
+			"x": -28.754994975230055,
 			"y": 0,
-			"z": 8.165545892901514
+			"z": 18.62665487459585
 		}
 	},
 	{
 		"name": "CT 1",
 		"annotationName": "CT 1",
 		"position": {
-			"x": -45.99311039878147,
+			"x": -28.754994975230055,
 			"y": 0,
-			"z": -39.03494376815199
+			"z": 37.2533097491917
 		}
 	},
 	{
 		"name": "CT 2",
 		"annotationName": "CT 2",
 		"position": {
-			"x": -32.85222171341533,
+			"x": 28.754994975230055,
 			"y": 0,
-			"z": -39.03494376815199
+			"z": -37.25330974919171
 		}
 	},
 	{
 		"name": "C1",
 		"annotationName": "C Room",
 		"position": {
-			"x": -19.711333028049197,
+			"x": 28.754994975230055,
 			"y": 0,
-			"z": -39.03494376815199
+			"z": -18.626654874595857
 		}
 	},
 	{
 		"name": "E1",
 		"annotationName": "E Room",
 		"position": {
-			"x": -6.570444342683063,
+			"x": 28.754994975230055,
 			"y": 0,
-			"z": -39.03494376815199
+			"z": -1.7763568394002505e-15
 		}
 	},
 	{
 		"name": "TriageNursePlace",
 		"annotationName": "Triage Nurse Place",
 		"position": {
-			"x": 6.5704443426830705,
+			"x": 28.754994975230055,
 			"y": 0,
-			"z": -39.03494376815199
+			"z": 18.62665487459585
 		}
 	},
 	{
 		"name": "Fast Track 1",
 		"annotationName": "Fast Track",
 		"position": {
-			"x": 19.711333028049204,
+			"x": 28.754994975230055,
 			"y": 0,
-			"z": -39.03494376815199
+			"z": 37.2533097491917
 		}
 	},
 	{
 		"name": "Greeter Nurse Wait",
 		"annotationName": "Greeter",
 		"position": {
-			"x": 32.85222171341534,
+			"x": -90.08711831585335,
 			"y": 0,
-			"z": -39.03494376815199
+			"z": -66.93091938090643
 		}
 	},
 	{
 		"name": "Check In",
 		"annotationName": "Check In",
 		"position": {
-			"x": 45.993110398781475,
+			"x": -72.06969465268268,
 			"y": 0,
-			"z": -39.03494376815199
+			"z": -66.93091938090643
 		}
 	},
 	{
 		"name": "NursePlace",
 		"annotationName": "Nurse Place",
 		"position": {
-			"x": -39.715164671242604,
+			"x": -54.05227098951201,
 			"y": 0,
-			"z": -8.165545892901514
+			"z": -66.93091938090643
 		}
 	},
 	{
 		"name": "B Desk",
 		"annotationName": "B Desk",
 		"position": {
-			"x": -39.715164671242604,
+			"x": -36.03484732634135,
 			"y": 0,
-			"z": 8.165545892901514
+			"z": -66.93091938090643
 		}
 	},
 	{
 		"name": "TechPlace",
 		"annotationName": "Tech Place",
 		"position": {
-			"x": 39.715164671242604,
+			"x": -18.01742366317068,
 			"y": 0,
-			"z": -8.165545892901514
+			"z": -66.93091938090643
 		}
 	},
 	{
 		"name": "ResidentStart",
 		"annotationName": "Resident Start",
 		"position": {
-			"x": 39.715164671242604,
+			"x": -1.0658141036401503e-14,
 			"y": 0,
-			"z": 8.165545892901514
+			"z": -66.93091938090643
 		}
 	},
 	{
 		"name": "Tech Start",
 		"annotationName": "Tech Start",
 		"position": {
-			"x": -44.653652995013644,
+			"x": 18.017423663170657,
 			"y": 0,
-			"z": 39.03494376815199
+			"z": -66.93091938090643
 		}
 	},
 	{
 		"name": "CT 1",
 		"annotationName": "CT 1",
 		"position": {
-			"x": -28.83384950211187,
+			"x": 36.03484732634132,
 			"y": 0,
-			"z": 39.03494376815199
+			"z": -66.93091938090643
 		}
 	},
 	{
 		"name": "CT 2",
 		"annotationName": "CT 2",
 		"position": {
-			"x": -13.014046009210094,
+			"x": 54.052270989511996,
 			"y": 0,
-			"z": 39.03494376815199
+			"z": -66.93091938090643
 		}
 	},
 	{
 		"name": "C2",
 		"annotationName": "C Room",
 		"position": {
-			"x": 13.014046009210098,
+			"x": 72.06969465268266,
 			"y": 0,
-			"z": 39.03494376815199
+			"z": -66.93091938090643
 		}
 	},
 	{
 		"name": "E1",
 		"annotationName": "E Room",
 		"position": {
-			"x": 28.833849502111875,
+			"x": 90.08711831585332,
 			"y": 0,
-			"z": 39.03494376815199
+			"z": -66.93091938090643
 		}
 	},
 	{
 		"name": "TriageNursePlace",
 		"annotationName": "Triage Nurse Place",
 		"position": {
-			"x": 44.653652995013644,
+			"x": -81.83087620317755,
 			"y": 0,
-			"z": 39.03494376815199
+			"z": -34.92497788986723
+		}
+	},
+	{
+		"name": "Fast Track 1",
+		"annotationName": "Fast Track",
+		"position": {
+			"x": -81.83087620317755,
+			"y": 0,
+			"z": -11.641659296622409
+		}
+	},
+	{
+		"name": "Greeter Nurse Wait",
+		"annotationName": "Greeter",
+		"position": {
+			"x": -81.83087620317755,
+			"y": 0,
+			"z": 11.641659296622409
+		}
+	},
+	{
+		"name": "Check In",
+		"annotationName": "Check In",
+		"position": {
+			"x": -81.83087620317755,
+			"y": 0,
+			"z": 34.92497788986723
+		}
+	},
+	{
+		"name": "NursePlace",
+		"annotationName": "Nurse Place",
+		"position": {
+			"x": 81.83087620317755,
+			"y": 0,
+			"z": -34.92497788986723
+		}
+	},
+	{
+		"name": "B Desk",
+		"annotationName": "B Desk",
+		"position": {
+			"x": 81.83087620317755,
+			"y": 0,
+			"z": -11.641659296622409
+		}
+	},
+	{
+		"name": "TechPlace",
+		"annotationName": "Tech Place",
+		"position": {
+			"x": 81.83087620317755,
+			"y": 0,
+			"z": 11.641659296622409
+		}
+	},
+	{
+		"name": "ResidentStart",
+		"annotationName": "Resident Start",
+		"position": {
+			"x": 81.83087620317755,
+			"y": 0,
+			"z": 34.92497788986723
+		}
+	},
+	{
+		"name": "Tech Start",
+		"annotationName": "Tech Start",
+		"position": {
+			"x": -89.53904374811762,
+			"y": 0,
+			"z": 66.93091938090643
+		}
+	},
+	{
+		"name": "CT 1",
+		"annotationName": "CT 1",
+		"position": {
+			"x": -70.42547094947551,
+			"y": 0,
+			"z": 66.93091938090643
+		}
+	},
+	{
+		"name": "CT 2",
+		"annotationName": "CT 2",
+		"position": {
+			"x": -51.311898150833414,
+			"y": 0,
+			"z": 66.93091938090643
+		}
+	},
+	{
+		"name": "C3",
+		"annotationName": "C Room",
+		"position": {
+			"x": -32.198325352191304,
+			"y": 0,
+			"z": 66.93091938090643
+		}
+	},
+	{
+		"name": "E1",
+		"annotationName": "E Room",
+		"position": {
+			"x": -13.084752553549205,
+			"y": 0,
+			"z": 66.93091938090643
+		}
+	},
+	{
+		"name": "TriageNursePlace",
+		"annotationName": "Triage Nurse Place",
+		"position": {
+			"x": 13.084752553549208,
+			"y": 0,
+			"z": 66.93091938090643
+		}
+	},
+	{
+		"name": "Fast Track 1",
+		"annotationName": "Fast Track",
+		"position": {
+			"x": 32.19832535219131,
+			"y": 0,
+			"z": 66.93091938090643
+		}
+	},
+	{
+		"name": "Greeter Nurse Wait",
+		"annotationName": "Greeter",
+		"position": {
+			"x": 51.311898150833414,
+			"y": 0,
+			"z": 66.93091938090643
+		}
+	},
+	{
+		"name": "Check In",
+		"annotationName": "Check In",
+		"position": {
+			"x": 70.42547094947551,
+			"y": 0,
+			"z": 66.93091938090643
+		}
+	},
+	{
+		"name": "NursePlace",
+		"annotationName": "Nurse Place",
+		"position": {
+			"x": 89.53904374811762,
+			"y": 0,
+			"z": 66.93091938090643
 		}
 	},
 	{
@@ -248,7 +401,7 @@ export default [
 		"position": {
 			"x": 0,
 			"y": 0,
-			"z": 36.530507224982536
+			"z": 65.23926926686691
 		}
 	}
 ]

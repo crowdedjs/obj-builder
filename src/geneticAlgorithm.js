@@ -57,7 +57,7 @@ function repopulate() {
     fs.appendFileSync("../runs/ga/best.txt", printStats(population[0]));
     fs.appendFileSync("../runs/ga/best.csv", toCSV(population[0]));
     fse.emptyDirSync("../assets/locations");
-    fse.emptyDirSync("../assets/obj");
+    fse.emptyDirSync("../assets/objs");
     
     let newPopulation = [];
     newPopulation.push(population[0]);
@@ -97,7 +97,8 @@ function generateBuildings() {
 
 
     for (let i = 0; i < populationLength; i++) {
-        fitness.push(runSim(i))
+        // fitness.push(runCrowdSim(i))
+        fitness.push(runDiscreteEventSim(i))
     }
 
     Promise.all(fitness)
@@ -147,13 +148,22 @@ function removeLeastFit(fitnessVals, numToKeep = 5) {
     genAlgLoop();
 }
 
-function runSim(workerData) {
+function runCrowdSim(workerData) {
     return new Promise((resolve, reject) => {
         const worker = new Worker("../../node/index.js", { workerData });
         worker.on('message', data => {
             resolve(data)
         })
         worker.on('error', data => {
+            resolve(data)
+        })
+    })
+}
+
+function runDiscreteEventSim(workerData) {
+    return new Promise((resolve, reject) => {
+        const worker = new Worker("./discreteEventSim.js", { workerData });
+        worker.on('message', data => {
             resolve(data)
         })
     })

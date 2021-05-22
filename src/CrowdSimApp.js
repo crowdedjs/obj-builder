@@ -6,8 +6,8 @@
 // import ObstacleAvoidanceParams from "../../src/detour/crowd/ObstacleAvoidanceParams.js"
 
 //import {CrowdAgentParams, RecastTestMeshBuilder, NavMesh, NavMeshQuery, Crowd, ObstacleAvoidanceParams} from "../../src/Main.js"
-// import crowded from "../node_modules/crowded.js"
-import crowded from "../../recast-detour/crowded.js"
+import crowded from "../node_modules/crowded.js"
+// import crowded from "../../examples/node_modules/@crowdedjs/crowd-setup/crowded.js"
 
 let CrowdAgentParams = crowded.CrowdAgentParams;
 let RecastTestMeshBuilder = crowded.RecastTestMeshBuilder;
@@ -39,7 +39,7 @@ class CrowdSimApp {
 
     bootMesh(objFileContents) {
 
-
+        console.log(objFileContents.length)
         this.nmd = RecastTestMeshBuilder.fromFile(objFileContents).getMeshData();
         //.log(JSON.stringify(this.nmd, null, 2));
         this.navmesh = new NavMesh(this.nmd, 6, 0);
@@ -70,24 +70,24 @@ class CrowdSimApp {
         params.adaptiveDepth = 3;
         this.crowd.setObstacleAvoidanceParams(3, params);
 
-        // this.ap = this.getAgentParams(this.updateFlags);
+        this.ap = this.getAgentParams(this.updateFlags);
         this.ext = this.crowd.getQueryExtents();
         this.filter = this.crowd.getFilter(0);
     }
 
-    // getAgentParams(updateFlags) {
-    //     let ap = new CrowdAgentParams();
-    //     ap.radius = 0.6;
-    //     ap.height = 2;
-    //     ap.maxAcceleration = 8.0;
-    //     ap.maxSpeed = 2.5; //Originally 3.5f
-    //     ap.collisionQueryRange = ap.radius * 12;
-    //     ap.pathOptimizationRange = ap.radius * 30;
-    //     ap.updateFlags = updateFlags;
-    //     ap.obstacleAvoidanceType = 0;
-    //     ap.separationWeight = 1; //Originally 2f
-    //     return ap;
-    // }
+    getAgentParams(updateFlags) {
+        let ap = new CrowdAgentParams();
+        ap.radius = 0.6;
+        ap.height = 2;
+        ap.maxAcceleration = 8.0;
+        ap.maxSpeed = 2.5; //Originally 3.5f
+        ap.collisionQueryRange = ap.radius * 12;
+        ap.pathOptimizationRange = ap.radius * 30;
+        ap.updateFlags = updateFlags;
+        ap.obstacleAvoidanceType = 0;
+        ap.separationWeight = 1; //Originally 2f
+        return ap;
+    }
 
     // writeAgentPosition(currentMillisecond) {
     //     for(let j = 0; j < CrowdSimApp.agents.length; j++) {
