@@ -1,11 +1,4 @@
-import { fillSpaceWithRooms } from "./src/fillSpaceWithRooms.js";
-import { innerCircleLayout } from "./src/innerCircleLayout.js";
-import flatGenerator from "./src/flatGenerator.js"
-import wallGenerator from "./src/wallGenerator.js"
-import { HLayout } from "./src/HLayout.js";
-import { YLayout } from "./src/YLayout.js";
-import { XLayout } from "./src/XLayout.js";
-import { demo } from "./src/Demo.js";
+import {improvedERLayout} from "./src/FloorPlans/improvedERLayout.js"
 
 
 let hallWidth = 3;
@@ -15,13 +8,7 @@ let midRatio = 3/4;
 let randAngles = randomAngles();
 
 
-// fillSpaceWithRooms("./runs/BasicFilledSpace");
-innerCircleLayout("./runs/InnerCircle");
-HLayout("./runs/HLayout");
-// YLayout("./runs/YLayout", undefined, [0, randAngles[0], randAngles[1]], undefined);
-// YLayout("./runs/YLayout", undefined, undefined, undefined);
-// XLayout("./runs/XLayout");
-// demo("./runs/demo");
+improvedERLayout("improvedER", 100, 100, 15, 1, "")
 
 
 function randomAngles() {

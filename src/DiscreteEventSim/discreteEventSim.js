@@ -1,6 +1,6 @@
 import Event from "./Event.js"
 import { workerData, parentPort } from "worker_threads"
-import assets from "../assets/index.js"
+import assets from "../../assets/index.js"
 import CrowdSimApp from "./CrowdSimApp.js"
 
 

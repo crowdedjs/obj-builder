@@ -51,7 +51,7 @@ function fillProcessing(dimension, maxRoomSize) {
  * @param {Array} filledSpace An array of spaces that have already been filled
  * @param {Integer} vOffset An integer that aids in the creation of vertices for objects
  */
-export function basicFill(filePath, emptySpace, filledSpace, vOffset, doorSize, maxRoomSize = 15, count) {
+export function basicFill(filePath, emptySpace, filledSpace, vOffset, doorSize, maxRoomSize = 10, count) {
     let width = fillProcessing(emptySpace[0].BR.x - emptySpace[0].TL.x, maxRoomSize);
     let length = fillProcessing(emptySpace[0].BR.y - emptySpace[0].TL.y, maxRoomSize);
 
@@ -65,7 +65,7 @@ export function basicFill(filePath, emptySpace, filledSpace, vOffset, doorSize, 
  * @param {Array} filledSpace An array of spaces that have already been filled
  * @param {Integer} vOffset An integer that aids in the creation of vertices for objects
  */
-export function lineFill(filePath, emptySpace, filledSpace, vOffset, doorSize, maxRoomSize = 15, count) {
+export function lineFill(filePath, emptySpace, filledSpace, vOffset, doorSize, maxRoomSize = 10, count) {
     let width, length;
 
     if (emptySpace[0].BR.x - emptySpace[0].TL.x > emptySpace[0].BR.y - emptySpace[0].TL.y) {
@@ -87,7 +87,7 @@ export function lineFill(filePath, emptySpace, filledSpace, vOffset, doorSize, m
  * @param {Integer} vOffset An integer that aids in the creation of vertices for objects
  * @param {*} halls An array of length four with booleans corresponding to which sides of the space have halls. TRBL.
  */
-export function threeHallFill(filePath, emptySpace, filledSpace, vOffset, halls, doorSize, maxRoomSize = 15, count) {
+export function threeHallFill(filePath, emptySpace, filledSpace, vOffset, halls, doorSize, maxRoomSize = 10, count) {
     let splitValue;
 
     if (emptySpace[0].BR.x - emptySpace[0].TL.x > emptySpace[0].BR.y - emptySpace[0].TL.y) {
@@ -134,7 +134,7 @@ export function threeHallFill(filePath, emptySpace, filledSpace, vOffset, halls,
  * @param {Array} filledSpace An array of spaces that have already been filled
  * @param {Integer} vOffset An integer that aids in the creation of vertices for objects
  */
-export function fourHallFill(filePath, emptySpace, filledSpace, vOffset, doorSize, maxRoomSize = 15, count) {
+export function fourHallFill(filePath, emptySpace, filledSpace, vOffset, doorSize, maxRoomSize = 10, count) {
     let splitValue;
 
     if (emptySpace[0].BR.x - emptySpace[0].TL.x >= (emptySpace[0].BR.y - emptySpace[0].TL.y) * 2) {

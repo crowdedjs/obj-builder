@@ -46,9 +46,6 @@ export default class Event{
                     for (let i = 0; i < pointArr.length-1; i++) {
                         dist += this.euclideanDist(pointArr[i], pointArr[i+1])
                     }
-                    //TODO problem, getPath is returning a FindPathResult object
-                        //we need the distances along the path
-                        //do we need to try and implement a* pathfinding?
                     if (dist < optimalNum) {
                         optimalNum = dist;
                         optimal = [i, j];

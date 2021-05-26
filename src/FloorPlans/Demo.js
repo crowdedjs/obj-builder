@@ -1,7 +1,7 @@
 import fs from "fs";
-import { allocate, basicFill, lineFill, generateLabels, visualizeEmpty, checkForHalls, threeHallFill, fourHallFill } from "./spacesSharedFunctions.js"
-import flatGenerator from "./flatGenerator.js";
-import { makeWalls } from "./outerWalls.js";
+import { allocate, basicFill, lineFill, generateLabels, visualizeEmpty, checkForHalls, threeHallFill, fourHallFill } from "../spacesSharedFunctions.js"
+import flatGenerator from "../flatGenerator.js";
+import { makeWalls } from "../outerWalls.js";
 
 export function demo(filePath = "test", hallWidth = 6, hallLength = 30, doorSize = 3) {
     fs.writeFileSync(filePath + `.obj`, "mtllib room.mtl\n");

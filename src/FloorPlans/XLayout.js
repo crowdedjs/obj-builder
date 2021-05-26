@@ -1,7 +1,7 @@
 import fs from "fs";
-import { allocate, basicFill, lineFill, generateLabels, visualizeEmpty, checkForHalls, threeHallFill, fourHallFill } from "./spacesSharedFunctions.js"
-import flatGenerator from "./flatGenerator.js";
-import { makeWalls } from "./outerWalls.js";
+import { allocate, basicFill, lineFill, generateLabels, visualizeEmpty, checkForHalls, threeHallFill, fourHallFill } from "../spacesSharedFunctions.js"
+import flatGenerator from "../flatGenerator.js";
+import { makeWalls } from "../outerWalls.js";
 
 const w = Math.floor(Math.random() * 150) + 51;
 const vertL = Math.floor(Math.random() * 150) + 51;

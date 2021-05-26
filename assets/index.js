@@ -45,13 +45,13 @@ import O20 from "./objs/_20layout.js"
 // import bestLayout from "./objs/best.js"
 // import bestLocs from "./locations/bestGen100Loc.js"
 
-import desTest from "./objs/desTest.js"
-import desTestLocs from "./locations/desTestLocs.js"
+// import desTest from "./objs/desTest.js"
+// import desTestLocs from "./locations/desTestLocs.js"
 
 export default {
     arrivals: [arrivalHospital],
     locations: [L1, L2, L3, L4, L5, L6, L7, L8, L9, L10, L11, L12, L13, L14, L15, L16, L17, L18, L19, L20],
     objs: [O1, O2, O3, O4, O5, O6, O7, O8, O9, O10, O11, O12, O13, O14, O15, O16, O17, O18, O19, O20],
     // best: [bestLayout, bestLocs],
-    desTestInfo: [desTest, desTestLocs],
+    // desTestInfo: [desTest, desTestLocs],
 }

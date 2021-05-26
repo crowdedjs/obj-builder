@@ -1,5 +1,5 @@
 import flatGenerator from "./flatGenerator.js"
-import wallGenerator from "./wallGenerator.js"
+import wallGenerator from "./ProcGen/wallGenerator.js"
 import is from "is_js";
 
 

@@ -1,9 +1,9 @@
 import fs from "fs";
-import { allocate, basicFill, lineFill, generateLabels, visualizeEmpty, checkForHalls, threeHallFill, fourHallFill, adjustVertices } from "./spacesSharedFunctions.js"
-import flatGenerator from "./flatGenerator.js";
-import { makeWalls } from "./outerWalls.js";
+import { allocate, basicFill, lineFill, generateLabels, visualizeEmpty, checkForHalls, threeHallFill, fourHallFill, adjustVertices } from "../spacesSharedFunctions.js"
+import flatGenerator from "../flatGenerator.js";
+import { makeWalls } from "../outerWalls.js";
 import { group } from "console";
-import { triangleRoom } from "./triangleRoom.js";
+import { triangleRoom } from "../triangleRoom.js";
 import { basename } from "path";
 
 

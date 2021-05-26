@@ -6,7 +6,7 @@
 // import ObstacleAvoidanceParams from "../../src/detour/crowd/ObstacleAvoidanceParams.js"
 
 //import {CrowdAgentParams, RecastTestMeshBuilder, NavMesh, NavMeshQuery, Crowd, ObstacleAvoidanceParams} from "../../src/Main.js"
-import crowded from "../node_modules/crowded.js"
+import crowded from "crowded"
 // import crowded from "../../examples/node_modules/@crowdedjs/crowd-setup/crowded.js"
 
 let CrowdAgentParams = crowded.CrowdAgentParams;
