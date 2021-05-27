@@ -2,7 +2,7 @@ import fs from "fs";
 import Zone from "../zone.js"
 
 
-export function improvedERLayout(filePath = "test", w = 100, l = 100, maxRoomSize = 10, labelVal = 1, count = "") {
+export function improvedERLayout(filePath = "test", w = 100, l = 100, maxRoomSize = 10, count = "") {
     // fs.writeFileSync(filePath + `objs/_${count}layout.obj`, "\n");
     // fs.writeFileSync(filePath + `objs/_${count}layout.js`, "export default\n`");
     
@@ -54,6 +54,13 @@ export function improvedERLayout(filePath = "test", w = 100, l = 100, maxRoomSiz
     entryZones.splice(randnum, 1)
     randnum = Math.floor(Math.random()*3)
     entryZones[randnum].assignType("Fast Track")
+    entryZones.splice(randnum, 1)
+
+    let toSplice = []
+    zones.forEach((z, i) => { if (z.zoneType !== undefined) { toSplice.push(i) } })
+    zones.splice(toSplice.pop(),1)
+    zones.splice(toSplice.pop(),1)
+
 
     let zoneTypes = [
         {type: "C", num: 5},
@@ -62,55 +69,58 @@ export function improvedERLayout(filePath = "test", w = 100, l = 100, maxRoomSiz
         {type: "CT", num: 1},
         {type: "XRay", num: 1},
     ]
-
+    let ourZones = [];
 
     do {
-        console.log(zoneTypes.length)
-        for (let i = 0; i < zones.length; i++) {
-            if (zones[i].zoneType === undefined) {
-                let ourZones = recursiveZoning(zones[i], [], zoneTypes[0].num)
-                if (ourZones !== undefined) {
-                    zoneTypes.splice(0, 1);
-                    ourZones.forEach(z => { z.assignType(zoneTypes[0]) })
-                }
-                zones.forEach(z => { z.updateVisited(false) })
-            } else {
-                zones.splice(i, 1)
-                break;
+        if (zoneTypes.length > 0) {
+            recursiveZoning(zones[Math.floor(Math.random()*zones.length)], zoneTypes[0].num, [])
+            console.log("\nzones: " + zones.length)
+            console.log("ourzones: " + ourZones.length)
+            console.log(zoneTypes[0])
+            if (ourZones.length == zoneTypes[0].num) {
+                ourZones.forEach(z => { z.assignType(zoneTypes[0].type) })
+                zoneTypes.splice(0, 1);
+                ourZones = []
             }
+            zones.forEach((z, i) => { z.updateVisited(false); if (z.zoneType !== undefined) { toSplice.push(i) } })
+            while (toSplice.length > 0) {
+                zones.splice(toSplice.pop(),1)
+            }
+        } else {
+            break;
         }
     } while (zones.length > 0)
 
-    console.log(`${Z1.id} - ${Z1.zoneType}`)
-    console.log(`${Z2.id} - ${Z2.zoneType}`)
-    console.log(`${Z3.id} - ${Z3.zoneType}`)
-    console.log(`${Z4.id} - ${Z4.zoneType}`)
-    console.log(`${Z5.id} - ${Z5.zoneType}`)
-    console.log(`${Z6.id} - ${Z6.zoneType}`)
-    console.log(`${Z7.id} - ${Z7.zoneType}`)
-    console.log(`${Z8.id} - ${Z8.zoneType}`)
-    console.log(`${Z9.id} - ${Z9.zoneType}`)
-    console.log(`${Z10.id} - ${Z10.zoneType}`)
-    console.log(`${Z11.id} - ${Z11.zoneType}`)
-    console.log(`${Z12.id} - ${Z12.zoneType}`)
-    console.log(`${Z13.id} - ${Z13.zoneType}`)
-    console.log(`${Z14.id} - ${Z14.zoneType}`)
-    console.log(`${Z15.id} - ${Z15.zoneType}`)
 
-}
+    zones = [Z1, Z2, Z3, Z4, Z5, Z6, Z7, Z8, Z9, Z10, Z11, Z12, Z13, Z14, Z15]
+    zones.forEach(z => {
+        //TODO design fillZone
+        fillZone(filePath, z, RSW, RSL, maxRoomSize, count)
+    });
 
 
-function recursiveZoning(zone, adjacentFreeZones, goal) {
-    zone.updateVisited(true)
-    adjacentFreeZones.push(zone)
-
-    if (adjacentFreeZones.length == goal) {
-        return adjacentFreeZones;
-    }
-
-    zone.adjacentZones.forEach(az => {
-        if (!az.visited) {
-            recursiveZoning(az, adjacentFreeZones)
+    function recursiveZoning(zone, goal, zoneTracker) {
+        if (goal == 1) {
+            ourZones.push(zone)
+            return;
         }
-    })
+
+        zone.updateVisited(true)
+        
+        if (zoneTracker.length == goal) {
+            if (ourZones.length != goal) {
+                ourZones = zoneTracker;
+            }
+            return;
+        }
+
+        zoneTracker.push(zone)
+        
+        zone.adjacentZones.forEach(az => {
+            // if (!az.visited && az.zoneType === undefined) {
+            if (!az.visited && zones.indexOf(az) != -1) {
+                recursiveZoning(az, goal, zoneTracker)
+            }
+        })
+    }
 }

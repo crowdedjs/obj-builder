@@ -12,8 +12,8 @@
       "skipFiles": [
         "<node_internals>/**"
       ],
-      "program": "${workspaceFolder}\\src\\geneticAlgorithm.js",
-      "cwd": "${workspaceFolder}\\src\\"
+      "program": "${workspaceFolder}\\index.js",
+      "cwd": "${workspaceFolder}\\"
     }
   ]
 }
