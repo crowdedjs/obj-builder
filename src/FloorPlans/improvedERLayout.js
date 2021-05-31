@@ -1,10 +1,13 @@
 import fs from "fs";
-import Zone from "../zone.js"
+import Zone from "./zone.js"
+import { makeWalls } from "../ProcGen/outerWalls.js";
+import flatGenerator from "../ProcGen/flatGenerator.js";
+import { lineFill, generateZoneLabels } from "../ProcGen/spacesSharedFunctions.js"
 
 
-export function improvedERLayout(filePath = "test", w = 100, l = 100, maxRoomSize = 10, count = "") {
-    // fs.writeFileSync(filePath + `objs/_${count}layout.obj`, "\n");
-    // fs.writeFileSync(filePath + `objs/_${count}layout.js`, "export default\n`");
+export function improvedERLayout(filePath = "test", w = 140, l = 140, maxRoomSize = 10, count = "") {
+    fs.writeFileSync("src/FloorPlans/improvedER/objs/_1layout" + `.obj`, "\n");
+    fs.writeFileSync("src/FloorPlans/improvedER/objs/_1layout" + `.js`, "export default\n`");
     
     const RSW = (w - 15)/6;
     const RSL = (l - 18)/7;
@@ -73,10 +76,8 @@ export function improvedERLayout(filePath = "test", w = 100, l = 100, maxRoomSiz
 
     do {
         if (zoneTypes.length > 0) {
-            recursiveZoning(zones[Math.floor(Math.random()*zones.length)], zoneTypes[0].num, [])
-            console.log("\nzones: " + zones.length)
-            console.log("ourzones: " + ourZones.length)
-            console.log(zoneTypes[0])
+            let rand = Math.floor(Math.random()*zones.length)
+            recursiveZoning(zones[rand], zoneTypes[0].num, [], [zones[rand].id])
             if (ourZones.length == zoneTypes[0].num) {
                 ourZones.forEach(z => { z.assignType(zoneTypes[0].type) })
                 zoneTypes.splice(0, 1);
@@ -92,20 +93,31 @@ export function improvedERLayout(filePath = "test", w = 100, l = 100, maxRoomSiz
     } while (zones.length > 0)
 
 
+    let vOffset = makeWalls(
+        w, l, 3,
+        [[w],[l],[w/2 - 1.5, w/2 - 1.5],[l]],
+        3, "src/FloorPlans/" + filePath,
+        0, 0, 0, 0, count
+    );
+    vOffset = flatGenerator(w + 30, l + 30,
+        "src/FloorPlans/" + filePath, {},
+        0, 0, 0, vOffset, count
+    );
+
     zones = [Z1, Z2, Z3, Z4, Z5, Z6, Z7, Z8, Z9, Z10, Z11, Z12, Z13, Z14, Z15]
+    zones.forEach(z => console.log(z.zoneType))
+    fs.writeFileSync("src/FloorPlans/improvedER/locations/_" + count + "locations.js", "export default [\n");
     zones.forEach(z => {
-        //TODO design fillZone
-        fillZone(filePath, z, RSW, RSL, maxRoomSize, count)
+        vOffset = fillZone(filePath, z, RSW, RSL, maxRoomSize, count, vOffset)
     });
+    fs.appendFileSync("src/FloorPlans/improvedER/locations/_" + count + "locations.js", "]");
 
 
-    function recursiveZoning(zone, goal, zoneTracker) {
+    function recursiveZoning(zone, goal, zoneTracker, visitedIDs) {
         if (goal == 1) {
             ourZones.push(zone)
             return;
         }
-
-        zone.updateVisited(true)
         
         if (zoneTracker.length == goal) {
             if (ourZones.length != goal) {
@@ -113,14 +125,41 @@ export function improvedERLayout(filePath = "test", w = 100, l = 100, maxRoomSiz
             }
             return;
         }
-
         zoneTracker.push(zone)
         
         zone.adjacentZones.forEach(az => {
             // if (!az.visited && az.zoneType === undefined) {
-            if (!az.visited && zones.indexOf(az) != -1) {
-                recursiveZoning(az, goal, zoneTracker)
+            visitedIDs.some(id => id != az.id)
+            if (visitedIDs.some(id => id != az.id) && zones.indexOf(az) != -1) {
+                visitedIDs.push(az.id)
+                recursiveZoning(az, goal, zoneTracker, visitedIDs)
             }
         })
     }
+}
+
+
+function fillZone(filePath, zone, RSW, RSL, maxRoomSize, count, vOffset) {
+    fs.appendFileSync("src/FloorPlans/improvedER/" + `objs/_${count}layout.obj`, "\n");
+    fs.appendFileSync("src/FloorPlans/improvedER/" + `objs/_${count}layout.js`, "export default\n`");
+
+    let sideA, sideB;
+    let filledSpace = [];
+
+    if (zone.doorwaySide == 1) {
+        sideA = RSL * 2 + 3;
+        sideB = RSW;
+        vOffset = lineFill("src/FloorPlans/improvedER/", [{TL:{x:zone.spatialOffset[0]-sideB/2,y:zone.spatialOffset[1]-sideA/2},BR:{x:zone.spatialOffset[0]+sideB/2,y:zone.spatialOffset[1]+sideA/2}}], filledSpace, vOffset, 3, maxRoomSize, count)
+    } else if (zone.doorwaySide == 2) {
+        sideA = RSL;
+        sideB = RSW * 2 + 3;
+        vOffset = lineFill("src/FloorPlans/improvedER/", [{TL:{x:zone.spatialOffset[0]-sideB/2,y:zone.spatialOffset[1]-sideA/2},BR:{x:zone.spatialOffset[0]+sideB/2,y:zone.spatialOffset[1]+sideA/2}}], filledSpace, vOffset, 3, maxRoomSize, count)
+    } else {
+        sideA = RSL * 2 + 3;
+        sideB = RSW;
+        vOffset = lineFill("src/FloorPlans/improvedER/", [{TL:{x:zone.spatialOffset[0]-sideB/2,y:zone.spatialOffset[1]-sideA/2},BR:{x:zone.spatialOffset[0]+sideB/2,y:zone.spatialOffset[1]+sideA/2}}], filledSpace, vOffset, 3, maxRoomSize, count)
+    }
+
+    generateZoneLabels(filledSpace, "src/FloorPlans/improvedER/" + `locations/_${count}`, zone.zoneType)
+    return vOffset;
 }

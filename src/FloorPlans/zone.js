@@ -21,6 +21,10 @@ export default class Zone {
         this.zoneType = type;
     }
 
+    getType() {
+        return this.zoneType;
+    }
+
     updateVisited(truefalse) {
         this.visited = truefalse;
     }

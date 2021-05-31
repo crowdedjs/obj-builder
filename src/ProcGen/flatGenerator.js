@@ -1,9 +1,6 @@
 import is from "is_js";
-import Canvas from 'canvas';
 import fs from 'fs';
-import textureDefaults from './textureDefaults.js'
 import getFileBase from './getFileBase.js'
-import { homedir } from "os";
 
 
 /**

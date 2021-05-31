@@ -1,8 +1,7 @@
 import fs from "fs";
-import { allocate, generateLabels, visualizeEmpty, checkForHalls, threeHallFill, fourHallFill, lineFill, arrivalOnePerRoom } from "./spacesSharedFunctions.js"
-import { makeRoom } from "./room.js";
-import { makeWalls } from "./outerWalls.js";
-import flatGenerator from "./flatGenerator.js"
+import { allocate, generateLabels, checkForHalls, threeHallFill, fourHallFill, lineFill } from "../ProcGen/spacesSharedFunctions.js"
+import { makeWalls } from "../ProcGen/outerWalls.js";
+import flatGenerator from "../ProcGen/flatGenerator.js"
 
 
 export function innerCircleLayout(filePath = "test", hallWidth = 4, doorSize = 3, w = 100, l = 100, midRatio = 1/3, maxRoomSize = 15, labelVal = 1, count = "") {

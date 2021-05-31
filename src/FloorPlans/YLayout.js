@@ -1,10 +1,7 @@
 import fs from "fs";
-import { allocate, basicFill, lineFill, generateLabels, visualizeEmpty, checkForHalls, threeHallFill, fourHallFill, adjustVertices } from "../spacesSharedFunctions.js"
-import flatGenerator from "../flatGenerator.js";
-import { makeWalls } from "../outerWalls.js";
-import { group } from "console";
-import { triangleRoom } from "../triangleRoom.js";
-import { basename } from "path";
+import { allocate, basicFill, lineFill, generateLabels, checkForHalls, threeHallFill, fourHallFill, adjustVertices } from "../ProcGen/spacesSharedFunctions.js"
+import { makeWalls } from "../ProcGen/outerWalls.js";
+import { triangleRoom } from "../ProcGen/triangleRoom.js";
 
 
 const wingLengths = [50, 100, 100];

@@ -2,7 +2,7 @@ import flatGenerator from "./flatGenerator.js"
 import {makeRoom} from "./room.js"
 import fs from 'fs';
 import readline from 'readline';
-import PerlinNoise from '../node_modules/@mohayonao/perlin-noise/index.js'
+import PerlinNoise from '../../node_modules/@mohayonao/perlin-noise/index.js'
 
 /**
  * Fills all given empty spaces with rooms.
@@ -342,6 +342,20 @@ function deepCloneSpace(target, source) {
     target.TL.y = source.TL.y;
     target.BR.y = source.BR.y;
     target.isRoom = source.isRoom;
+}
+
+export function generateZoneLabels(filledSpace, filePath, labelVal) {
+    let nameCount = 1;
+    filledSpace.forEach(space => {
+        let name = labelVal + " " + nameCount;
+        let annotationName = name;
+        let position = {x:0,y:0,z:0};
+        position.x = (space.TL.x + space.BR.x) / 2;
+        position.y = 0;
+        position.z = (space.TL.y + space.BR.y) / 2;
+        fs.appendFileSync(filePath + "locations.js", `\t{\n\t\t"name": "${name}",\n\t\t"annotationName": "${annotationName}",\n\t\t"position": {\n\t\t\t"x": ${position.x},\n\t\t\t"y": ${position.y},\n\t\t\t"z": ${position.z}\n\t\t}\n\t},\n`)
+        nameCount++;
+    });
 }
 
 /**

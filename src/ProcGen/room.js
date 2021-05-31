@@ -1,6 +1,5 @@
 import flatGenerator from "./flatGenerator.js"
 import wallGenerator from "./wallGenerator.js"
-import fs from 'fs';
 import is from "is_js";
 
 

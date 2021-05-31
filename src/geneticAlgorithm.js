@@ -1,4 +1,4 @@
-import { innerCircleLayout } from "./innerCircleLayout.js";
+import { innerCircleLayout } from "./FloorPlans/innerCircleLayout.js";
 import fs from 'fs';
 import fse from 'fs-extra';
 import {Worker} from "worker_threads"

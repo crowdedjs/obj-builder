@@ -5,10 +5,10 @@ let hallWidth = 3;
 let w = 100;
 let l = 100;
 let midRatio = 3/4;
-let randAngles = randomAngles();
+// let randAngles = randomAngles();
 
 
-improvedERLayout("improvedER", 100, 100, 15, 1, "")
+improvedERLayout("improvedER", 100, 100, 10, 1, "")
 
 
 function randomAngles() {
