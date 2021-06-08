@@ -2,7 +2,7 @@ import wallGenerator from "./wallGenerator.js"
 import is from "is_js";
 
 
-const wallWidth = 2;
+const wallWidth = 1;
 
 
 /**

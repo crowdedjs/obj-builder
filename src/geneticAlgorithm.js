@@ -20,7 +20,7 @@ import { improvedERLayout } from "./FloorPlans/improvedERLayout.js";
 const searchSpace = [
     {name:"BUILDING_WIDTH", min:100, max:200},
     {name:"BUILDING_LENGTH", min:100, max:200},
-    {name:"MAX_ROOM_SIZE", min:5, max:13},
+    {name:"MAX_ROOM_SIZE", min:5, max:9},
     {name:"LABEL_VAL", min:0, max:1}
 ]
 

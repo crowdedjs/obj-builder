@@ -3,11 +3,14 @@ import Zone from "./zone.js"
 import { makeWalls } from "../ProcGen/outerWalls.js";
 import flatGenerator from "../ProcGen/flatGenerator.js";
 import { zoneFill, generateZoneLabels } from "../ProcGen/spacesSharedFunctions.js"
+import PerlinNoise from '../../node_modules/@mohayonao/perlin-noise/index.js'
+//IMPORTANT: The perlin noise used in this project is reseeded every time it is made.
+    //This can be changed by editing the "rand" variable to be static.
 
 
 let zoneLocCount;
 
-export function improvedERLayout(filePath = "test", w = 140, l = 140, maxRoomSize = 10, count = "") {
+export function improvedERLayout(filePath = "test", w = 140, l = 140, maxRoomSize = 10, centerOpeningSize = 10, noiseVal = 0.5, count = "") {
     fs.writeFileSync(filePath + `objs/_${count}layout` + `.obj`, "\n");
     fs.writeFileSync(filePath + `objs/_${count}layout` + `.js`, "export default\n`");
     
@@ -78,13 +81,15 @@ export function improvedERLayout(filePath = "test", w = 140, l = 140, maxRoomSiz
 
     Z9.assignType("A")
 
+    let iterCount = 0;
     do {
         if (zoneTypes.length > 0) {
-            let rand = Math.floor(Math.random() * zones.length)
+            let pn = new PerlinNoise();
+            let rand = Math.floor(pn.noise(noiseVal + iterCount / 13) * zones.length)
+            iterCount++;
             recursiveZoning(zones[rand], zoneTypes[0].num, [], [zones[rand].id])
             if (ourZones.length == zoneTypes[0].num) {
                 ourZones.forEach(z => { z.assignType(zoneTypes[0].type) })
-                // if (zoneTypes[0].type == "E" || zoneTypes[0].type == "C") { console.log(ourZones) }
                 zoneTypes.splice(0, 1);
                 ourZones = []
             }
@@ -100,13 +105,24 @@ export function improvedERLayout(filePath = "test", w = 140, l = 140, maxRoomSiz
 
     let vOffset = makeWalls(
         w, l, 3,
-        [[w], [l], [w / 2 - 5, w / 2 - 5], [l]],
+        [[w], [l], [w / 2 - 5, w / 2 - 5], [l * 0.855 - 5, l * 0.145 - 5]],
         10, filePath,
         0, 0, 0, 0, count
     );
+
     vOffset = flatGenerator(w + 30, l + 30,
         filePath, {},
         0, 0, 0, vOffset, count
+    );
+
+    //walls for the central area
+    let innerX = RSW * 2 + HW -5
+    let innerY = RSL * 2 + HW -5
+    vOffset = makeWalls(
+        innerX, innerY, 1,
+        [[(innerX - centerOpeningSize)/2, (innerX - centerOpeningSize)/2], [(innerY - centerOpeningSize)/2, (innerY - centerOpeningSize)/2], [innerX], [(innerY - centerOpeningSize)/2, (innerY - centerOpeningSize)/2]],
+        centerOpeningSize, filePath,
+        0, -RSW / 2, 0, vOffset, count
     );
 
     zones = [Z1, Z2, Z3, Z4, Z5, Z6, Z7, Z8, Z9, Z10, Z11, Z12, Z13, Z14, Z15]
@@ -125,6 +141,8 @@ export function improvedERLayout(filePath = "test", w = 140, l = 140, maxRoomSiz
     fs.appendFileSync(filePath + "locations/_" + count + "locations.js", `\t{\n\t\t"name": "Check In",\n\t\t"annotationName": "Check In",\n\t\t"position": {\n\t\t\t"x": ${LEFT + 3 * RSW + 2.5 * HW},\n\t\t\t"y": 0,\n\t\t\t"z": ${TOP + 6 * RSL + 5 * HW}\n\t\t}\n\t},\n`)
     //Main Entrance
     fs.appendFileSync(filePath + "locations/_" + count + "locations.js", `\t{\n\t\t"name": "Main Entrance",\n\t\t"annotationName": "Main Entrance",\n\t\t"position": {\n\t\t\t"x": ${LEFT + 3 * RSW + 2.5 * HW},\n\t\t\t"y": 0,\n\t\t\t"z": ${TOP + 7 * RSL + 6 * HW}\n\t\t}\n\t},\n`)
+    //Ambulance Entrance
+    fs.appendFileSync(filePath + "locations/_" + count + "locations.js", `\t{\n\t\t"name": "Ambulance Entrance",\n\t\t"annotationName": "Ambulance Entrance",\n\t\t"position": {\n\t\t\t"x": ${LEFT},\n\t\t\t"y": 0,\n\t\t\t"z": ${TOP + 6 * RSL + 5.5 * HW}\n\t\t}\n\t},\n`)
 
 
     //Tech Start
@@ -172,6 +190,10 @@ function fillZone(filePath, zone, RSW, RSL, maxRoomSize, count, vOffset) {
 
     let sideA, sideB;
     let filledSpace = [];
+
+    if (zone.zoneType == "A" || zone.zoneType == "Trauma" || zone.zoneType == "XRay" || zone.zoneType == "CT") {
+        maxRoomSize += 4
+    }
 
     if (zone.doorwaySide == 1) { //R
         sideA = RSL * 2 + 3;
