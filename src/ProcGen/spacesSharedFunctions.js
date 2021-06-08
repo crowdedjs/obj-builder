@@ -79,6 +79,59 @@ export function lineFill(filePath, emptySpace, filledSpace, vOffset, doorSize, m
     return fillHelper(filePath, emptySpace, filledSpace, vOffset, width, length, doorSize, count);
 }
 
+
+/**
+ * Fills a space with rooms in a line
+ * @param {String} filePath The base path to the files we write to
+ * @param {Array} emptySpace An array of spaces that have yet to be filled
+ * @param {Array} filledSpace An array of spaces that have already been filled
+ * @param {Integer} vOffset An integer that aids in the creation of vertices for objects
+ */
+export function zoneFill(filePath, emptySpace, filledSpace, vOffset, maxRoomSize = 10, count, doorCode) {
+    let width, length;
+
+    if (emptySpace[0].BR.x - emptySpace[0].TL.x > emptySpace[0].BR.y - emptySpace[0].TL.y) {
+        length = emptySpace[0].BR.y - emptySpace[0].TL.y;
+        width = fillProcessing(emptySpace[0].BR.x - emptySpace[0].TL.x, maxRoomSize);
+    } else {
+        width = emptySpace[0].BR.x - emptySpace[0].TL.x;
+        length = fillProcessing(emptySpace[0].BR.y - emptySpace[0].TL.y, maxRoomSize);
+    }
+
+
+    while (emptySpace.length != 0) {    
+        let filled = {
+            TL:{x:emptySpace[0].TL.x, y:emptySpace[0].TL.y},
+            BR:{x:emptySpace[0].TL.x + width, y:emptySpace[0].TL.y + length},
+            isRoom:true
+        };
+
+        let alignedEdges = checkValidPartition(emptySpace[0], filled);
+        cutSpace(emptySpace[0], filled, alignedEdges, emptySpace);
+    
+        vOffset = makeRoom(
+            width, length, 2,
+            doorCode, "./" + filePath,
+            (filled.BR.x + filled.TL.x) / 2, (filled.BR.y + filled.TL.y) / 2, 0, vOffset, count
+        );
+
+        filledSpace.push(filled);
+        removeOverlappingEmptySpace(filled, emptySpace);
+
+    }
+    return vOffset;
+
+}
+
+
+
+
+
+
+
+
+
+
 /**
  * Fills a space that has halls on three sides with rooms
  * @param {String} filePath The base path to the files we write to
@@ -344,11 +397,13 @@ function deepCloneSpace(target, source) {
     target.isRoom = source.isRoom;
 }
 
-export function generateZoneLabels(filledSpace, filePath, labelVal) {
-    let nameCount = 1;
+export function generateZoneLabels(filledSpace, filePath, labelVal, nameCount) {
     filledSpace.forEach(space => {
         let name = labelVal + " " + nameCount;
         let annotationName = name;
+        if (labelVal == "E" || labelVal == "C" || labelVal == "A") {
+            annotationName = labelVal + " Room"
+        }
         let position = {x:0,y:0,z:0};
         position.x = (space.TL.x + space.BR.x) / 2;
         position.y = 0;
@@ -356,6 +411,7 @@ export function generateZoneLabels(filledSpace, filePath, labelVal) {
         fs.appendFileSync(filePath + "locations.js", `\t{\n\t\t"name": "${name}",\n\t\t"annotationName": "${annotationName}",\n\t\t"position": {\n\t\t\t"x": ${position.x},\n\t\t\t"y": ${position.y},\n\t\t\t"z": ${position.z}\n\t\t}\n\t},\n`)
         nameCount++;
     });
+    return nameCount;
 }
 
 /**
@@ -380,12 +436,12 @@ export function generateLabels(filledSpace, filePath, labelVal) {
         {name:"NursePlace", annotationName:"Nurse Place"},
         {name:"B Desk", annotationName:"B Desk"},
         {name:"TechPlace", annotationName:"Tech Place"},
-        {name:"ResidentStart", annotationName:"Resident Start"},
+        {name:"Resident Start", annotationName:"Resident Start"},
         {name:"Tech Start", annotationName:"Tech Start"},
         {name:"CT 1", annotationName:"CT 1"},
         {name:"CT 2", annotationName:"CT 2"},
         {name:"C", annotationName:"C Room"},
-        {name:"E1", annotationName:"E Room"},
+        {name:"E 1", annotationName:"E Room"},
     ];
 
     let myRooms = [];
@@ -414,7 +470,7 @@ export function generateLabels(filledSpace, filePath, labelVal) {
         } else {
             annotationName = myRooms[roomCount % myRooms.length].room.annotationName;
             if (annotationName == "C Room")
-                name = "C" + cRoomIter++;
+                name = "C " + cRoomIter++;
             else
                 name = myRooms[roomCount % myRooms.length].room.name;
         }

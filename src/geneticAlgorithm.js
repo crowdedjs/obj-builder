@@ -2,19 +2,31 @@ import { innerCircleLayout } from "./FloorPlans/innerCircleLayout.js";
 import fs from 'fs';
 import fse from 'fs-extra';
 import {Worker} from "worker_threads"
+import { improvedERLayout } from "./FloorPlans/improvedERLayout.js";
 
 
+//Below search space is for the innerCircleLayout
+    // const searchSpace = [
+    //     {name:"HALL_WIDTH", min:3, max:13},
+    //     {name:"DOOR_SIZE", min:3, max:8},
+    //     {name:"BUILDING_WIDTH", min:100, max:200},
+    //     {name:"BUILDING_LENGTH", min:100, max:200},
+    //     {name:"MID_RATIO", min:0.3, max:0.6},
+    //     {name:"MAX_ROOM_SIZE", min:10, max:20},
+    //     {name:"LABEL_VAL", min:0, max:1}
+    // ];
+
+//Below search space is for the improvedERLayout
 const searchSpace = [
-    {name:"HALL_WIDTH", min:3, max:13},
-    {name:"DOOR_SIZE", min:3, max:8},
     {name:"BUILDING_WIDTH", min:100, max:200},
     {name:"BUILDING_LENGTH", min:100, max:200},
-    {name:"MID_RATIO", min:0.3, max:0.6},
-    {name:"MAX_ROOM_SIZE", min:10, max:20},
+    {name:"MAX_ROOM_SIZE", min:5, max:13},
     {name:"LABEL_VAL", min:0, max:1}
-];
+]
+
 const populationLength = 20;
-const iterations = 1000; //TODO bump up iterations as necessary
+const iterations = 1000;
+const numToKeep = 5;
 let iteration = 0;
 
 
@@ -25,6 +37,7 @@ fs.writeFileSync("../runs/ga/ticks.csv", "Generation,Best,Average\n");
 
 let population = [];
 let fitness = [];
+let activeWorkers = [];
 genAlgLoop();
 
 function genAlgLoop() {
@@ -80,25 +93,26 @@ function generateBuildings() {
     let count = 1;
     fitness.length = 0;
     population.forEach(vector => {
-        innerCircleLayout(
+        // innerCircleLayout(
+        improvedERLayout(
             // `../../node/node_modules/@crowdedjs/assets/`,
             `../assets/`,
             vector[0] * (searchSpace[0].max - searchSpace[0].min) + searchSpace[0].min,
             vector[1] * (searchSpace[1].max - searchSpace[1].min) + searchSpace[1].min,
             vector[2] * (searchSpace[2].max - searchSpace[2].min) + searchSpace[2].min,
-            vector[3] * (searchSpace[3].max - searchSpace[3].min) + searchSpace[3].min,
-            vector[4] * (searchSpace[4].max - searchSpace[4].min) + searchSpace[4].min,
-            vector[5] * (searchSpace[5].max - searchSpace[5].min) + searchSpace[5].min,
-            vector[6] * (searchSpace[6].max - searchSpace[6].min) + searchSpace[6].min,
+            // vector[3] * (searchSpace[3].max - searchSpace[3].min) + searchSpace[3].min,
+            // vector[4] * (searchSpace[4].max - searchSpace[4].min) + searchSpace[4].min,
+            // vector[5] * (searchSpace[5].max - searchSpace[5].min) + searchSpace[5].min,
+            // vector[6] * (searchSpace[6].max - searchSpace[6].min) + searchSpace[6].min,
             count
         );
         count++;
     });
 
-
+    console.log("runSim")
     for (let i = 0; i < populationLength; i++) {
-        // fitness.push(runCrowdSim(i))
-        fitness.push(runDiscreteEventSim(i))
+        fitness.push(runCrowdSim(i))
+        // fitness.push(runDiscreteEventSim(i))
     }
 
     Promise.all(fitness)
@@ -115,9 +129,9 @@ function evalFitness() {
     let avgResult = 0;
 
     for (let i = 0; i < populationLength; i++) {
-        if (fitness[i].distance < bestResult)
-            bestResult = fitness[i].distance;
-        avgResult += fitness[i].distance;
+        if (fitness[i].endTick < bestResult)
+            bestResult = fitness[i].endTick;
+        avgResult += fitness[i].endTick;
     }
 
     fs.appendFileSync("../runs/ga/ticks.csv", `${iteration},${bestResult},${avgResult/populationLength}\n`);
@@ -126,14 +140,14 @@ function evalFitness() {
 
     for (let i = 0; i < populationLength; i++) {
         fitnessVals.push([
-           bestResult / fitness[i].distance, i
+           bestResult / fitness[i].endTick, i
         ])
     }
     console.log(fitnessVals)
     removeLeastFit(fitnessVals)
 }
 
-function removeLeastFit(fitnessVals, numToKeep = 5) {
+function removeLeastFit(fitnessVals) {
     console.log("removeLeastFit")
     fitnessVals.sort((a, b) => b[0] - a[0])
     let newPopulation = []
@@ -151,11 +165,27 @@ function removeLeastFit(fitnessVals, numToKeep = 5) {
 function runCrowdSim(workerData) {
     return new Promise((resolve, reject) => {
         const worker = new Worker("../../node/index.js", { workerData });
+        activeWorkers.push([workerData, worker])
         worker.on('message', data => {
+            activeWorkers = activeWorkers.filter(w => w[0] != workerData)
             resolve(data)
+            if (activeWorkers.length <= populationLength - numToKeep) {
+                activeWorkers.forEach(w => {
+                    w[1].terminate();
+                })
+                activeWorkers = [];
+            }
         })
         worker.on('error', data => {
+            console.log("hey we found an error! Workerdata: " + workerData)
             resolve(data)
+        })
+        worker.on('exit', data => {
+            activeWorkers = activeWorkers.filter(w => w[0] != workerData)
+            resolve({
+                layoutNum: workerData + 1,
+                endTick: Infinity
+            })
         })
     })
 }
@@ -211,7 +241,7 @@ function checkSimilarity(vector, pop) {
             totalDifference += Math.abs(vector[j] - pop[i][j]);
         }
         //the vectors are "different enough"
-        if (totalDifference / searchSpace.length >= (0.1*Math.exp(-0.1*iteration)) || pop.length == 1)
+        if (totalDifference / searchSpace.length >= (0.2*Math.exp(-0.1*iteration)) || pop.length == 1)
             return false;
     }
     return true
