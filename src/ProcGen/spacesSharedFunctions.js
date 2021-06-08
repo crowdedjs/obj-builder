@@ -398,10 +398,14 @@ function deepCloneSpace(target, source) {
 }
 
 export function generateZoneLabels(filledSpace, filePath, labelVal, nameCount) {
-    filledSpace.forEach(space => {
+    filledSpace.forEach((space, idx) => {
         let name = labelVal + " " + nameCount;
         let annotationName = name;
-        if (labelVal == "E" || labelVal == "C" || labelVal == "A") {
+        if (labelVal == "A" && idx  == 0) {
+            name = "Pharmacy"
+            annotationName = "Pharmacy"
+            nameCount--;
+        } else if (labelVal == "E" || labelVal == "C" || labelVal == "A") {
             annotationName = labelVal + " Room"
         }
         let position = {x:0,y:0,z:0};

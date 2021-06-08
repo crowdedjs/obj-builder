@@ -5,7 +5,6 @@ export default class Zone {
     spatialOffset; //[x,y,z]
     doorwaySide; //T=0,R=1,B=2,L=3; also tells us if it's horizontal or vertical
     id;
-    visited = false;
 
     constructor(id, spatialOffset, doorwaySide) {
         this.id = id;
@@ -23,9 +22,5 @@ export default class Zone {
 
     getType() {
         return this.zoneType;
-    }
-
-    updateVisited(truefalse) {
-        this.visited = truefalse;
     }
 }

@@ -34,7 +34,8 @@ export function improvedERLayout(filePath = "test", w = 140, l = 140, maxRoomSiz
     let Z14 = new Zone(14, [LEFT + 4.5 * RSW + 4 * HW, TOP + 6 * RSL + 5.5 * HW, 0], 3)
     let Z15 = new Zone(15, [LEFT + 5.5 * RSW + 5 * HW, TOP + 6 * RSL + 5.5 * HW, 0], 3)
     
-    let zones = [Z1, Z2, Z3, Z4, Z5, Z6, Z7, Z8, Z9, Z10, Z11, Z12, Z13, Z14, Z15]
+    //excludes Z9, which is set to be an "A" zone
+    let zones = [Z1, Z2, Z3, Z4, Z5, Z6, Z7, Z8, Z10, Z11, Z12, Z13, Z14, Z15]
 
     Z1.updateAdjacencies([Z2, Z4, Z5])
     Z2.updateAdjacencies([Z1, Z3, Z6])
@@ -54,7 +55,7 @@ export function improvedERLayout(filePath = "test", w = 140, l = 140, maxRoomSiz
 
     let toSplice = []
     let zoneTypes = [
-        { type: "C", num: 5 },
+        { type: "C", num: 4 },
         { type: "E", num: 4 },
         { type: "Trauma", num: 2 },
         { type: "CT", num: 1 },
@@ -70,8 +71,12 @@ export function improvedERLayout(filePath = "test", w = 140, l = 140, maxRoomSiz
         { type: "XRay", count: 1 },
         { type: "Triage", count: 1 },
         { type: "Fast Track", count: 1 },
+        { type: "A", count: 1 },
     ]
     let ourZones = [];
+
+
+    Z9.assignType("A")
 
     do {
         if (zoneTypes.length > 0) {
@@ -79,10 +84,11 @@ export function improvedERLayout(filePath = "test", w = 140, l = 140, maxRoomSiz
             recursiveZoning(zones[rand], zoneTypes[0].num, [], [zones[rand].id])
             if (ourZones.length == zoneTypes[0].num) {
                 ourZones.forEach(z => { z.assignType(zoneTypes[0].type) })
+                // if (zoneTypes[0].type == "E" || zoneTypes[0].type == "C") { console.log(ourZones) }
                 zoneTypes.splice(0, 1);
                 ourZones = []
             }
-            zones.forEach((z, i) => { z.updateVisited(false); if (z.zoneType !== undefined) { toSplice.push(i) } })
+            zones.forEach((z, i) => { if (z.zoneType !== undefined) { toSplice.push(i) } })
             while (toSplice.length > 0) {
                 zones.splice(toSplice.pop(), 1)
             }
@@ -104,7 +110,6 @@ export function improvedERLayout(filePath = "test", w = 140, l = 140, maxRoomSiz
     );
 
     zones = [Z1, Z2, Z3, Z4, Z5, Z6, Z7, Z8, Z9, Z10, Z11, Z12, Z13, Z14, Z15]
-    // zones.forEach(z => console.log(z.zoneType))
     fs.writeFileSync(filePath + "locations/_" + count + "locations.js", "export default [\n");
     zones.forEach(z => {
         vOffset = fillZone(filePath, z, RSW, RSL, maxRoomSize, count, vOffset)
@@ -142,19 +147,20 @@ export function improvedERLayout(filePath = "test", w = 140, l = 140, maxRoomSiz
 
     function recursiveZoning(zone, goal, zoneTracker, visitedIDs) {
         if (ourZones.length != goal) {
-            zoneTracker.push(zone)
+            if (!zoneTracker.some(z => z.id == zone.id)) {
+                zoneTracker.push(zone)
+            }
             if (zoneTracker.length == goal) {
                 ourZones = zoneTracker;
                 return;
             }
-
             zone.adjacentZones.forEach(az => {
                 if (!visitedIDs.some(id => id == az.id) && zones.indexOf(az) != -1) {
                     recursiveZoning(az, goal, zoneTracker, visitedIDs.concat([az.id]))
                 }
             })
         } else {
-            return
+            return;
         }
     }
 }

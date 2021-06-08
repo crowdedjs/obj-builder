@@ -7,8 +7,10 @@ let l = 100;
 let midRatio = 3/4;
 // let randAngles = randomAngles();
 
-
-improvedERLayout("src/FloorPlans/improvedER/", 100, 100, 13, 1, "")
+for (let i = 0; i < 1000; i++) {
+    console.log(i)
+    improvedERLayout("src/FloorPlans/improvedER/", 100, 100, 13, 1, "")
+}
 
 
 function randomAngles() {
