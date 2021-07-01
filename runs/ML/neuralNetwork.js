@@ -1,9 +1,3 @@
-// ml5.js: Train Your Own Neural Network
-// The Coding Train / Daniel Shiffman
-// https://thecodingtrain.com/learning/ml5/6.1-ml5-train-your-own.html
-// https://youtu.be/8HEgeAbYphA
-// https://editor.p5js.org/codingtrain/sketches/zwGahux8a
-
 let model;
 let targetLabel;
 let trainingData = [];
@@ -14,89 +8,117 @@ function setup() {
     let options = {
         inputs: [
             'Nurse',
-            'Triage Nurse',
-            'Greeter Nurse',
+            'TriageNurse',
+            // 'GreeterNurse',
             'Tech',
             'CT',
-            'Janitorial',
-            'Radiology',
+            // 'Janitorial',
+            // 'Radiology',
             'Phlebotomist',
             'XRay',
             'Attending',
             'Resident',
-            'Pharmacist'
+            // 'Pharmacist'
         ],
         outputs: ['TickEstimation'],
         task: 'regression',
-        // debug: 'true',
-        // learningRate: 0.5
+        debug: 'true',
     };
     model = ml5.neuralNetwork(options);
     // model.loadData('mouse-notes.json', dataLoaded());
 }
 
-// window.onload = function() {
-//     var iframe = document.createElement('iframe')
-//     iframe.id = 'iframe'
-//     iframe.style.display = 'none'
-//     document.body.appendChild(iframe)
-//     iframe.src = 'simResults.csv'
-//     setTimeout(function() {
-//         let text = document.getElementById('iframe').innerHTML;
-//         console.log(text);
-//     })
-
-    // console.log(data)
-// }
 
 function trainNN() {
     let fr = new FileReader();
     const file = document.querySelector('input[type=file]').files[0];
-    const preview = document.querySelector('img')
 
-    
+
     if (file) {
         fr.readAsText(file, "UTF-8");
 
         fr.addEventListener('load', (evt) => {
-            console.log(evt.target.result)
-            trainingData = evt.target.result.split('\n')
-            training
-            console.log(trainingData)
+            let temp = evt.target.result.split('\n')
+            temp.forEach(vector => {
+                let temp2 = vector.split(',')
+                temp2.forEach((data, i) => {
+                    temp2[i] = parseInt(data)
+                })
+                trainingData.push(temp2)
+            });
+    
+            trainingData.forEach(line => {
+                let target = {
+                    TickEstimation: line[1]
+                };
+                // let inputs = {
+                //     Nurse: line[2],
+                //     TriageNurse: line[3],
+                //     GreeterNurse: line[4],
+                //     Tech: line[5],
+                //     CT: line[6],
+                //     Janitorial: line[7],
+                //     Radiology: line[8],
+                //     Phlebotomist: line[9],
+                //     XRay: line[10],
+                //     Attending: line[11],
+                //     Resident: line[12],
+                //     Pharmacist: line[13]
+                // }
+                let inputs = {
+                    Nurse: line[2],
+                    TriageNurse: line[3],
+                    Tech: line[4],
+                    CT: line[5],
+                    Phlebotomist: line[6],
+                    XRay: line[7],
+                    Attending: line[8],
+                    Resident: line[9],
+                }
+                model.addData(inputs, target);
+            })
+            model.normalizeData();
+            console.log(model)
+            let options = {
+                epochs: 50,
+                batchSize: 10
+            };
+            model.train(options, whileTraining, finishedTraining);
         }, false)
     }
 }
 
-
-function keyPressed() {
-    if (key == 't') {
-        state = 'training';
-        console.log('starting training');
-        model.normalizeData();
-        let options = {
-            epochs: 200
-        };
-        model.train(options, whileTraining, finishedTraining);
-    } else if (key == 's') {
-        model.saveData('mouse-notes')
-    } else {
-        targetLabel = key.toUpperCase();
-    }
-}
-
 function whileTraining(epoch, loss) {
-    console.log(epoch);
+    // console.log(epoch);
 }
 
 function finishedTraining() {
     console.log('finished training.');
     state = 'prediction';
+    console.log(model)
 }
 
-function gotResults(error, results) {
-    if (error) {
-        console.error(error);
-        return;
-    }
-    console.log(results);
+function processQuery() {
+    let queryVector = [];
+    queryVector.push(document.getElementById("nurse").value);
+    queryVector.push(document.getElementById("triage").value);
+    // queryVector.push(document.getElementById("greeter").value);
+    queryVector.push(document.getElementById("tech").value);
+    queryVector.push(document.getElementById("ct").value);
+    // queryVector.push(document.getElementById("janitorial").value);
+    // queryVector.push(document.getElementById("radiology").value);
+    queryVector.push(document.getElementById("phlebotomist").value);
+    queryVector.push(document.getElementById("xray").value);
+    queryVector.push(document.getElementById("attending").value);
+    queryVector.push(document.getElementById("resident").value);
+    // queryVector.push(document.getElementById("pharmacist").value);
+    
+    model.predict(queryVector, (err, results) => {
+        if (err) {
+            console.log(err)
+            return
+        }
+        console.log(results[0].value)
+        alert(results[0].value)
+    })
 }
