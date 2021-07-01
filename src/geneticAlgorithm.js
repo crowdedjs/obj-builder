@@ -20,8 +20,9 @@ import { improvedERLayout } from "./FloorPlans/improvedERLayout.js";
 const searchSpace = [
     {name:"BUILDING_WIDTH", min:100, max:200},
     {name:"BUILDING_LENGTH", min:100, max:200},
-    {name:"MAX_ROOM_SIZE", min:5, max:9},
-    {name:"LABEL_VAL", min:0, max:1}
+    {name:"MAX_ROOM_SIZE", min:5, max:8},
+    {name:"CENTER_OPENING_SIZE", min:5, max:15},
+    {name:"PERLIN_NOISE", min:0, max:1}
 ]
 
 const populationLength = 20;
@@ -100,8 +101,8 @@ function generateBuildings() {
             vector[0] * (searchSpace[0].max - searchSpace[0].min) + searchSpace[0].min,
             vector[1] * (searchSpace[1].max - searchSpace[1].min) + searchSpace[1].min,
             vector[2] * (searchSpace[2].max - searchSpace[2].min) + searchSpace[2].min,
-            // vector[3] * (searchSpace[3].max - searchSpace[3].min) + searchSpace[3].min,
-            // vector[4] * (searchSpace[4].max - searchSpace[4].min) + searchSpace[4].min,
+            vector[3] * (searchSpace[3].max - searchSpace[3].min) + searchSpace[3].min,
+            vector[4] * (searchSpace[4].max - searchSpace[4].min) + searchSpace[4].min,
             // vector[5] * (searchSpace[5].max - searchSpace[5].min) + searchSpace[5].min,
             // vector[6] * (searchSpace[6].max - searchSpace[6].min) + searchSpace[6].min,
             count
@@ -177,7 +178,7 @@ function runCrowdSim(workerData) {
             }
         })
         worker.on('error', data => {
-            console.log("hey we found an error! Workerdata: " + workerData)
+            console.log(workerData + ": " + data)
             resolve(data)
         })
         worker.on('exit', data => {
@@ -228,9 +229,11 @@ function crossover(parentA, parentB, pop) {
 
 
 function mutate(vector, pop) {
-    do {
-        vector[Math.floor(Math.random() * searchSpace.length)] = Math.random();
-    } while (checkSimilarity(vector, pop))
+    //TODO Commented out due to consistant issues with checkSimilarity resulting in an infinite loop
+    // do {
+    //     vector[Math.floor(Math.random() * searchSpace.length)] = Math.random();
+    // } while (checkSimilarity(vector, pop))
+    vector[Math.floor(Math.random() * searchSpace.length)] = Math.random();
     return vector;
 }
 

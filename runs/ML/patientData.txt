@@ -1,0 +1,61 @@
+    {
+        "name": "patient",
+        "arrivalTick": 5,
+        "arrivalLocation": "Main Entrance",
+        "age": 34,
+        "severity": "ESI3",
+        "patientName": "Daniel",
+        "gender": "male",
+        "id": X0
+    },
+    {
+        "name": "patient",
+        "arrivalTick": 100,
+        "arrivalLocation": "Main Entrance",
+        "age": 34,
+        "severity": "ESI3",
+        "patientName": "Jessie",
+        "gender": "female",
+        "id": X1
+    },
+    {
+        "name": "patient",
+        "arrivalTick": 200,
+        "arrivalLocation": "Main Entrance",
+        "age": 34,
+        "severity": "ESI3",
+        "patientName": "Jay",
+        "gender": "male",
+        "id": X2
+    },
+    {
+        "name": "patient",
+        "arrivalTick": 300,
+        "arrivalLocation": "Main Entrance",
+        "age": 34,
+        "severity": "ESI3",
+        "patientName": "Daniel",
+        "gender": "male",
+        "id": X3
+    },
+    {
+        "name": "patient",
+        "arrivalTick": 400,
+        "arrivalLocation": "Main Entrance",
+        "age": 34,
+        "severity": "ESI3",
+        "patientName": "Jessie",
+        "gender": "female",
+        "id": X4
+    },
+    {
+        "name": "patient",
+        "arrivalTick": 500,
+        "arrivalLocation": "Main Entrance",
+        "age": 34,
+        "severity": "ESI3",
+        "patientName": "Jay",
+        "gender": "male",
+        "id": X5
+    }
+]

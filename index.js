@@ -4,9 +4,10 @@ import {improvedERLayout} from "./src/FloorPlans/improvedERLayout.js"
 
 let w = 100;
 let l = 100;
-let maxRoomSize = 9;
-let centerOpeningSize = 10;
-let noiseVal = 0.5;
+let maxRoomSize = 8;
+let centerOpeningSize = 14;
+let noiseVal = 0.543121271443701;
+let i = 1;
 let pn = new PerlinNoise()
 
 

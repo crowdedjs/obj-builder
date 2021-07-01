@@ -1,0 +1,119 @@
+[
+	{
+		"name": "Hall",
+		"annotationName": "Hall",
+		"position": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		}
+	},
+	{
+		"name": "Main Entrance",
+		"annotationName": "Main Entrance",
+		"position": {
+			"x": 0,
+			"y": 0,
+			"z": 33
+		}
+	},
+	{
+		"name": "Triage Nurse Place",
+		"annotationName": "Triage Nurse Place",
+		"position": {
+			"x": -10.5,
+			"y": 0,
+			"z": 22.5
+		}
+	},
+	{
+		"name": "Greeter Nurse Wait",
+		"annotationName": "Greeter Nurse Wait",
+		"position": {
+			"x": 0,
+			"y": 0,
+			"z": 28
+		}
+	},
+	{
+		"name": "Check In",
+		"annotationName": "Check In",
+		"position": {
+			"x": 10.5,
+			"y": 0,
+			"z": 22.5
+		}
+	},
+	{
+		"name": "Nurse Place",
+		"annotationName": "Nurse Place",
+		"position": {
+			"x": 10.5,
+			"y": 0,
+			"z": -28
+		}
+	},
+	{
+		"name": "B Desk",
+		"annotationName": "B Desk",
+		"position": {
+			"x": 10.5,
+			"y": 0,
+			"z": -17
+		}
+	},
+	{
+		"name": "Tech Place",
+		"annotationName": "Tech Place",
+		"position": {
+			"x": -10.5,
+			"y": 0,
+			"z": -28
+		}
+	},
+	{
+		"name": "Resident Start",
+		"annotationName": "Resident Start",
+		"position": {
+			"x": -10.5,
+			"y": 0,
+			"z": -17
+		}
+	},
+	{
+		"name": "Tech Start",
+		"annotationName": "Tech Start",
+		"position": {
+			"x": -10.5,
+			"y": 0,
+			"z": -7.5
+		}
+	},
+	{
+		"name": "CT 1",
+		"annotationName": "CT 1",
+		"position": {
+			"x": -10.5,
+			"y": 0,
+			"z": 7.5
+		}
+	},
+	{
+		"name": "C1",
+		"annotationName": "C1",
+		"position": {
+			"x": 10.5,
+			"y": 0,
+			"z": -7.5
+		}
+	},
+	{
+		"name": "CT 2",
+		"annotationName": "CT 2",
+		"position": {
+			"x": 10.5,
+			"y": 0,
+			"z": 7.5
+		}
+	}
+]

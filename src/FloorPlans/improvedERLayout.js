@@ -14,24 +14,24 @@ export function improvedERLayout(filePath = "test", w = 140, l = 140, maxRoomSiz
     fs.writeFileSync(filePath + `objs/_${count}layout` + `.obj`, "\n");
     fs.writeFileSync(filePath + `objs/_${count}layout` + `.js`, "export default\n`");
     
-    const RSW = (w - 15) / 6;
-    const RSL = (l - 18) / 7;
+    const HW = 4;
+    const RSW = (w - HW * 5) / 6;
+    const RSL = (l - HW * 6) / 7;
     const LEFT = -w / 2;
     const TOP = -l / 2;
-    const HW = 3;
     
     
-    let Z1 = new Zone(1, [LEFT + 1 * RSW + 0.5 * HW, TOP + 0.5 * RSL + 0 * HW, 0], 2)
-    let Z2 = new Zone(2, [0, TOP + 0.5 * RSL + 0 * HW, 0], 2)
-    let Z3 = new Zone(3, [LEFT + 5 * RSW + 4.5 * HW, TOP + 0.5 * RSL + 0 * HW, 0], 2)
-    let Z4 = new Zone(4, [LEFT + 0.5 * RSW + 0 * HW, TOP + 2 * RSL + 1.5 * HW, 0], 1)
-    let Z5 = new Zone(5, [LEFT + 1.5 * RSW + 1 * HW, TOP + 2 * RSL + 1.5 * HW, 0], 1)
-    let Z6 = new Zone(6, [0, TOP + 1.5 * RSL + 1 * HW, 0], 2)
-    let Z7 = new Zone(7, [LEFT + 4.5 * RSW + 4 * HW, TOP + 2 * RSL + 1.5 * HW, 0], 3)
-    let Z8 = new Zone(8, [LEFT + 5.5 * RSW + 5 * HW, TOP + 2 * RSL + 1.5 * HW, 0], 3)
-    let Z9 = new Zone(9, [LEFT + 0.5 * RSW + 0 * HW, TOP + 4 * RSL + 3.5 * HW, 0], 1)
+    let Z1  = new Zone( 1, [LEFT + 1 * RSW + 0.5 * HW, TOP + 0.5 * RSL + 0 * HW, 0], 2)
+    let Z2  = new Zone( 2, [0,                         TOP + 0.5 * RSL + 0 * HW, 0], 2)
+    let Z3  = new Zone( 3, [LEFT + 5 * RSW + 4.5 * HW, TOP + 0.5 * RSL + 0 * HW, 0], 2)
+    let Z4  = new Zone( 4, [LEFT + 0.5 * RSW + 0 * HW, TOP + 2 * RSL + 1.5 * HW, 0], 1)
+    let Z5  = new Zone( 5, [LEFT + 1.5 * RSW + 1 * HW, TOP + 2 * RSL + 1.5 * HW, 0], 1)
+    let Z6  = new Zone( 6, [0,                         TOP + 1.5 * RSL + 1 * HW, 0], 2)
+    let Z7  = new Zone( 7, [LEFT + 4.5 * RSW + 4 * HW, TOP + 2 * RSL + 1.5 * HW, 0], 3)
+    let Z8  = new Zone( 8, [LEFT + 5.5 * RSW + 5 * HW, TOP + 2 * RSL + 1.5 * HW, 0], 3)
+    let Z9  = new Zone( 9, [LEFT + 0.5 * RSW + 0 * HW, TOP + 4 * RSL + 3.5 * HW, 0], 1)
     let Z10 = new Zone(10, [LEFT + 1.5 * RSW + 1 * HW, TOP + 4 * RSL + 3.5 * HW, 0], 1)
-    let Z11 = new Zone(11, [0, TOP + 4.5 * RSL + 4 * HW, 0], 2)
+    let Z11 = new Zone(11, [0,                         TOP + 4.5 * RSL + 4 * HW, 0], 2)
     let Z12 = new Zone(12, [LEFT + 4.5 * RSW + 4 * HW, TOP + 4 * RSL + 3.5 * HW, 0], 3)
     let Z13 = new Zone(13, [LEFT + 5.5 * RSW + 5 * HW, TOP + 4 * RSL + 3.5 * HW, 0], 3)
     let Z14 = new Zone(14, [LEFT + 4.5 * RSW + 4 * HW, TOP + 6 * RSL + 5.5 * HW, 0], 3)
@@ -116,13 +116,13 @@ export function improvedERLayout(filePath = "test", w = 140, l = 140, maxRoomSiz
     );
 
     //walls for the central area
-    let innerX = RSW * 2 + HW -5
-    let innerY = RSL * 2 + HW -5
+    let innerX = RSW * 2 + HW
+    let innerY = RSL * 2 + HW
     vOffset = makeWalls(
         innerX, innerY, 1,
         [[(innerX - centerOpeningSize)/2, (innerX - centerOpeningSize)/2], [(innerY - centerOpeningSize)/2, (innerY - centerOpeningSize)/2], [innerX], [(innerY - centerOpeningSize)/2, (innerY - centerOpeningSize)/2]],
         centerOpeningSize, filePath,
-        0, -RSW / 2, 0, vOffset, count
+        0, -(RSL + HW) / 2, 0, vOffset, count
     );
 
     zones = [Z1, Z2, Z3, Z4, Z5, Z6, Z7, Z8, Z9, Z10, Z11, Z12, Z13, Z14, Z15]
