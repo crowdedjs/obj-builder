@@ -12,7 +12,8 @@
       "skipFiles": [
         "<node_internals>/**"
       ],
-      "program": "${workspaceFolder}\\index.js"
+      "program": "${workspaceFolder}\\runs\\ML\\produceData.js",
+      "cwd": "${workspaceFolder}\\"
     }
   ]
 }

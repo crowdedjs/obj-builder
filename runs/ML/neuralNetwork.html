@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <script src="https://cdn.jsdelivr.net/npm/p5@1.3.1/lib/p5.min.js">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/p5@1.3.1/lib/addons/p5.sound.min.js">
+  </script>
+  <script src="https://unpkg.com/ml5@0.4.2/dist/ml5.min.js">
+  </script>
+  <meta charset="utf-8" />
+
+</head>
+
+<body>
+  <input type="file" onchange="trainNN()">
+
+  <form id="form">
+    <label for="nurse">Nurse (1-3)</label>
+    <input id="nurse" type="number" min="1" max="3" value="1">
+    <br>
+    
+    <label for="triage">Triage Nurse (1-3)</label>
+    <input id="triage" type="number" min="1" max="3" value="1">
+    <br>
+    
+    <label for="greeter">Greeter Nurse (1)</label>
+    <input id="greeter" type="number" min="1" max="1" value="1">
+    <br>
+    
+    <label for="tech">Tech (1-3)</label>
+    <input id="tech" type="number" min="1" max="3" value="1">
+    <br>
+    
+    <label for="ct">CT (1-2)</label>
+    <input id="ct" type="number" min="1" max="2" value="1">
+    <br>
+    
+    <label for="janitorial">Janitorial (1)</label>
+    <input id="janitorial" type="number" min="1" max="1" value="1">
+    <br>
+    
+    <label for="radiology">Radiology (1)</label>
+    <input id="radiology" type="number" min="1" max="1" value="1">
+    <br>
+    
+    <label for="phlebotomist">Phlebotomist (1-3)</label>
+    <input id="phlebotomist" type="number" min="1" max="3" value="1">
+    <br>
+    
+    <label for="xray">XRay (1-3)</label>
+    <input id="xray" type="number" min="1" max="3" value="1">
+    <br>
+    
+    <label for="attending">Attending (1-3)</label>
+    <input id="attending" type="number" min="1" max="3" value="1">
+    <br>
+    
+    <label for="resident">Resident (1-3)</label>
+    <input id="resident" type="number" min="1" max="3" value="1">
+    <br>
+    
+    <label for="pharmacist">Pharmacist (1)</label>
+    <input id="pharmacist" type="number" min="1" max="1" value="1">
+    <br>
+
+    <button onclick="processQuery()">Process Agents</button>
+  </form>
+
+  <script src="neuralNetwork.js">
+  </script>
+</body>
+
+</html>

@@ -1,5 +1,7 @@
 ## Custom ignores for this project
-runs
+ga
+assets
+arrivals
 
 # Logs
 logs

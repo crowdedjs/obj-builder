@@ -2,6 +2,7 @@ import flatGenerator from "./flatGenerator.js"
 import {makeRoom} from "./room.js"
 import fs from 'fs';
 import readline from 'readline';
+import PerlinNoise from '../../node_modules/@mohayonao/perlin-noise/index.js'
 
 /**
  * Fills all given empty spaces with rooms.
@@ -12,7 +13,7 @@ import readline from 'readline';
  * @param {Float} width The width of the space to fill
  * @param {Float} length The length of the space to fill
  */
-function fillHelper(filePath, emptySpace, filledSpace, vOffset, width, length, doorSize) {
+function fillHelper(filePath, emptySpace, filledSpace, vOffset, width, length, doorSize, count) {
     while (emptySpace.length != 0) {    
         let newSpace = {
             TL:{x:emptySpace[0].TL.x, y:emptySpace[0].TL.y},
@@ -20,7 +21,7 @@ function fillHelper(filePath, emptySpace, filledSpace, vOffset, width, length, d
             isRoom:true
         };
 
-        vOffset = allocate(filePath, newSpace, doorSize, 0, emptySpace, filledSpace, vOffset);
+        vOffset = allocate(filePath, newSpace, doorSize, 0, emptySpace, filledSpace, vOffset, count);
 
         // if (newSpace.TL.x - newSpace.BR.x < 0 && newSpace.TL.y - newSpace.BR.y < 0) {
         //     vOffset = allocate(filePath, newSpace, doorSize, 0, emptySpace, filledSpace, vOffset);
@@ -50,11 +51,11 @@ function fillProcessing(dimension, maxRoomSize) {
  * @param {Array} filledSpace An array of spaces that have already been filled
  * @param {Integer} vOffset An integer that aids in the creation of vertices for objects
  */
-export function basicFill(filePath, emptySpace, filledSpace, vOffset, doorSize, maxRoomSize = 15) {
+export function basicFill(filePath, emptySpace, filledSpace, vOffset, doorSize, maxRoomSize = 10, count) {
     let width = fillProcessing(emptySpace[0].BR.x - emptySpace[0].TL.x, maxRoomSize);
     let length = fillProcessing(emptySpace[0].BR.y - emptySpace[0].TL.y, maxRoomSize);
 
-    return fillHelper(filePath, emptySpace, filledSpace, vOffset, width, length, doorSize);
+    return fillHelper(filePath, emptySpace, filledSpace, vOffset, width, length, doorSize, count);
 }
 
 /**
@@ -64,7 +65,7 @@ export function basicFill(filePath, emptySpace, filledSpace, vOffset, doorSize, 
  * @param {Array} filledSpace An array of spaces that have already been filled
  * @param {Integer} vOffset An integer that aids in the creation of vertices for objects
  */
-export function lineFill(filePath, emptySpace, filledSpace, vOffset, doorSize, maxRoomSize = 15) {
+export function lineFill(filePath, emptySpace, filledSpace, vOffset, doorSize, maxRoomSize = 10, count) {
     let width, length;
 
     if (emptySpace[0].BR.x - emptySpace[0].TL.x > emptySpace[0].BR.y - emptySpace[0].TL.y) {
@@ -75,8 +76,61 @@ export function lineFill(filePath, emptySpace, filledSpace, vOffset, doorSize, m
         length = fillProcessing(emptySpace[0].BR.y - emptySpace[0].TL.y, maxRoomSize);
     }
 
-    return fillHelper(filePath, emptySpace, filledSpace, vOffset, width, length, doorSize);
+    return fillHelper(filePath, emptySpace, filledSpace, vOffset, width, length, doorSize, count);
 }
+
+
+/**
+ * Fills a space with rooms in a line
+ * @param {String} filePath The base path to the files we write to
+ * @param {Array} emptySpace An array of spaces that have yet to be filled
+ * @param {Array} filledSpace An array of spaces that have already been filled
+ * @param {Integer} vOffset An integer that aids in the creation of vertices for objects
+ */
+export function zoneFill(filePath, emptySpace, filledSpace, vOffset, maxRoomSize = 10, count, doorCode) {
+    let width, length;
+
+    if (emptySpace[0].BR.x - emptySpace[0].TL.x > emptySpace[0].BR.y - emptySpace[0].TL.y) {
+        length = emptySpace[0].BR.y - emptySpace[0].TL.y;
+        width = fillProcessing(emptySpace[0].BR.x - emptySpace[0].TL.x, maxRoomSize);
+    } else {
+        width = emptySpace[0].BR.x - emptySpace[0].TL.x;
+        length = fillProcessing(emptySpace[0].BR.y - emptySpace[0].TL.y, maxRoomSize);
+    }
+
+
+    while (emptySpace.length != 0) {    
+        let filled = {
+            TL:{x:emptySpace[0].TL.x, y:emptySpace[0].TL.y},
+            BR:{x:emptySpace[0].TL.x + width, y:emptySpace[0].TL.y + length},
+            isRoom:true
+        };
+
+        let alignedEdges = checkValidPartition(emptySpace[0], filled);
+        cutSpace(emptySpace[0], filled, alignedEdges, emptySpace);
+    
+        vOffset = makeRoom(
+            width, length, 2,
+            doorCode, "./" + filePath,
+            (filled.BR.x + filled.TL.x) / 2, (filled.BR.y + filled.TL.y) / 2, 0, vOffset, count
+        );
+
+        filledSpace.push(filled);
+        removeOverlappingEmptySpace(filled, emptySpace);
+
+    }
+    return vOffset;
+
+}
+
+
+
+
+
+
+
+
+
 
 /**
  * Fills a space that has halls on three sides with rooms
@@ -86,7 +140,7 @@ export function lineFill(filePath, emptySpace, filledSpace, vOffset, doorSize, m
  * @param {Integer} vOffset An integer that aids in the creation of vertices for objects
  * @param {*} halls An array of length four with booleans corresponding to which sides of the space have halls. TRBL.
  */
-export function threeHallFill(filePath, emptySpace, filledSpace, vOffset, halls, doorSize, maxRoomSize = 15) {
+export function threeHallFill(filePath, emptySpace, filledSpace, vOffset, halls, doorSize, maxRoomSize = 10, count) {
     let splitValue;
 
     if (emptySpace[0].BR.x - emptySpace[0].TL.x > emptySpace[0].BR.y - emptySpace[0].TL.y) {
@@ -120,7 +174,7 @@ export function threeHallFill(filePath, emptySpace, filledSpace, vOffset, halls,
     }
 
     for (let i = 1; i < emptySpace.length; i++) {
-        vOffset = lineFill(filePath, [emptySpace[i]], filledSpace, vOffset, doorSize, maxRoomSize)
+        vOffset = lineFill(filePath, [emptySpace[i]], filledSpace, vOffset, doorSize, maxRoomSize, count)
     }
 
     return vOffset;
@@ -133,7 +187,7 @@ export function threeHallFill(filePath, emptySpace, filledSpace, vOffset, halls,
  * @param {Array} filledSpace An array of spaces that have already been filled
  * @param {Integer} vOffset An integer that aids in the creation of vertices for objects
  */
-export function fourHallFill(filePath, emptySpace, filledSpace, vOffset, doorSize, maxRoomSize = 15) {
+export function fourHallFill(filePath, emptySpace, filledSpace, vOffset, doorSize, maxRoomSize = 10, count) {
     let splitValue;
 
     if (emptySpace[0].BR.x - emptySpace[0].TL.x >= (emptySpace[0].BR.y - emptySpace[0].TL.y) * 2) {
@@ -155,7 +209,7 @@ export function fourHallFill(filePath, emptySpace, filledSpace, vOffset, doorSiz
     }
 
     for (let i = 1; i < emptySpace.length; i++) {
-        vOffset = lineFill(filePath, [emptySpace[i]], filledSpace, vOffset, doorSize, maxRoomSize)
+        vOffset = lineFill(filePath, [emptySpace[i]], filledSpace, vOffset, doorSize, maxRoomSize, count)
     }
 
     return vOffset;
@@ -171,7 +225,7 @@ export function fourHallFill(filePath, emptySpace, filledSpace, vOffset, doorSiz
  * @param {Array} filledSpace An array of spaces that have already been filled
  * @param {Integer} vOffset An integer that aids in the creation of vertices for objects
  */
-export function allocate(filePath, filled, doorSize, index, emptySpace, filledSpace, vOffset) {
+export function allocate(filePath, filled, doorSize, index, emptySpace, filledSpace, vOffset, count) {
     let hallEdges = checkForHalls(filledSpace, filled);
     let alignedEdges = checkValidPartition(emptySpace[index], filled);
     cutSpace(emptySpace[index], filled, alignedEdges, emptySpace);
@@ -180,18 +234,18 @@ export function allocate(filePath, filled, doorSize, index, emptySpace, filledSp
         vOffset = makeRoom(
             filled.BR.x - filled.TL.x, filled.BR.y - filled.TL.y, 2,
             hallEdges.map(x => x * doorSize), "./" + filePath,
-            (filled.BR.x + filled.TL.x) / 2, (filled.BR.y + filled.TL.y) / 2, 0, vOffset
+            (filled.BR.x + filled.TL.x) / 2, (filled.BR.y + filled.TL.y) / 2, 0, vOffset, count
         );
     } else if (filled.isRoom) {
         vOffset = makeRoom(
             filled.BR.x - filled.TL.x, filled.BR.y - filled.TL.y, 2,
             [0,0,0,0], "./" + filePath,
-            (filled.BR.x + filled.TL.x) / 2, (filled.BR.y + filled.TL.y) / 2, 0, vOffset
+            (filled.BR.x + filled.TL.x) / 2, (filled.BR.y + filled.TL.y) / 2, 0, vOffset, count
         );
     } else {
         vOffset = flatGenerator(filled.BR.x - filled.TL.x, filled.BR.y - filled.TL.y,
             "./" + filePath, {},
-            (filled.BR.x + filled.TL.x) / 2, (filled.BR.y + filled.TL.y) / 2, 0, vOffset
+            (filled.BR.x + filled.TL.x) / 2, (filled.BR.y + filled.TL.y) / 2, 0, vOffset, count
         );
     }
     filledSpace.push(filled);
@@ -343,20 +397,115 @@ function deepCloneSpace(target, source) {
     target.isRoom = source.isRoom;
 }
 
+export function generateZoneLabels(filledSpace, filePath, labelVal, nameCount) {
+    filledSpace.forEach((space, idx) => {
+        let name = labelVal + " " + nameCount;
+        let annotationName = name;
+        if (labelVal == "A" && idx  == 0) {
+            name = "Pharmacy"
+            annotationName = "Pharmacy"
+            nameCount--;
+        } else if (labelVal == "E" || labelVal == "C" || labelVal == "A") {
+            annotationName = labelVal + " Room"
+        }
+        let position = {x:0,y:0,z:0};
+        position.x = (space.TL.x + space.BR.x) / 2;
+        position.y = 0;
+        position.z = (space.TL.y + space.BR.y) / 2;
+        fs.appendFileSync(filePath + "locations.js", `\t{\n\t\t"name": "${name}",\n\t\t"annotationName": "${annotationName}",\n\t\t"position": {\n\t\t\t"x": ${position.x},\n\t\t\t"y": ${position.y},\n\t\t\t"z": ${position.z}\n\t\t}\n\t},\n`)
+        nameCount++;
+    });
+    return nameCount;
+}
+
 /**
  * Creates labels for each room
  * @param {Array} filledSpace An array of spaces that have already been filled
  * @param {String} filePath The base path to the files we write to
  */
-export function generateLabels(filledSpace, filePath, labelBase = "room") {
+export function generateLabels(filledSpace, filePath, labelVal) {
+    let pn = new PerlinNoise();
+    //offset should have same number of vals as requiredLabels
+    let offset = [
+        0.3589498927475854, 0.6731241996778812, 0.8609188242458334,
+        0.9204826579435137, 0.15580535791249406, 0.3545864876277909,
+        0.1876592832533981, 0.4802537341091899, 0.45769937168685537,
+        0.9440184060829737, 0.2976507230240073, 0.9611906065795968        
+    ]
+    let requiredLabels = [
+        {name:"TriageNursePlace", annotationName:"Triage Nurse Place"},
+        {name:"Fast Track 1", annotationName:"Fast Track"},
+        {name:"Greeter Nurse Wait", annotationName:"Greeter"},
+        {name:"Check In", annotationName:"Check In"},
+        {name:"NursePlace", annotationName:"Nurse Place"},
+        {name:"B Desk", annotationName:"B Desk"},
+        {name:"TechPlace", annotationName:"Tech Place"},
+        {name:"Resident Start", annotationName:"Resident Start"},
+        {name:"Tech Start", annotationName:"Tech Start"},
+        {name:"CT 1", annotationName:"CT 1"},
+        {name:"CT 2", annotationName:"CT 2"},
+        {name:"C", annotationName:"C Room"},
+        {name:"E 1", annotationName:"E Room"},
+    ];
+
+    let myRooms = [];
+    for (let i = 0; i < requiredLabels.length; i++) {
+        let newRoom = {
+            room:requiredLabels[i],
+            value:pn.noise(offset[i] + labelVal)
+        }
+            
+        myRooms.push(newRoom);
+    }
+    myRooms = myRooms.sort((a,b) => a.value < b.value ? a : b)
+
+
+    //now we need to assign rooms labels.  Go through the myRooms array,
+    //returning to the beginning when you hit the end
+    //Each space in filledSpace gets a name.
+    let roomCount = 0;
+    let cRoomIter = 1;
+    fs.writeFileSync(filePath + "locations.js", "export default [\n");
+    filledSpace.forEach(space => {
+        let name, annotationName;
+        if (space.name !== undefined) {
+            name = space.name;
+            annotationName = space.name;
+        } else {
+            annotationName = myRooms[roomCount % myRooms.length].room.annotationName;
+            if (annotationName == "C Room")
+                name = "C " + cRoomIter++;
+            else
+                name = myRooms[roomCount % myRooms.length].room.name;
+        }
+        let position = {x:0,y:0,z:0};
+        position.x = (space.TL.x + space.BR.x) / 2;
+        position.y = 0;
+        position.z = (space.TL.y + space.BR.y) / 2;
+        if (filledSpace.length == roomCount + 1) {
+            fs.appendFileSync(filePath + "locations.js", `\t{\n\t\t"name": "${name}",\n\t\t"annotationName": "${annotationName}",\n\t\t"position": {\n\t\t\t"x": ${position.x},\n\t\t\t"y": ${position.y},\n\t\t\t"z": ${position.z}\n\t\t}\n\t}\n`)
+        } else {
+            fs.appendFileSync(filePath + "locations.js", `\t{\n\t\t"name": "${name}",\n\t\t"annotationName": "${annotationName}",\n\t\t"position": {\n\t\t\t"x": ${position.x},\n\t\t\t"y": ${position.y},\n\t\t\t"z": ${position.z}\n\t\t}\n\t},\n`)
+        }
+        roomCount++;
+    });
+    fs.appendFileSync(filePath + "locations.js", "]");
+}
+
+/**
+ * Creates labels for each room
+ * @param {Array} filledSpace An array of spaces that have already been filled
+ * @param {String} filePath The base path to the files we write to
+ */
+export function generateLabelsOld(filledSpace, filePath, labelBase = "room") {
     let nameCount = 1;
-    fs.writeFileSync(filePath + "Labels.json", "[\n");
+    fs.writeFileSync(filePath + "locations.js", "export default [\n");
     filledSpace.forEach(space => {
         let name;
         if (space.name !== undefined) {
             name = space.name;
         } else {
-            name = labelBase + " " + (nameCount + 1);
+            name = labelBase + " " + nameCount;
         }
         let annotationName = name;
         let position = {x:0,y:0,z:0};
@@ -364,13 +513,13 @@ export function generateLabels(filledSpace, filePath, labelBase = "room") {
         position.y = 0;
         position.z = (space.TL.y + space.BR.y) / 2;
         if (filledSpace.length == nameCount) {
-            fs.appendFileSync(filePath + "Labels.json", `\t{\n\t\t"name": "${name}",\n\t\t"annotationName": "${annotationName}",\n\t\t"position": {\n\t\t\t"x": ${position.x},\n\t\t\t"y": ${position.y},\n\t\t\t"z": ${position.z}\n\t\t}\n\t}\n`)
+            fs.appendFileSync(filePath + "locations.js", `\t{\n\t\t"name": "${name}",\n\t\t"annotationName": "${annotationName}",\n\t\t"position": {\n\t\t\t"x": ${position.x},\n\t\t\t"y": ${position.y},\n\t\t\t"z": ${position.z}\n\t\t}\n\t}\n`)
         } else {
-            fs.appendFileSync(filePath + "Labels.json", `\t{\n\t\t"name": "${name}",\n\t\t"annotationName": "${annotationName}",\n\t\t"position": {\n\t\t\t"x": ${position.x},\n\t\t\t"y": ${position.y},\n\t\t\t"z": ${position.z}\n\t\t}\n\t},\n`)
+            fs.appendFileSync(filePath + "locations.js", `\t{\n\t\t"name": "${name}",\n\t\t"annotationName": "${annotationName}",\n\t\t"position": {\n\t\t\t"x": ${position.x},\n\t\t\t"y": ${position.y},\n\t\t\t"z": ${position.z}\n\t\t}\n\t},\n`)
         }
         nameCount++;
     });
-    fs.appendFileSync(filePath + "Labels.json", "]");
+    fs.appendFileSync(filePath + "locations.js", "]");
 }
 
 /**
@@ -379,21 +528,21 @@ export function generateLabels(filledSpace, filePath, labelBase = "room") {
  * @param {String} filePath The base path to the files we write to
  */
 export function arrivalOnePerRoom(filledSpace, filePath, labelBase = "room") {
-    fs.writeFileSync(filePath + "Arrivals.json", "[\n");
-    for (let i = 0; i < filledSpace.length; i++) {
+    fs.writeFileSync(filePath + "arrivals.js", "export default [\n");
+    for (let i = 1; i < filledSpace.length; i++) {
         let name = "EscapePerson";
         let type = name;
-        let arrivalLocation = labelBase + " " + (i + 1);
+        let arrivalLocation = labelBase + " " + i;
         let arrivalTick = 10;
-        let id = i;
+        let id = i - 1;
         
-        if ((i+1) < filledSpace.length) {
-            fs.appendFileSync(filePath + "Arrivals.json", `\t{\n\t\t"name": "${name}",\n\t\t"type": "${type}",\n\t\t"arrivalLocation": "${arrivalLocation}",\n\t\t"arrivalTick": "${arrivalTick}",\n\t\t"id": "${id}"\n\t},\n`)
+        if (i < filledSpace.length) {
+            fs.appendFileSync(filePath + "arrivals.js", `\t{\n\t\t"name": "${name}",\n\t\t"type": "${type}",\n\t\t"arrivalLocation": "${arrivalLocation}",\n\t\t"arrivalTick": ${arrivalTick},\n\t\t"id": ${id}\n\t},\n`)
         } else {
-            fs.appendFileSync(filePath + "Arrivals.json", `\t{\n\t\t"name": "${name}",\n\t\t"type": "${type}",\n\t\t"arrivalLocation": "${arrivalLocation}",\n\t\t"arrivalTick": "${arrivalTick}",\n\t\t"id": "${id}"\n\t}\n`)
+            fs.appendFileSync(filePath + "arrivals.js", `\t{\n\t\t"name": "${name}",\n\t\t"type": "${type}",\n\t\t"arrivalLocation": "${arrivalLocation}",\n\t\t"arrivalTick": ${arrivalTick},\n\t\t"id": ${id}\n\t}\n`)
         }
     }
-    fs.appendFileSync(filePath + "Arrivals.json", "]");
+    fs.appendFileSync(filePath + "arrivals.js", "]");
 }
 
 /**

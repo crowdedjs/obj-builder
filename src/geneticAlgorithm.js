@@ -1,41 +1,64 @@
-import { innerCircleLayout } from "./innerCircleLayout.js";
+import { innerCircleLayout } from "./FloorPlans/innerCircleLayout.js";
 import fs from 'fs';
 import fse from 'fs-extra';
-import boot from "../../examples/src/index.js"
+import {Worker} from "worker_threads"
+import { improvedERLayout } from "./FloorPlans/improvedERLayout.js";
 
 
+//Below search space is for the innerCircleLayout
+    // const searchSpace = [
+    //     {name:"HALL_WIDTH", min:3, max:13},
+    //     {name:"DOOR_SIZE", min:3, max:8},
+    //     {name:"BUILDING_WIDTH", min:100, max:200},
+    //     {name:"BUILDING_LENGTH", min:100, max:200},
+    //     {name:"MID_RATIO", min:0.3, max:0.6},
+    //     {name:"MAX_ROOM_SIZE", min:10, max:20},
+    //     {name:"LABEL_VAL", min:0, max:1}
+    // ];
+
+//Below search space is for the improvedERLayout
 const searchSpace = [
-    {name:"HALL_WIDTH", min:3, max:13},
-    {name:"DOOR_SIZE", min:3, max:8},
     {name:"BUILDING_WIDTH", min:100, max:200},
     {name:"BUILDING_LENGTH", min:100, max:200},
-    {name:"MID_RATIO", min:0.3, max:0.6},
-    {name:"MAX_ROOM_SIZE", min:10, max:20}
-];
-const populationLength = 25;
+    {name:"MAX_ROOM_SIZE", min:5, max:8},
+    {name:"CENTER_OPENING_SIZE", min:5, max:15},
+    {name:"PERLIN_NOISE", min:0, max:1}
+]
+
+const populationLength = 20;
 const iterations = 1000;
-const mutationRate = 0.2;
+const numToKeep = 5;
+let iteration = 0;
 
 
 
 fs.writeFileSync("../runs/ga/best.txt", "");
-fs.writeFileSync("../runs/ga/best.csv", "Hall Width,Door Size, Building Width, Building Length, Mid-Ratio, Max Room Size\n");
+fs.writeFileSync("../runs/ga/best.csv", "Hall Width, Door Size, Building Width, Building Length, Mid-Ratio, Max Room Size, Label Value\n");
+fs.writeFileSync("../runs/ga/ticks.csv", "Generation,Best,Average\n");
 
-console.log("\n\n~~~~~~~BEGINNING GENERATION 1~~~~~~~");
-let nextPop = genAlgLoop(initPopulation(), 1);
-for (let i = 2; i <= iterations; i++) {
-    console.log("\n\n~~~~~~~BEGINNING GENERATION " + i + "~~~~~~~");
-    fs.appendFileSync("../runs/ga/best.txt", "\n\nBEST OF GEN " + i + "\n");
-    nextPop = genAlgLoop(repopulate(nextPop), i)
+let population = [];
+let fitness = [];
+let activeWorkers = [];
+genAlgLoop();
+
+function genAlgLoop() {
+    iteration++;
+    if (iteration == 1) {
+        console.log("\n\n~~~~~~~BEGINNING GENERATION " + iteration + "~~~~~~~");
+        fs.appendFileSync("../runs/ga/best.txt", "\n\nBEST OF GEN " + iteration + "\n");
+        population = initPopulation();
+        generateBuildings();
+    } else if (iteration <= iterations) {
+        console.log("\n\n~~~~~~~BEGINNING GENERATION " + iteration + "~~~~~~~");
+        fs.appendFileSync("../runs/ga/best.txt", "\n\nBEST OF GEN " + iteration + "\n");
+        population = repopulate()
+        generateBuildings();
+    }
 }
 
-
-function genAlgLoop(population, iteration) {
-    generateBuildings(population);
-    return removeLeastFit(evalFitness(population), population, iteration);
-}
 
 function initPopulation() {
+    console.log("initPopulation")
     let population = [];
     for (let i = 0; i < populationLength; i++) {
         population.push(randomVector());
@@ -43,18 +66,20 @@ function initPopulation() {
     return population;
 }
 
-function repopulate(population) {
+function repopulate() {
+    console.log("repopulate")
     fs.appendFileSync("../runs/ga/best.txt", printStats(population[0]));
     fs.appendFileSync("../runs/ga/best.csv", toCSV(population[0]));
-    fse.emptyDirSync("../runs/ga/thisGeneration");
+    fse.emptyDirSync("../assets/locations");
+    fse.emptyDirSync("../assets/objs");
     
     let newPopulation = [];
     newPopulation.push(population[0]);
     for (let i = 0; i < population.length; i++) {
         for (let j = i + 1; j < population.length; j++) {
-            newPopulation.push(crossover(population[i], population[j]))
+            newPopulation.push(crossover(population[i], population[j], newPopulation))
         }
-        newPopulation.push(mutate(population[i]))
+        newPopulation.push(mutate(population[i], newPopulation))
     }
 
     for (let i = newPopulation.length; i < populationLength; i++) {
@@ -64,20 +89,115 @@ function repopulate(population) {
     return newPopulation;
 }
 
-function generateBuildings(population) {
+function generateBuildings() {
+    console.log("generateBuildings")
     let count = 1;
+    fitness.length = 0;
     population.forEach(vector => {
-        innerCircleLayout(
-            "../runs/ga/thisGeneration/a" + count,
+        // innerCircleLayout(
+        improvedERLayout(
+            // `../../node/node_modules/@crowdedjs/assets/`,
+            `../assets/`,
             vector[0] * (searchSpace[0].max - searchSpace[0].min) + searchSpace[0].min,
             vector[1] * (searchSpace[1].max - searchSpace[1].min) + searchSpace[1].min,
             vector[2] * (searchSpace[2].max - searchSpace[2].min) + searchSpace[2].min,
             vector[3] * (searchSpace[3].max - searchSpace[3].min) + searchSpace[3].min,
             vector[4] * (searchSpace[4].max - searchSpace[4].min) + searchSpace[4].min,
-            vector[5] * (searchSpace[5].max - searchSpace[5].min) + searchSpace[5].min
+            // vector[5] * (searchSpace[5].max - searchSpace[5].min) + searchSpace[5].min,
+            // vector[6] * (searchSpace[6].max - searchSpace[6].min) + searchSpace[6].min,
+            count
         );
         count++;
     });
+
+    console.log("runSim")
+    for (let i = 0; i < populationLength; i++) {
+        fitness.push(runCrowdSim(i))
+        // fitness.push(runDiscreteEventSim(i))
+    }
+
+    Promise.all(fitness)
+    .then(results => {
+        fitness = results;
+        console.log(fitness)
+        evalFitness()
+    })
+}
+
+function evalFitness() {
+    console.log("evalFitness")
+    let bestResult = Infinity;
+    let avgResult = 0;
+
+    for (let i = 0; i < populationLength; i++) {
+        if (fitness[i].endTick < bestResult)
+            bestResult = fitness[i].endTick;
+        avgResult += fitness[i].endTick;
+    }
+
+    fs.appendFileSync("../runs/ga/ticks.csv", `${iteration},${bestResult},${avgResult/populationLength}\n`);
+
+    let fitnessVals = [];
+
+    for (let i = 0; i < populationLength; i++) {
+        fitnessVals.push([
+           bestResult / fitness[i].endTick, i
+        ])
+    }
+    console.log(fitnessVals)
+    removeLeastFit(fitnessVals)
+}
+
+function removeLeastFit(fitnessVals) {
+    console.log("removeLeastFit")
+    fitnessVals.sort((a, b) => b[0] - a[0])
+    let newPopulation = []
+    
+    for (let i = 0; i < numToKeep; i++)
+    {
+        newPopulation.push(population[fitnessVals[i][1]])
+    }
+    fs.copyFileSync("../assets/objs/_" + (fitnessVals[0][1] + 1) + "layout.obj", "../runs/ga/best/bestGen" + iteration + "Obj.obj")
+    fs.copyFileSync("../assets/locations/_" + (fitnessVals[0][1] + 1) + "locations.js", "../runs/ga/best/bestGen" + iteration + "Loc.js")
+    population = newPopulation;
+    genAlgLoop();
+}
+
+function runCrowdSim(workerData) {
+    return new Promise((resolve, reject) => {
+        const worker = new Worker("../../node/index.js", { workerData });
+        activeWorkers.push([workerData, worker])
+        worker.on('message', data => {
+            activeWorkers = activeWorkers.filter(w => w[0] != workerData)
+            resolve(data)
+            if (activeWorkers.length <= populationLength - numToKeep) {
+                activeWorkers.forEach(w => {
+                    w[1].terminate();
+                })
+                activeWorkers = [];
+            }
+        })
+        worker.on('error', data => {
+            console.log(workerData + ": " + data)
+            resolve(data)
+        })
+        worker.on('exit', data => {
+            activeWorkers = activeWorkers.filter(w => w[0] != workerData)
+            resolve({
+                layoutNum: workerData + 1,
+                endTick: Infinity
+            })
+        })
+    })
+}
+
+function runDiscreteEventSim(workerData) {
+    return new Promise((resolve, reject) => {
+        const worker = new Worker("./discreteEventSim.js", { workerData });
+        worker.on('message', data => {
+            resolve(data)
+        })
+    })
 }
 
 function randomVector() {
@@ -88,128 +208,46 @@ function randomVector() {
     return newVector;
 }
 
-function crossover(parentA, parentB) {
-    let newVector = [];
-    for (let i = 0; i < searchSpace.length; i++) {
-        if (Math.floor(Math.random()*2))
-            newVector.push(parentA[i])
-        else
-            newVector.push(parentB[i])
-
+function crossover(parentA, parentB, pop) {
+    let totalDifference = 0;
+    for (let j = 0; j < searchSpace.length; j++) {
+        totalDifference += Math.abs(parentA[j] - parentB[j]);
     }
-    return newVector;
+    //the vectors are "different enough"
+    if (totalDifference / searchSpace.length >= (0.1*Math.exp(-0.1*iteration))) {
+        let newVector = [];
+        for (let i = 0; i < searchSpace.length; i++) {
+            if (Math.floor(Math.random()*2))
+                newVector.push(parentA[i])
+            else
+                newVector.push(parentB[i])
+        }
+        return newVector;
+    }
+    return mutate(parentB, pop);
 }
 
-function mutate(vector) {
-    for (let i = 0; i < searchSpace.length; i++) {
-        if (Math.random() < mutationRate)
-            vector[i] = Math.random();
-    }
+
+function mutate(vector, pop) {
+    //TODO Commented out due to consistant issues with checkSimilarity resulting in an infinite loop
+    // do {
+    //     vector[Math.floor(Math.random() * searchSpace.length)] = Math.random();
+    // } while (checkSimilarity(vector, pop))
+    vector[Math.floor(Math.random() * searchSpace.length)] = Math.random();
     return vector;
 }
 
-function removeLeastFit(fitnessVals, population, iteration, numToKeep = 5) {
-    fitnessVals.sort((a, b) => b[0] - a[0])
-    let newPopulation = []
-    
-    for (let i = 0; i < fitnessVals.length; i++)
-    {
-        if (i < numToKeep)
-            newPopulation.push(population[fitnessVals[i][1]])
+function checkSimilarity(vector, pop) {
+    for (let i = 0; i < pop.length; i++) {
+        let totalDifference = 0;
+        for (let j = 0; j < searchSpace.length; j++) {
+            totalDifference += Math.abs(vector[j] - pop[i][j]);
+        }
+        //the vectors are "different enough"
+        if (totalDifference / searchSpace.length >= (0.2*Math.exp(-0.1*iteration)) || pop.length == 1)
+            return false;
     }
-    fs.copyFileSync("../runs/ga/thisGeneration/a" + (fitnessVals[0][1] + 1) + ".obj", "../runs/ga/best/bestGen" + iteration + ".obj")
-    return newPopulation;
-}
-
-function evalFitness(population) {
-    //IN DEVELOPMENT. IDEAS:
-    //we could measure the distance between important points
-        //That would be keeping in mind that the most crucial, lifesaving travel distances should be weighted
-        //More commonly traveled distances should also be weighted
-    //hall width needs to be evaluated.  This would be more accurate to do in our simulation, but it would take SO long.
-        //Probably what we need is a heuristic.
-    //we could get a room count.  We need to make sure that the algorithm doesn't favor tiny ERs.
-    //we could use the average distance from the center..?
-
-
-    //REALLY BASIC HEURISTIC
-    let bestHeuristics = [0,0,0]
-    let roomHeuristics = []
-    let hallHeuristics = []
-    let doorHeuristics = []
-    // let bestResult = 0;
-    // let runtimeResults = []
-
-    for (let i = 0; i < population.length; i++) {
-        roomHeuristics.push(roomHeuristic("../runs/ga/thisGeneration/a" + (i+1) + "Labels.json"));
-        hallHeuristics.push(hallHeuristic(population, i));
-        doorHeuristics.push(doorHeuristic(population, i));
-        // runtimeResults.push(runSimTest(i))
-
-        if (roomHeuristics[i] > bestHeuristics[0])
-            bestHeuristics[0] = roomHeuristics[i];
-        if (hallHeuristics[i] > bestHeuristics[1])
-            bestHeuristics[1] = hallHeuristics[i];
-        if (doorHeuristics[i] > bestHeuristics[2])
-            bestHeuristics[2] = doorHeuristics[i];
-        // if (runtimeResults[i] > bestResult)
-        //     bestResult = runtimeResults[i];
-    };
-
-    let fitnessVals = [];
-
-    for (let i = 0; i < population.length; i++) {
-        fitnessVals.push([
-            (
-                roomHeuristics[i] +
-                hallHeuristics[i] +
-                doorHeuristics[i]
-            ) / (
-                bestHeuristics[0] +
-                bestHeuristics[1] +
-                bestHeuristics[2]
-            ), i
-        ])
-    }
-    
-    return fitnessVals;
-}
-
-function roomHeuristic(filePath) {
-    //The size of the json file should be proportional to the number of rooms.
-    const stats = fs.statSync(filePath)
-    return stats.size;
-}
-
-function hallHeuristic(population, vectorNum) {
-    let hallValue = population[vectorNum][0] * (searchSpace[0].max - searchSpace[0].min) + searchSpace[0].min;
-    let hallCutoff = 6;
-    return hallValue < hallCutoff ? population[vectorNum][0] : hallCutoff / hallValue;
-}
-
-function doorHeuristic(population, vectorNum) {
-    let doorValue = population[vectorNum][1] * (searchSpace[1].max - searchSpace[1].min) + searchSpace[1].min;
-    let doorCutoff = 4;
-    return doorValue < doorCutoff ? population[vectorNum][1] : doorCutoff / doorValue;
-}
-
-// function runSimTest(vectorNum) {
-//     let params = {};
-
-//     let assetBase = "../runs/ga/thisGeneration/a" + (vectorNum+1);
-
-//     params.objPath = assetBase + ".obj";
-//     params.arrivalPath =  "../runs/ga/arrival.json"; //TODO
-//     params.locationsPath = assetBase + "Labels.json";
-//     params.secondsOfSimulation = 300;
-//     params.millisecondsBetweenFrames = 40;
-//     params = urlParser(window, params, assetBase);
-
-//     return boot(params);
-// }
-
-function evacHeuristic(params) {
-    //TODO: time how long it takes for all people to evacuate
+    return true
 }
 
 function printStats(vector) {

@@ -1,5 +1,4 @@
 import flatGenerator from "./flatGenerator.js"
-import {makeWalls} from "./outerWalls.js"
 import fs from 'fs';
 import wallGenerator from "./wallGenerator.js";
 
